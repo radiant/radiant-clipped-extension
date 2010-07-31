@@ -1,0 +1,58 @@
+---
+nl:
+  activerecord:
+    errors:
+      models:
+        asset:
+          attributes:
+            asset:
+              blank: 'Je moet eerst het bestand selecteren dat je wilt uploaden'
+  paperclipped:
+    add_asset_to_bucket: 'Voeg bestand toe aan klembord'
+    add_to_bucket: 'Naar klembord kopieren'
+    asset: 'Bestand'
+    asset_edit_title: 'Bestand aanpassen'
+    asset_errors: 'Sorry. {{errors}}'
+    asset_page_attachment_note: 'Gekoppelde bestanden. Deze kunnen worden ingevoegd met "drag and drop", of getoond worden met de <code>&lt;r:assets:each /&gt;</code> tag.'
+    asset_note: 'Gekoppelde bestanden.'
+    assets_explanation: "Bestanden en afbeeldingen kunnen geüpload worden en dan toegevoegd worden aan Pagina's, Snippets en Layouts."
+    assets_title: 'Bestanden'
+    asset_page_upload_note: 'Bestanden die hier worden geüpload, zullen automatisch gekoppeld worden aan de huidige pagina.'
+    asset_upload_note: 'Selecteer hier het bestand dat je wil uploaden. Als je het <code>Titel</code> veld leeg laat, zal de bestandsnaam daarvoor gebruikt worden. Je kunt ook een onderschrift toevoegen door op <code>Meer</code> te klikken.'
+    attached_assets: 'Gekoppelde bestanden'
+    attach_to_page: 'Aan pagina koppelen'
+    audio: 'Geluid'
+    bucket: 'Klembord'
+    bucket_note: 'Het klembord is een tijdelijke plaats voor je bestanden. Je kunt ze van daaruit makkelijk kopieren naar in een pagina of snippet.'
+    caption: 'Onderschrift'
+    choose_upload: 'Kies een bestand om te uploaden'
+    clear_bucket: 'Klembord leeg maken'
+    confirm_remove_asset: 'Ben je zeker dat je dit bestand <strong class="warning">voorgoed wilt verwijderen</strong>?'
+    confirm_remove_from_page: 'Ben je zeker dat je dit bestand van de pagina wilt ontkoppelen?'
+    delete_asset: 'Bestand verwijderen'
+    edit_asset: 'Pas {{asset}} aan'
+    empty_bucket: 'Het klembord is leeg'
+    filename: 'Bestandsnaam'
+    images: 'Afbeeldingen'
+    less: 'Minder'
+    movies: 'Filmpjes'
+    new_asset: 'Nieuw Bestand'
+    no_assets_found: 'Er zijn geen bestanden gevonden'
+    no_assets: 'Geen bestanden'
+    no_attached_assets: 'Er zijn geen gekoppelde bestanden.'
+    others: 'Andere'
+    regenerate_all_thumbnails: 'Je kunt hier alle thumbnails voor afbeeldingen opnieuw genereren. Houd er rekening mee dat dit lang kan duren, en aanzienlijke druk veroorzaakt op de server.'
+    regenerate: 'Opnieuw genereren'
+    regenerate_thumbnails: 'Je kunt hier de thumbnails voor afbeeldingen opnieuw genereren. Houd er rekening mee dat dit lang kan duren, en aanzienlijke druk veroorzaakt op de server.'
+    remove_asset: 'Bestand verwijderen'
+    remove_from_page: 'Van pagina ontkoppelen'
+    reorder: 'Herschikken'
+    replace_file: 'Bestand vervangen'
+    save_and_upload: 'Opslaan en uploaden'
+    search_assets: 'Zoeken naar bestanden'
+    search: 'Zoek'
+    show_assets_bucket: 'Toon klembord'
+    title: 'Titel'
+    type: 'Type'  
+    types_to_find: 'Te doorzoeken types'
+    upload: 'Uploaden'
