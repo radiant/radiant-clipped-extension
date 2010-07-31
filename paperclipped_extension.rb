@@ -36,7 +36,7 @@ class PaperclippedExtension < Radiant::Extension
     end
     
     tab 'Content' do
-      add_item "Assets", "/admin/assets", :after => "Pages"
+      add_item I18n.translate("paperclipped.assets_title"), "/admin/assets", :after => "Pages"
     end
   end
   
