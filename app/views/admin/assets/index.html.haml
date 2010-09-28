@@ -38,6 +38,6 @@
       %li= link_to((image('plus', :alt => '') + ' ' + t('paperclipped.new_asset')), new_admin_asset_path)
       - unless Asset.thumbnail_sizes.blank?
         %li.highlight
-          Need to upload?
+          = t('paperclipped.need_to_upload')
           = automatic_size_descriptions
-          images are automatically created
+          = t('paperclipped.images_automatically_created')
