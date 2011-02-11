@@ -75,6 +75,8 @@ table td.add-to-bucket a { background: url("../../images/admin/plus.png") no-rep
 #assets p { padding: 0; margin: 0; line-height: 22px; }
 #assets .note { font-weight: normal; color: black; font-size: 80%; }
 
+.note:first-letter { text-transform: uppercase; }
+
 #assets p.note { margin: 5px 0; font-style: italic;}
 
 #clear-bucket, #reorder, #done {position: absolute; right: 10px;}
@@ -157,5 +159,5 @@ table#site-map td.assets, table#site-map th.assets  { text-align: right; border:
 #show-bucket { font-size: 85%; padding: 0 0 0 4px; }
 #content form #show-bucket a { color: #44e; }
 
-
+.highlight { color: #fff; }
 .pagination { float: right; margin: 14px 10px 0 0;}

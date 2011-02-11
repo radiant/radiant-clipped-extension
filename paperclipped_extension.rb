@@ -1,4 +1,4 @@
-# require_dependency 'application_controller'
+require_dependency 'application_controller'
 require File.dirname(__FILE__) + '/lib/url_additions'
 include UrlAdditions
 
@@ -11,6 +11,10 @@ class PaperclippedExtension < Radiant::Extension
     
     Radiant::AdminUI.send :include, AssetsAdminUI unless defined? admin.asset # UI is a singleton and already loaded
     admin.asset = Radiant::AdminUI.load_default_asset_regions
+    
+    Admin::PagesController.class_eval {
+      helper Admin::AssetsHelper
+    }
 
     %w{page}.each do |view|
       # admin.send(view).edit.add :main, "/admin/assets/show_bucket_link", :before => "edit_header"  

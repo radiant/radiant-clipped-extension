@@ -36,3 +36,8 @@
     = pagination_for @assets, :depaginate => false
     %ul
       %li= link_to((image('plus', :alt => '') + ' ' + t('paperclipped.new_asset')), new_admin_asset_path)
+      - unless Asset.thumbnail_sizes.blank?
+        %li.highlight
+          = t('paperclipped.need_to_upload')
+          = automatic_size_descriptions
+          = t('paperclipped.images_automatically_created')
