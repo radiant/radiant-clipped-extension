@@ -3,7 +3,7 @@ require File.dirname(__FILE__) + '/lib/url_additions'
 include UrlAdditions
 
 class PaperclippedExtension < Radiant::Extension
-  version "0.8.0"
+  version "0.8.1"
   description "Assets extension based on the lightweight Paperclip plugin."
   url "http://github.com/kbingman/paperclipped"
   

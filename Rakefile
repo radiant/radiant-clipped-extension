@@ -1,3 +1,18 @@
+begin
+  require 'jeweler'
+  Jeweler::Tasks.new do |gem|
+    gem.name = "radiant-paperclipped-extension"
+    gem.summary = %Q{Paperclipped extension for Radiant CMS}
+    gem.description = %Q{Assets extension based on the lightweight Paperclip plugin.}
+    gem.email = "benny@gorilla-webdesign.be"
+    gem.homepage = "https://github.com/jomz/paperclipped"
+    gem.authors = ["Keith Bingman"]
+    gem.add_dependency 'radiant', ">=0.9.1"
+    # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
+  end
+rescue LoadError
+  puts "Jeweler (or a dependency) not available. This is only required if you plan to package copy_move as a gem."
+end
 # I think this is the one that should be moved to the extension Rakefile template
 
 # In rails 1.2, plugins aren't available in the path until they're loaded.
