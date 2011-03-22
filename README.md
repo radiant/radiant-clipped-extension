@@ -1,85 +1,109 @@
-Paperclipped
----
+Radiant Assets Extension
+------------------------
 
-## IMPORTANT!
+Based on Keith Bingman's excellent Paperclipped extension for Radiant. This
+extension provides Mephisto-style asset management for Radiant. Complete with
+an asset bucket and easy upload functionality.
 
-This version of Paperclipped now requires Radiant 0.9.0 or higher. Just in case, the previous version is still around, on a branch marked Radiant-0.8 
+This extension is an experimental extension designed for Radiant version 1.0
+or higher. The goal is that it will be a drop-in replacement for both
+Paperclipped and Page Attachments.
 
-Let me know if this works and if you run into any issues. 
 
+## Installation
 
-###Installation
-
-To install paperclipped, just run 
+To install the Radiant Assets extension, just run:
  
-	rake production db:migrate:extensions
-	rake production radiant:extensions:paperclipped:update
+    rake production db:migrate:extensions
+    rake production radiant:extensions:paperclipped:update
 
-This runs the database migrations and installs the javascripts, images and css.
+This runs the database migrations and installs the javascripts, images, and
+CSS.
 
-###Configuration
 
-If you install the Settings Extension (highly recommended), you can also easily adjust both the sizes of any additional thumbnails and which thumbnails are displayed in the image edit view. The default is the original file, but any image size can be used by giving in the name of that size. 
+## Configuration
 
-If you do install the Settings Extension you should be sure to add a config.extensions line to your environment.rb file: 
+If you install the Settings Extension (highly recommended), you can also
+easily adjust both the sizes of any additional thumbnails and which thumbnails
+are displayed in the image edit view. The default is the original file, but
+any image size can be used by giving in the name of that size.
+
+If you do install the Settings Extension you should be sure to add a
+config.extensions line to your environment.rb file:
 
     config.extensions = [ :settings, :all ]
-   
-Also the Settings Extension migration should be run before Paperclipped's migration.
+    
+Also the Settings Extension migration should be run before Paperclipped's
+migration.
 
-The configuration settings also enable a list of the allowed file types, maximum file size and should you need it, the path to your installation of Image Magick (this should not be needed, but I sometimes had a problem when using mod_rails).
+The configuration settings also enable a list of the allowed file types,
+maximum file size and should you need it, the path to your installation of
+Image Magick (this should not be needed, but I sometimes had a problem when
+using mod_rails).
 
-Paperclipped will integrate with the Styles'n'Scripts extension. For that to work, you'll need to load that extension before paperclipped:
+Paperclipped will integrate with the Styles'n'Scripts extension. For that to
+work, you'll need to load that extension before paperclipped:
 
     config.extensions = [ :sns, :all ]
 
-###Using Paperclipped
 
-Once installed, you get a new Tab with the entire assets library, a Bucket à la Mephisto (though only the concept is stolen) and a search. You can also easily attach assets to any page and directly upload them to a page.
+## Usage
 
-###Asset Tags
+Once installed, you get a new Tab with the entire assets library and a search.
+You can also easily attach assets to any page and directly upload them to a
+page.
 
-There are a veriety of new tags. The basic tag is the <code><r:assets /></code> tag, which can be used either alone or as a double tag. This tag requires the "title" attribute, which references the asset. If you use the drag and drop from the asset bucket, this title will be added for you. 
 
-The <code><r:assets /></code> tag can be combined with other tags for a variety of uses: 
+## Tags
 
-    <r:assets:image title="foo" /> will return <img src="/path/to/foo" alt="foo" />
+The Radiant assets extension adds a variety of new tags. The basic tag is the
+<code><r:asset /></code> tag, which can be used either alone or as a double
+tag. This tag requires the "name" attribute, which references the asset. If
+you use the drag and drop from the asset bucket, this name will be added for
+you. The <code><r:asset /></code> tag can be combined with other tags for a
+variety of uses:
 
-    <r:assets:link title="foo" /> will return <a href="/path/to/foo">foo</a>
+    <r:asset:image name="image.png" />  #=>  <img src="/path/to/image.png" />
+    <r:asset:link name="image.png" />   #=>  <a href="/path/to/image.png">image.png</a>
 
 You could also use: 
 
-    <r:assets:link title="foo" text="This is the link to foo" /> will return <a href="/path/to/foo">This is the link to foo</a>
-
-or 
-
-    <r:assets:link title="foo">This is another link</r:link>
+    <r:asset:link name="bar.pdf">Download PDF</r:asset:link>
 
 Asset links are also available, such as content_type, file_size, and url. 
 
-Another important tag is the <code><r:assets:each>...</r:assets:each></code>. If a page has attached assets, the assets:each tag will cycle through each asset. You can then use an image, link or url tag to display or connect your assets. Usage:
+Another important tag is the <code><r:assets:each>...</r:assets:each></code>.
+(Note the plural namespace tag "assets".) If a page has attached assets, the
+assets:each tag will cycle through each asset. You can then use an image,
+link or url tag to display and connect your assets. Usage:
 
     <r:assets:each [limit=0] [offset=0] [order="asc|desc"] [by="position|title|..."] [extensions="png|pdf|doc"]>
       ...
     </r:assets:each>
 
-`<r:assets:each>` parameters:
+This tag uses the following parameters:
 
-* `limit` and `offset` let you specify a range of assets;
-* `order` and `by` lets you control sorting;
-* `extensions` allows you to filter assets by file extensions; you can specify multiple extensions separated by `|`.
+* `limit` and `offset` let you specify a range of assets
+* `order` and `by` lets you control sorting
+* `extensions` allows you to filter assets by file extensions; you can specify multiple extensions separated by `|`
 
-<code><pre>`<r:if_assets [min_count="0"]>` and `<r:unless_assets [min_count="0"]>` 
-</code></pre>
-  
-conditional tags let you optionally render content based on the existance of tags. They accept the same options as `<r:assets:each>`.
+The conditional tags <code><r:if_assets [min_count="0"]></code> and
+<code><r:unless_assets [min_count="0"]></code> allow you to optionally render
+content based on the existence of tags. They accept the same options as
+`<r:assets:each>`.
 
-Thumbnails are automatically generated for images when the images are uploaded. By default, two sizes are made for use within the extension itself. These are "icon" 42px by 42px and "thumbnail" which is fit into 100px, maintaining its aspect ratio.
+Thumbnails are automatically generated for images when the images are
+uploaded. By default, two sizes are made for use within the extension itself.
+These are "icon" 42px by 42px and "thumbnail" which is fit into 100px,
+maintaining its aspect ratio.
 
-You can access sizes of image assets for various versions with the tags `<r:assets:width [size="original"]/>` and `<r:assets:height [size="original"]/>`.
+You can access sizes of image assets for various versions with the tags
+`<r:asset:width [size="original"]/>` and `<r:asset:height
+[size="original"]/>`.
 
-Also, for vertical centering of images, you have the handy `<r:assets:top_padding container="<container height>" [size="icon"]/>` tag. Working example:
-  
+Also, for vertical centering of images, you have the handy
+`<r:asset:top_padding container="<container height>" [size="icon"]/>` tag.
+Working example:
 
     <ul>
       <r:assets:each>
@@ -89,49 +113,89 @@ Also, for vertical centering of images, you have the handy `<r:assets:top_paddin
         </li>
       </r:assets:each>
     </ul>
-   
-    
-###Using Amazon s3
+
+
+## Using Amazon S3
+
 First, be sure you have the aws\-s3 gem installed. 
 
-<pre><code>gem install aws-s3</code></pre>
+    gem install aws-s3
 
-Everything works as before, but now if you want to add S3 support, you simply set the storage setting to "s3". 
+Everything works as before, but now if you want to add S3 support, you simply
+set the storage setting to "s3". 
 
-<pre><code>Radiant::Config[assets.storage] = "s3"</code></pre>
+    Radiant::Config[assets.storage] = "s3"
  
-Then add 3 new settings with your Amazon credentials, either in the console or with the [Settings](http://github.com/Squeegy/radiant-settings/tree/master) extension:
+Then add 3 new settings with your Amazon credentials, either in the console or
+with the [Settings](http://github.com/Squeegy/radiant-settings/tree/master)
+extension:
 
 <pre><code>Radiant::Config[assets.s3.bucket] = "my_supercool_bucket"
 Radiant::Config[assets.s3.key] = "123456"
 Radiant::Config[assets.s3.secret] = "123456789ABCDEF"
 </code></pre>
 
-and finally the path you want to use within your bucket, which uses the same notation as the Paperclip plugin.
+And finally the path you want to use within your bucket, which uses the same
+notation as the Paperclip plugin.
 
-<pre><code>Radiant::Config[assets.path] = :class/:id/:basename_:style.:extension 
-</code></pre>
+Radiant::Config[assets.path] = ":class/:id/:basename_:style.:extension"
 
-The path setting, along with a new <code>url</code> setting can be used with the file system to customize both the path and url of your assets.
+The path setting, along with a new <code>url</code> setting can be used with
+the file system to customize both the path and url of your assets.
 
 
-### Migrating from the page_attachments extension
+## Migrating from Paperclipped
 
-If you're moving from page_attachments to paperclipped, here's how to migrate smoothly:
+This extension is based on Keith Bingman's original Paperclipped extension so
+the upgrade path is very simple from Paperclipped. You just need to run the
+appropriate Rake task:
 
-First, remove or disable the page_attachments extension, and install the paperclipped extension.
-For example:
+    rake radiant:update
+
+
+## Migrating from Page Attachments
+
+If you're moving from Page Attachments to this extension, here's how to
+migrate smoothly:
+
+  TODO: Tweak instructions for migrating from Page Attachments. Remove references to the Ray extension
+
+First, remove or disable the page_attachments extension, and install the
+new assets extension:
 
 <pre><code>rake ray:dis name=page_attachments
 rake ray:assets
 </code></pre>
-    
-  
+
 The migration has now copied your original `page_attachments` table to `old_page_attachments`.
 
-<pre><code>rake radiant:extensions:paperclipped:migrate_from_page_attachments
+<pre><code>rake radiant:extensions:assets:migrate_from_page_attachments
 </code></pre>
-  
-This rake task will create paperclipped-style attachments for all `OldPageAttachments`. It will also ask you if you want to clean up the old table and thumbnails in `/public/page_attachments`.
 
-Done!
+This rake task will create new attachments for all `OldPageAttachments`. It
+will also ask you if you want to clean up the old table and thumbnails in
+`/public/page_attachments`.
+
+
+## Contributions
+
+This extension is obviously a work in progress. If you would like to
+contribute, please fork the project and submit a pull request:
+
+https://github.com/radiant/radiant-assets-extension
+
+Pull requests with working tests are preferred and have a greater chance of
+being merged.
+
+
+## Support
+
+If you have questions about this extension please post a message to the
+Radiant-Dev mailing list:
+
+http://groups.google.com/group/radiantcms-dev
+
+If you would like to file a bug report or feature request, please create a
+GitHub issue here:
+
+https://github.com/radiant/radiant-assets-extension/issues
