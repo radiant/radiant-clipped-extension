@@ -146,11 +146,11 @@ the file system to customize both the path and url of your assets.
 
 ## Migrating from Paperclipped
 
-This extension is based on Keith Bingman's original Paperclipped extension so
-the upgrade path is very simple from Paperclipped. You just need to run the
-appropriate Rake task:
+TODO: Add instructions for migrating from Paperclipped
 
-    rake radiant:update
+This extension is based on Keith Bingman's original Paperclipped extension so
+the upgrade path is very simple. You just need to run the appropriate Rake
+task...
 
 
 ## Migrating from Page Attachments
@@ -179,10 +179,10 @@ will also ask you if you want to clean up the old table and thumbnails in
 
 ## Contributions
 
-This extension is obviously a work in progress. If you would like to
+This extension is a work in progress. If you would like to
 contribute, please fork the project and submit a pull request:
 
-https://github.com/radiant/radiant-assets-extension
+<https://github.com/radiant/radiant-assets-extension>
 
 Pull requests with working tests are preferred and have a greater chance of
 being merged.
@@ -193,9 +193,9 @@ being merged.
 If you have questions about this extension please post a message to the
 Radiant-Dev mailing list:
 
-http://groups.google.com/group/radiantcms-dev
+<http://groups.google.com/group/radiantcms-dev>
 
 If you would like to file a bug report or feature request, please create a
 GitHub issue here:
 
-https://github.com/radiant/radiant-assets-extension/issues
+<https://github.com/radiant/radiant-assets-extension/issues>
