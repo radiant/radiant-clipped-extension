@@ -1,12 +1,12 @@
-Paperclipped
----
+Radiant Assets Extension
+------------------------
 
-Paperclip is a new file management plugin from Thoughtbot which has a  few advantages over attachment_fu: it doesn't use RMagick, which uses a lot of RAM and is a bit of overkill for just making thumbnails. Instead it directly uses ImageMagick, making it much easier to install. 
+Paperclip is a new file management plugin from Thoughtbot which has a few advantages over attachment_fu: it doesn't use RMagick, which uses a lot of RAM and is a bit of overkill for just making thumbnails. Instead it directly uses ImageMagick, making it much easier to install. 
 
 
 ###Installation
 
-To install paperclipped, just run 
+To install the Radiant assets extension, just run 
  
 	rake production db:migrate:extensions
 	rake production radiant:extensions:paperclipped:update
@@ -19,7 +19,7 @@ If you install the Setting Extension (highly recommended), you can also easily a
 
 The configuration settings also enable a list of the allowed file types, maximum file size and should you need it, the path to your installation of Image Magick (this should not be needed, but I sometimes had a problem when using mod_rails).
 
-###Using Paperclipped
+###Usage
 
 Once installed, you get a new Tab with the entire assets library, a Bucket à la Mephisto (though only the concept is stolen) and a search. You can also easily attach assets to any page and directly upload them to a page.
 

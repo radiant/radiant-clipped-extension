@@ -2,13 +2,12 @@ require_dependency 'application_controller'
 require File.dirname(__FILE__) + '/lib/url_additions'
 include UrlAdditions
 
-class PaperclippedExtension < Radiant::Extension
+class AssetsExtension < Radiant::Extension
   version "0.8.1"
-  description "Assets extension based on the lightweight Paperclip plugin."
-  url "http://github.com/kbingman/paperclipped"
+  description "Assets extension based Keith Bingman's original Paperclipped extension."
+  url "http://github.com/radiant/radiant-assets-extension"
   
   def activate
-    
     Radiant::AdminUI.send :include, AssetsAdminUI unless defined? admin.asset # UI is a singleton and already loaded
     admin.asset = Radiant::AdminUI.load_default_asset_regions
     
