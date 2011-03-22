@@ -5,7 +5,7 @@ begin
     gem.summary = %Q{Assets extension for Radiant CMS}
     gem.description = %Q{Assets extension based Keith Bingman's excellent Paperclipped extension.}
     gem.email = "me@johnwlong.com"
-    gem.homepage = "https://github.com/radiant/paperclipped"
+    gem.homepage = "https://github.com/radiant/radiant-assets-extension"
     gem.authors = ["Keith Bingman", "Benny Degezelle", "William Ross", "John W. Long"]
     gem.add_dependency 'radiant', ">=0.9.1"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings

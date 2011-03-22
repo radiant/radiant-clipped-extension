@@ -3,7 +3,7 @@ require File.dirname(__FILE__) + '/lib/url_additions'
 include UrlAdditions
 
 class AssetsExtension < Radiant::Extension
-  version "0.8.1"
+  version "1.0"
   description "Assets extension based Keith Bingman's original Paperclipped extension."
   url "http://github.com/radiant/radiant-assets-extension"
   
@@ -14,15 +14,13 @@ class AssetsExtension < Radiant::Extension
     Admin::PagesController.class_eval {
       helper Admin::AssetsHelper
     }
-
-    %w{page}.each do |view|
-      # admin.send(view).edit.add :main, "/admin/assets/show_bucket_link", :before => "edit_header"  
-      admin.pages.edit.add :part_controls, 'admin/assets/show_bucket_link'   
-      admin.send(view).edit.add :main, "/admin/assets/assets_bucket", :after => "edit_buttons"
-      admin.send(view).edit.asset_tabs.concat %w{attachment_tab upload_tab bucket_tab search_tab}
-      admin.send(view).edit.bucket_pane.concat %w{bucket_notes bucket bucket_bottom}
-      admin.send(view).edit.asset_panes.concat %w{page_attachments upload search}
-    end
+    
+    # admin.page.edit.add :main, "/admin/assets/show_bucket_link", :before => "edit_header"  
+    admin.pages.edit.add :part_controls, 'admin/assets/show_bucket_link'   
+    admin.page.edit.add :main, "/admin/assets/assets_bucket", :after => "edit_buttons"
+    admin.page.edit.asset_tabs.concat %w{attachment_tab upload_tab bucket_tab search_tab}
+    admin.page.edit.bucket_pane.concat %w{bucket_notes bucket bucket_bottom}
+    admin.page.edit.asset_panes.concat %w{page_attachments upload search}
     
     Page.class_eval {
       has_many :page_attachments, :order => :position
@@ -34,7 +32,7 @@ class AssetsExtension < Radiant::Extension
     if defined?(TextAsset)
       TextAsset.send :include, AssetTags
     end
-
+    
     # connect UserActionObserver with my models 
     UserActionObserver.instance.send :add_observer!, Asset 
     
@@ -43,8 +41,12 @@ class AssetsExtension < Radiant::Extension
       Paperclip.options[:image_magick_path] = Radiant::Config["assets.image_magick_path"]
     end
     
-    tab 'Content' do
-      add_item I18n.translate("paperclipped.assets_title"), "/admin/assets", :after => "Pages"
+    tab "Assets", :after => "Content" do
+      add_item "All", "/admin/assets/"
+      add_item "Images", "/admin/assets/?filter[images]=true"
+      add_item "Audio", "/admin/assets/?filter[audio]=true"
+      add_item "Movies", "/admin/assets/?filter[movies]=true"
+      add_item "Others", "/admin/assets/?filter[others]=true"
     end
   end
   

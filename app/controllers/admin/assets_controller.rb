@@ -10,10 +10,10 @@ class Admin::AssetsController < Admin::ResourceController
       format.html { render }
       format.js {
         @template_name = 'index'
-        if !@page.nil?
-          render :partial => 'admin/assets/search_results.html.haml', :layout => false
+        unless @page.nil?
+          render :partial => 'admin/assets/search_results', :layout => false
         else
-          render :partial => 'admin/assets/asset_table.html.haml', :locals => { :assets => @assets }, :layout => false
+          render :partial => 'admin/assets/asset_table', :locals => { :assets => @assets }, :layout => false
         end
       }
     end
@@ -78,19 +78,19 @@ class Admin::AssetsController < Admin::ResourceController
     end
     asset_type = @asset.image? ? 'image' : 'link'
     session[:bucket][@asset.asset.url] = { :thumbnail => @asset.thumbnail(:thumbnail), :id => @asset.id, :title => @asset.title, :type => asset_type }
-
+    
     render :update do |page|
       page[:bucket_list].replace_html "#{render :partial => 'bucket'}"
     end
   end
-
+  
   def clear_bucket
     session[:bucket] = nil
     render :update do |page|
       page[:bucket_list].replace_html '<li><p class="note"><em>Your bucket is empty.</em></p></li>'
     end
   end
-
+  
   # Attaches an asset to the current page
   def attach_asset
     @asset = Asset.find(params[:asset])
@@ -102,7 +102,7 @@ class Admin::AssetsController < Admin::ResourceController
     #   page[:attachments].replace_html "#{render :partial => 'page_assets', :locals => {:page => @page}}"
     # end
   end
-
+  
   # Removes asset from the current page
   def remove_asset
     @asset = Asset.find(params[:asset])
@@ -111,7 +111,7 @@ class Admin::AssetsController < Admin::ResourceController
     clear_model_cache
     render :nothing => true
   end
-
+  
   def reorder
     params[:attachments].each_with_index do |id,idx|
       page_attachment = PageAttachment.find(id)

@@ -1,5 +1,13 @@
 ---
 en:
+  
+  assets: 'Assets'
+  all:    'All'
+  images: 'Images'
+  others: 'Others'
+  audio:  'Audio'
+  movies: 'Movies'
+  
   activerecord:
     errors:
       models:
@@ -7,10 +15,10 @@ en:
           attributes:
             asset:
               blank: 'You must choose a file to upload!'
-  paperclipped:
+  
+  assets_extension:
     add_asset_to_bucket: 'Add Asset to Bucket'
     add_to_bucket: 'Add to Bucket'
-    asset: 'Asset'
     asset_edit_title: 'Edit Asset'
     asset_errors: 'Sorry. {{errors}}'
     asset_page_attachment_note: 'Attached assets. These can be inserted with drag and drop or shown with the <code>&lt;r:assets:each /&gt;</code> tag.'

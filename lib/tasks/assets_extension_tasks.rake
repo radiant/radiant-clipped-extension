@@ -1,15 +1,15 @@
 namespace :radiant do
   namespace :extensions do
-    namespace :paperclipped do
+    namespace :assets do
       
       desc "Runs the migration of the Assets extension"
       task :migrate => :environment do
         require 'radiant/extension_migrator'
         if ENV["VERSION"]
-          PaperclippedExtension.migrator.migrate(ENV["VERSION"].to_i)
+          AssetsExtension.migrator.migrate(ENV["VERSION"].to_i)
           Rake::Task['db:schema:dump'].invoke
         else
-          PaperclippedExtension.migrator.migrate
+          AssetsExtension.migrator.migrate
           Rake::Task['db:schema:dump'].invoke
         end
       end
@@ -17,19 +17,19 @@ namespace :radiant do
       desc "Copies public assets of the Assets to the instance public/ directory."
       task :update => :environment do
         is_svn_or_dir = proc {|path| path =~ /\.svn/ || File.directory?(path) }
-        Dir[PaperclippedExtension.root + "/public/**/*"].reject(&is_svn_or_dir).each do |file|
-          path = file.sub(PaperclippedExtension.root, '')
+        Dir[AssetsExtension.root + "/public/**/*"].reject(&is_svn_or_dir).each do |file|
+          path = file.sub(AssetsExtension.root, '')
           directory = File.dirname(path)
           puts "Copying #{path}..."
           mkdir_p RAILS_ROOT + directory, :verbose => false
           cp file, RAILS_ROOT + path, :verbose => false
         end
         
-        # unless PaperclippedExtension.starts_with? RAILS_ROOT # don't need to copy vendored tasks
-        #   puts "Copying rake tasks from PaperclippedExtension"
+        # unless AssetsExtension.starts_with? RAILS_ROOT # don't need to copy vendored tasks
+        #   puts "Copying rake tasks from AssetsExtension"
         #   local_tasks_path = File.join(RAILS_ROOT, %w(lib tasks))
         #   mkdir_p local_tasks_path, :verbose => false
-        #   Dir[File.join PaperclippedExtension.root, %w(lib tasks *.rake)].each do |file|
+        #   Dir[File.join AssetsExtension.root, %w(lib tasks *.rake)].each do |file|
         #     cp file, local_tasks_path, :verbose => false
         #   end
         # end
@@ -37,7 +37,7 @@ namespace :radiant do
         desc "Syncs all available translations for this ext to the English ext master"
         task :sync => :environment do
           # The main translation root, basically where English is kept
-          language_root = PaperclippedExtension.get_translation_keys(language_root)
+          language_root = AssetsExtension.get_translation_keys(language_root)
 
           Dir["#{language_root}/*.yml"].each do |filename|
             next if filename.match('_available_tags')
@@ -115,8 +115,8 @@ If you would like to use this mode type \"yes\", type \"no\" or just hit enter t
           c.remove_column :assets, :thumbnail
         end
 
-        PaperclippedExtension.migrator.new(:up, PaperclippedExtension.migrations_path).send(:assume_migrated_upto_version, 3)
-        PaperclippedExtension.migrator.migrate
+        AssetsExtension.migrator.new(:up, AssetsExtension.migrations_path).send(:assume_migrated_upto_version, 3)
+        AssetsExtension.migrator.migrate
       end
     end
   end

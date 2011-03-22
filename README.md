@@ -15,7 +15,7 @@ Paperclipped and Page Attachments.
 To install the Radiant Assets extension, just run:
  
     rake production db:migrate:extensions
-    rake production radiant:extensions:paperclipped:update
+    rake production radiant:extensions:assets:update
 
 This runs the database migrations and installs the javascripts, images, and
 CSS.
@@ -44,7 +44,7 @@ Image Magick (this should not be needed, but I sometimes had a problem when
 using mod_rails).
 
 Paperclipped will integrate with the Styles'n'Scripts extension. For that to
-work, you'll need to load that extension before paperclipped:
+work, you'll need to load that extension before the assets extension:
 
     config.extensions = [ :sns, :all ]
 

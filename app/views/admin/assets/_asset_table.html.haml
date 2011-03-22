@@ -1,19 +1,19 @@
 %table{ :class => "index", :cellpadding => "0", :cellspacing => "0", :border => "0"}
   %tfoot
     %tr
-      %td{:colspan => 5}= t("paperclipped.assets_explanation")
+      %td{:colspan => 5}= t("assets_extension.assets_explanation")
   %thead
     %tr
       - render_region :thead do |thead|
         - thead.thumbnail_header do
           %th.asset
-            = t("paperclipped.asset")
+            = t("assets_extension.asset")
         - thead.title_header do
           %th.asset-title
-            = t("paperclipped.title")
+            = t("assets_extension.title")
         - thead.content_type_header do
           %th.content_type
-            = t("paperclipped.type")
+            = t("assets_extension.type")
         - thead.modify_header do
           %th.modify{ :colspan =>"2"}
             = t('modify')
@@ -38,12 +38,12 @@
                 = asset.asset_content_type
             - tbody.bucket_cell do
               %td.add-to-bucket
-                = link_to_remote(t("paperclipped.add_to_bucket"), :url => add_bucket_url(:id => asset))
+                = link_to_remote(t("assets_extension.add_to_bucket"), :url => add_bucket_url(:id => asset))
             - tbody.remove_cell do
               %td.remove
-                = link_to t("paperclipped.remove_asset"), remove_admin_asset_path(asset)
+                = link_to t("assets_extension.remove_asset"), remove_admin_asset_path(asset)
 
     - else
       %tr
         %td.note{ :colspan => "5" } 
-          = t("paperclipped.no_assets")
+          = t("assets_extension.no_assets")

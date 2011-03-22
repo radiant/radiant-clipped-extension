@@ -9,7 +9,7 @@ Paperclip is a new file management plugin from Thoughtbot which has a few advant
 To install the Radiant assets extension, just run 
  
 	rake production db:migrate:extensions
-	rake production radiant:extensions:paperclipped:update
+	rake production radiant:extensions:assets:update
 
 This runs the database migrations and installs the javascripts, images and css.
 
@@ -63,7 +63,7 @@ or
   
 The migration has now copied your original page_attachments table to old_page_attachments.
 
-    rake radiant:extensions:paperclipped:migrate_from_page_attachments
+    rake radiant:extensions:assets:migrate_from_page_attachments
   
-This rake task will create paperclipped-style attachments for all OldPageAttachments. It will also ask you if you want to clean up the old table and thumbnails in /public/page_attachments.
+This rake task will create attachments for all OldPageAttachments. It will also ask you if you want to clean up the old table and thumbnails in /public/page_attachments.
 Done!

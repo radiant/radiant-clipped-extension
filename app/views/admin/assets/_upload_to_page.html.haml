@@ -2,11 +2,11 @@
   - form_for :asset, :url => admin_assets_path(:page => @page, :format => 'js'), :html => { :id => 'asset-upload', :method => "post", :multipart => true, :target => 'ulframe' } do |form|
     %div.file
       %label.upload
-        = t("paperclipped.choose_upload")
+        = t("assets_extension.choose_upload")
       = form.file_field :asset, :class => "", :style => "width: 100%"
 
     .upload-buttons
-      = form.submit t("paperclipped.save_and_upload"), :class => "button"
+      = form.submit t("assets_extension.save_and_upload"), :class => "button"
       %div.spinner
         
   %iframe{ :id => 'ulframe', :name => "ulframe", :src => "about:blank"}

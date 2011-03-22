@@ -3,9 +3,9 @@
 
 - render_region :main do |main|
   - main.edit_header do
-    %h1= t("paperclipped.new_asset")
+    %h1= t("assets_extension.new_asset")
     %p 
-      != t("paperclipped.asset_upload_note")
+      != t("assets_extension.asset_upload_note")
 
   - main.edit_form do  
     - form_for :asset, :url => admin_assets_path, :html => { :method => "post", :multipart => true } do |f|
@@ -14,7 +14,7 @@
 
         %p.upload
           %label.upload
-            = t("paperclipped.choose_upload")
+            = t("assets_extension.choose_upload")
           = f.file_field :asset, :class => "", :style => "width: 100%"
      
         %p.buttons
