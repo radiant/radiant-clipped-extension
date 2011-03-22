@@ -23,6 +23,8 @@ CSS.
 
 ## Configuration
 
+TODO: Remove references to Settings extension
+
 If you install the Settings Extension (highly recommended), you can also
 easily adjust both the sizes of any additional thumbnails and which thumbnails
 are displayed in the image edit view. The default is the original file, but
@@ -158,7 +160,7 @@ task...
 If you're moving from Page Attachments to this extension, here's how to
 migrate smoothly:
 
-  TODO: Tweak instructions for migrating from Page Attachments. Remove references to the Ray extension
+TODO: Tweak instructions for migrating from Page Attachments. Remove references to the Ray extension
 
 First, remove or disable the page_attachments extension, and install the
 new assets extension:
