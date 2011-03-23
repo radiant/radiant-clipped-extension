@@ -18,9 +18,4 @@
   #actions
     = pagination_for @assets, :depaginate => false
     %ul
-      %li= link_to((image('plus', :alt => '') + ' ' + t('assets_extension.new_asset')), new_admin_asset_path)
-      - unless Asset.thumbnail_sizes.blank?
-        %li.highlight
-          = t('assets_extension.need_to_upload')
-          = automatic_size_descriptions
-          = t('assets_extension.images_automatically_created')
+      %li= link_to((image('upload') + ' ' + t('assets_extension.upload_asset')), new_admin_asset_path)

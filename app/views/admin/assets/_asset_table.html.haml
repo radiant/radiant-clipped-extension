@@ -1,7 +1,4 @@
-%table{ :class => "index", :cellpadding => "0", :cellspacing => "0", :border => "0"}
-  %tfoot
-    %tr
-      %td{:colspan => 5}= t("assets_extension.assets_explanation")
+%table.index#assets
   %thead
     %tr
       - render_region :thead do |thead|
@@ -9,26 +6,25 @@
           %th.asset
             = t("assets_extension.asset")
         - thead.title_header do
-          %th.asset-title
+          %th.asset_title
             = t("assets_extension.title")
         - thead.content_type_header do
           %th.content_type
             = t("assets_extension.type")
-        - thead.modify_header do
-          %th.modify{ :colspan =>"2"}
-            = t('modify')
-
+        - thead.actions_header do
+          %th.actions
+            = t('assets_extension.actions')
   %tbody
     - unless assets.empty?
       - for asset in assets 
-        %tr.node.level-1
+        %tr[asset]
           - render_region :tbody, :locals => { :asset => asset } do |tbody|
             - tbody.thumbnail_cell do
-              %td.asset
+              %td.icon
                 - asset_id = "asset_#{asset.id.to_s}"
                 = link_to image_tag(asset.thumbnail(:icon)), edit_admin_asset_path(asset), :class => 'icon'
             - tbody.title_cell do
-              %td.asset-title
+              %td.name
                 = link_to asset.title, edit_admin_asset_path(asset) 
                 &nbsp;
                 %span.caption
@@ -36,14 +32,12 @@
             - tbody.content_type_cell do
               %td.content_type
                 = asset.asset_content_type
-            - tbody.bucket_cell do
-              %td.add-to-bucket
-                = link_to_remote(t("assets_extension.add_to_bucket"), :url => add_bucket_url(:id => asset))
-            - tbody.remove_cell do
-              %td.remove
-                = link_to t("assets_extension.remove_asset"), remove_admin_asset_path(asset)
-
+            - tbody.actions_cell do
+              %td.actions
+                = link_to_remote(image('plus') + ' ' + t("assets_extension.add_to_bucket"), {:url=>add_bucket_url(:id => asset)}, {:class=>"action"})
+                = link_to(image_tag('/images/assets/copy.png') + ' ' + t("assets_extension.copy"), '', :class=>"action")
+                = link_to(image('minus') + ' ' + t("assets_extension.remove"), remove_admin_asset_path(asset), :class=>"action")
     - else
       %tr
-        %td.note{ :colspan => "5" } 
+        %td.empty{:colspan=>"4"} 
           = t("assets_extension.no_assets")
