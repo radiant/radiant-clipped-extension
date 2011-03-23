@@ -29,7 +29,6 @@ class Admin::AssetsController < Admin::ResourceController
 
       respond_to do |format|
         format.html {
-          flash[:notice] = "Asset successfully uploaded."
           redirect_to(@page ? edit_admin_page_path(@page) : (params[:continue] ? edit_admin_asset_path(@asset) : admin_assets_path))
         }
         format.js {

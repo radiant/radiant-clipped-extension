@@ -3,11 +3,8 @@
     %tr
       - render_region :thead do |thead|
         - thead.thumbnail_header do
-          %th.asset
+          %th.asset{:colspan=>2}
             = t("assets_extension.asset")
-        - thead.title_header do
-          %th.asset_title
-            = t("assets_extension.title")
         - thead.content_type_header do
           %th.content_type
             = t("assets_extension.type")
@@ -34,7 +31,7 @@
                 = asset.asset_content_type
             - tbody.actions_cell do
               %td.actions
-                = link_to_remote(image('plus') + ' ' + t("assets_extension.add_to_bucket"), {:url=>add_bucket_url(:id => asset)}, {:class=>"action"})
+                = link_to_remote(image('plus') + ' ' + t("assets_extension.bucket"), {:url=>add_bucket_url(:id => asset)}, {:class=>"action"})
                 = link_to(image_tag('/images/assets/copy.png') + ' ' + t("assets_extension.copy"), '', :class=>"action")
                 = link_to(image('minus') + ' ' + t("assets_extension.remove"), remove_admin_asset_path(asset), :class=>"action")
     - else
