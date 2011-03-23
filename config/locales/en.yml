@@ -17,6 +17,9 @@ en:
               blank: 'You must choose a file to upload!'
   
   assets_extension:
+    all: 'All'
+    assets: 'Assets'
+    asset: 'Asset'
     add_asset_to_bucket: 'Add Asset to Bucket'
     add_to_bucket: 'Add to Bucket'
     asset_edit_title: 'Edit Asset'
@@ -31,6 +34,7 @@ en:
     attach_to_page: 'Attach to page'
     audio: 'Audio'
     bucket: 'Bucket'
+    documents: 'Documents'
     bucket_note: 'The Bucket provides temporary storage for your items. You can use it to place items in your pages or snippets.'
     caption: 'Caption'
     choose_upload: 'Choose a file to upload'

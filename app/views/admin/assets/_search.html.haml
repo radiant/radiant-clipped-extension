@@ -1,0 +1,18 @@
+- form_tag(admin_assets_path, :id=>'filesearchform', :method => 'get', :class=>"search") do
+  .asset_filters
+    = link_to t("assets_extension.all"), "#", :class=>"pressed"
+    = link_to t("assets_extension.images"), "#"
+    = link_to t("assets_extension.documents"), "#"
+    = link_to t("assets_extension.audio"), "#"
+    = link_to t("assets_extension.movies"), "#"
+    = link_to t("assets_extension.others"), "#"
+  
+  .right
+    %input{:type=>"search", :id=>"search", :name=>"search", :value=>h(params[:search]), :placeholder=>"Search", :results=>0, :size=>30} 
+    = observe_field 'search',  :frequency => 1, :update => 'assets_table', :url =>  { :controller => 'assets', :action=> 'index' }, :method => 'get', :with => "'search=' + escape(value)"
+  
+  #type_boxes{:style => "display: none"}
+    = check_box_tag 'filter[audio]',  '1', false, :id => 'audio-check' 
+    = check_box_tag 'filter[image]',  '1', false, :id => 'images-check' 
+    = check_box_tag 'filter[other]',  '1', false, :id => 'others-check' 
+    = check_box_tag 'filter[movie]',  '1', false, :id => 'movies-check'

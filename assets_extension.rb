@@ -42,11 +42,7 @@ class AssetsExtension < Radiant::Extension
     end
     
     tab "Assets", :after => "Content" do
-      add_item "All", "/admin/assets/"
-      add_item "Images", "/admin/assets/?filter[images]=true"
-      add_item "Audio", "/admin/assets/?filter[audio]=true"
-      add_item "Movies", "/admin/assets/?filter[movies]=true"
-      add_item "Others", "/admin/assets/?filter[others]=true"
+      add_item "Home", "/admin/assets/"
     end
   end
   
