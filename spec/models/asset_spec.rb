@@ -55,6 +55,7 @@ describe Asset do
     it 'should return resized image for images when given size' do
       image = new_asset :asset_content_type => 'image/jpeg'
       image.stub! :asset => mock('asset')
+      image.asset.stub!(:content_type).and_return('image/jpeg')
       image.asset.stub!(:url).with(:thumbnail).and_return('/re/sized/image_thumbnail.jpg')
       image.thumbnail('thumbnail').should == '/re/sized/image_thumbnail.jpg'
     end
