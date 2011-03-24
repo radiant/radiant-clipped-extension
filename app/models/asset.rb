@@ -8,6 +8,8 @@ class Asset < ActiveRecord::Base
   # for example: Asset.register_type(:gps, %w{application/gpx+xml application/tcx+xml})
   # the main Asset register_type() calls are in the class definition below after validation
   
+  # TODO: bring across AssetType class to get all this properly encapsulated and out of the way
+  
   def self.register_type(type, mimes)
     constname = type.to_s.upcase.to_sym
     Mime.send(:remove_const, constname) if Mime.const_defined?(constname)
