@@ -4,7 +4,7 @@ module AssetTags
   
   class TagError < StandardError; end
   
-  %w{top_padding width height :title, caption asset_file_name asset_content_type asset_file_size id filename image flash thumbnail url link extension if_content_type page:title page:url}.each do |name|
+  %w{top_padding width height caption asset_file_name asset_content_type asset_file_size id filename image flash thumbnail url link extension if_content_type page:title page:url}.each do |name|
     deprecate_tag "assets:#{name}", :substitute => "asset:#{name}", :deadline => '2.0'
   end
   
@@ -17,7 +17,7 @@ module AssetTags
     The namespace for referencing images and assets.
     
     *Usage:* 
-    <pre><code><r:asset [title="asset_title"]>...</r:assets></code></pre>
+    <pre><code><r:asset [title="asset_title"]>...</r:asset></code></pre>
   }    
   tag 'asset' do |tag|
     tag.locals.asset = Asset.find_by_title(tag.attr['title']) || Asset.find(tag.attr['id']) unless tag.attr.empty?
@@ -45,7 +45,7 @@ module AssetTags
   end
 
   # General purpose paginated asset lister. Very useful dryness.
-  # Tag.logs.assets must be defined but can be empty.
+  # Tag.locals.assets must be defined but can be empty.
 
   tag 'asset_list' do |tag|
     raise TagError, "r:asset_list: no assets to list" unless tag.locals.assets
