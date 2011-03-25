@@ -56,6 +56,9 @@ class Asset < ActiveRecord::Base
     asset_file_name.split('.').last.downcase if asset_file_name
   end
 
+  # geometry  methods will return here
+  # if they can be made more S3-friendly
+
 private
 
   def assign_title

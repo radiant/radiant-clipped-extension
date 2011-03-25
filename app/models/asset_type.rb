@@ -96,10 +96,6 @@ class AssetType
 
   # class methods
   
-  def self.mime_lookup
-    @@mime_lookup
-  end
-  
   def self.from(mimetype)
     @@mime_lookup[mimetype] || catchall
   end

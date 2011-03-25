@@ -8,6 +8,7 @@ class AssetsExtension < Radiant::Extension
   url "http://github.com/radiant/radiant-assets-extension"
   
   def activate
+    # Radiant::Taggable.send :include, TagDeprecation                                    # 
     Page.send :include, PageAssetAssociations                                          # defines page-asset associations. likely to be generalised soon.
     Radiant::AdminUI.send :include, AssetsAdminUI unless defined? admin.asset          # defines shards for extension of the asset-admin interface
     Admin::PagesController.send :helper, Admin::AssetsHelper                           # currently only provides a description of asset sizes
