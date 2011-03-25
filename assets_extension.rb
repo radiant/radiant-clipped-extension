@@ -34,8 +34,8 @@ class AssetsExtension < Radiant::Extension
       Paperclip.options[:image_magick_path] = Radiant::Config["assets.image_magick_path"]
     end
     
-    tab "Content" do
-      add_item "Assets", "/admin/assets/"
+    tab "Assets", :after => "Content" do
+      add_item "All", "/admin/assets/"
     end
   end
   
