@@ -1,0 +1,258 @@
+@import 'compass'
+
+.asset_filters
+  float: left
+  padding: 4px 0
+  a
+    +border-radius(100px)
+    color: #555
+    padding: 3px 8px
+    text-decoration: none
+    font-size: 12px
+    &:hover
+      background: #ccc
+    &.pressed
+      background: #888
+      +box-shadow(0, 1px, 1px, #333, inset)
+      color: white
+      text-shadow: 0 1px 0 #333
+      &:hover
+        background: #888
+        +box-shadow(0, 1px, 1px, #333, inset)
+        color: white
+        text-shadow: 0 1px 0 #333
+
+.regenerator
+  float: right
+  margin-top: -40px
+  a
+    background: #000
+    color: #ccc
+    padding: 5px
+    font-size: 80%
+    text-decoration: none
+
+td.icon
+  width: 32px
+  text-align: right
+  a img
+    padding: 2px
+    background-color: #eee
+    border: 1px solid #ccc
+
+table.index#assets
+  th.content_type, td.content_type
+    width: 120px
+  td.content_type
+    font-size: 10px
+    font-weight: normal
+  th.actions, td.actions
+    width: 180px
+
+#asset-bucket
+  width: 70%
+  padding: 20px
+  cursor: move
+
+#assets-container, #asset-bucket
+  background-color: #9e9e9e
+
+#page #assets-container
+  margin-left: -20px
+  margin-right: -20px
+  padding: 20px
+
+#content #asset-bucket
+  form label
+    color: black
+    text-shadow: none
+  #search-assets form label
+    display: inline
+
+#close-link
+  margin-top: 10px
+
+div#assets
+  clear: both
+  position: relative
+  margin-bottom: 4px
+  padding: 0
+  cursor: default
+  min-height: 150px
+  height: auto !important
+  height: 150px
+  background: white
+
+#asset-bucket
+  +box-shadow(2px, 2px, 3px, rgba(0, 0, 0, 0.148))
+
+#assets .pane
+  +box-shadow(2px, 2px, 3px, rgba(0, 0, 0, 0.148))
+  background: #f5f1e2 url(/images/admin/vertical_tan_gradient.png) repeat-x 0% 0%
+  padding: 12px 20px
+
+#content .form-area .asset
+  background: #f5f1e2 url(/images/admin/vertical_tan_gradient.png) repeat-x 0% 0%
+  padding: 12px 20px
+
+div#assets
+  h4
+    font-size: 100%
+    font-weight: bold
+    margin: 0
+  p
+    padding: 0
+    margin: 0
+    line-height: 22px
+
+#clear-bucket, #reorder, #done
+  position: absolute
+  right: 10px
+
+#clear-bucket a, #reorder a, #done a
+  text-align: right
+  font-weight: bold
+  font-size: 85%
+  color: black
+  text-decoration: none
+
+#clear-bucket a:hover, #reorder a:hover, #done a:hover
+  color: blue
+  text-decoration: underline
+
+#asset-tabs
+  margin: 0
+  .asset-tab
+    background-color: #CAC8C0
+    color: #7F7F7F
+    +border-top-radius(6px)
+    display: inline-block
+    font-weight: bold
+    text-align: left
+    font-size: 90%
+    margin-right: 5px
+    padding: 7px 10px 4px
+    text-decoration: none
+    text-transform: titlecase
+    outline: none
+    &.here
+      background-color: white
+      color: black
+
+#bucket ul, #page-attachments ul, #search-results ul
+  list-style: none
+  margin: 0
+  padding: 0 10px 0 0
+
+div#assets
+  li
+    position: relative
+    float: left
+    margin: 8px 8px 0 8px
+    height: 106px
+    padding-right: 24px
+  .asset
+    position: relative
+    img
+      padding: 3px
+      background-color: #eaeaea
+      border: 1px solid #ccc
+  .info
+    position: absolute
+    top: 0
+    right: 0
+    p
+      margin: 0
+    a
+      display: block
+      color: black
+      text-decoration: none
+      height: 16
+      width: 16px
+      border: 1px solid #ccc
+      margin: 0 0 5px 0
+      &#edit_asset
+        background: white url('/images/assets/edit.png') center center no-repeat
+      &#add_asset
+        background: white url('/images/admin/plus.png') center center no-repeat
+      &#remove_asset
+        background: white url('/images/admin/minus.png') center center no-repeat
+    img.reorder
+      border: 1px solid #ccc
+      cursor: move
+    a:hover
+      color: blue
+      text-decoration: underline
+  .image_info h4
+    margin: 0 0 10px 0
+    padding: 0
+    background: none
+
+#content
+  .form-area
+    .asset
+      padding-top: 20px
+      padding-bottom: 20px
+    .upload
+  p.content label.filename
+    margin-bottom: -5px
+    display: block
+  .form-area p.upload label
+    margin-bottom: 5px
+    display: block
+
+p
+  &#asset-name
+    padding-top: 8px
+    font-size: 80%
+  &.info
+    font-size: 85%
+
+.asset-buttons
+  font-size: 80%
+
+#upload-assets a
+  color: black
+  font-weight: bold
+  text-decoration: none
+  &:hover
+    color: blue
+    text-decoration: underline
+
+#upload-form
+  .file
+    padding: 10px 10px 5px
+  .upload-buttons
+    padding: 0 10px
+    font-size: 80%
+  label
+    margin-bottom: 5px
+    display: block
+    font-weight: bold
+  iframe
+    width: 1px
+    height: 1px
+    border: 0
+
+#asset-upload
+  .spinner
+    display: none
+    width: 16px
+    height: 16px
+    background-image: url(/images/admin/spinner.gif)
+  &.waiting
+    color: #666
+    .spinner
+      display: block
+    .button
+      display: none
+
+.move a
+  cursor: move
+
+#show-bucket
+  font-size: 85%
+  padding: 0 0 0 4px
+
+#content form #show-bucket a
+  color: #44e

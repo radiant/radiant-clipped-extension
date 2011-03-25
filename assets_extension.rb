@@ -37,10 +37,28 @@ class AssetsExtension < Radiant::Extension
     tab "Assets", :after => "Content" do
       add_item "All", "/admin/assets/"
     end
+    
+    update_sass_each_request if RAILS_ENV == 'development'
   end
   
   def deactivate
     
   end
+  
+  private
+  
+    def update_sass_each_request
+      ApplicationController.class_eval do
+        prepend_before_filter :update_assets_sass
+        def update_assets_sass
+          radiant_assets_sass = "#{RAILS_ROOT}/public/stylesheets/sass/admin/assets.sass"
+          extension_assets_sass = "#{AssetsExtension.root}/public/stylesheets/sass/admin/assets.sass"
+          FileUtils.mkpath File.dirname(radiant_assets_sass)
+          if (not File.exists?(radiant_assets_sass)) or (File.mtime(extension_assets_sass) > File.mtime(radiant_assets_sass))
+            FileUtils.cp extension_assets_sass, radiant_assets_sass
+          end
+        end
+      end
+    end
   
 end
