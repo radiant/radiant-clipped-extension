@@ -1,13 +1,13 @@
 ---
 en:
-  
+
   assets: 'Assets'
   all:    'All'
   images: 'Images'
   others: 'Others'
   audio:  'Audio'
   movies: 'Movies'
-  
+
   activerecord:
     errors:
       models:
@@ -15,9 +15,9 @@ en:
           attributes:
             asset:
               blank: 'You must choose a file to upload!'
-  
+
   assets_extension:
-    actions: Actions
+    actions: 'Actions'
     add_asset_to_bucket: 'Add Asset to Bucket'
     add_to_bucket: 'Add to Bucket'
     all: 'All'
@@ -71,7 +71,22 @@ en:
     search: 'Search'
     show_assets_bucket: 'Show Assets Bucket'
     title: 'Title'
-    type: 'Type'  
+    type: 'Type'
     types_to_find: 'Types to find'
     upload: 'Upload'
     upload_asset: 'Upload Asset'
+
+  config:
+    assets:
+      additional_thumbnails: 'Additional Thumbnails'
+      content_types: 'Content Types'
+      display_size: 'Display Size'
+      max_asset_size: 'Max Asset Size'
+      path: 'Path'
+      skip_filetype_validation: 'Skip Filetype Validation'
+      storage: 'Storage'
+      url: 'Url'
+      s3:
+        bucket: 'Bucket'
+        key: 'Key'
+        secret: 'Secret'

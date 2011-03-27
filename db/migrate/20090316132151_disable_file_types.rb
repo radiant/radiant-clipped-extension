@@ -1,8 +1,8 @@
 class DisableFileTypes < ActiveRecord::Migration
   def self.up
-    Radiant::Config['assets.skip_filetype_validation'] = true
-    puts "-- Setting default content types in Radiant::Config"
     if defined? SettingsExtension && Radiant::Config.column_names.include?('description')
+      puts "-- Adding Settings Extension descriptions for assets.skip_filetype_validations"
+
       Radiant::Config.find(:all).each do |c|
        description = case c.key
          when 'assets.skip_filetype_validations'
