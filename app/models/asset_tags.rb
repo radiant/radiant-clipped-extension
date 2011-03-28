@@ -5,12 +5,12 @@ module AssetTags
   class TagError < StandardError; end
   
   %w{top_padding width height caption asset_file_name asset_content_type asset_file_size id filename image flash thumbnail url link extension if_content_type page:title page:url}.each do |name|
-    deprecate_tag "assets:#{name}", :substitute => "asset:#{name}", :deadline => '2.0'
+    deprecated_tag "assets:#{name}", :substitute => "asset:#{name}", :deadline => '2.0'
   end
   
   Asset.known_types.each do |known_type|
-    deprecate_tag "assets:if_#{known_type}", :substitute => "asset:if_#{known_type}", :deadline => '2.0'
-    deprecate_tag "assets:unless_#{known_type}", :substitute => "asset:unless_#{known_type}", :deadline => '2.0'
+    deprecated_tag "assets:if_#{known_type}", :substitute => "asset:if_#{known_type}", :deadline => '2.0'
+    deprecated_tag "assets:unless_#{known_type}", :substitute => "asset:unless_#{known_type}", :deadline => '2.0'
   end
   
   desc %{

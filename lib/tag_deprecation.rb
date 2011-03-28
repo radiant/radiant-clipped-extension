@@ -16,10 +16,10 @@ module TagDeprecation
 
     # Define a tag while also deprecating it. Normal usage:
     #
-    #   deprecate_tag 'old:way', :substitute => 'new:way', :deadline => '1.1.1'
+    #   deprecated_tag 'old:way', :substitute => 'new:way', :deadline => '1.1.1'
     #
     # If no substitute is given then a warning will be issued but nothing rendered. 
-    # If a deadilne version is provided then it will be included in the deprecation warnings.
+    # If a deadline version is provided then it will be mentioned in the deprecation warnings.
     #
     # In more complex situations you can use deprecate_tag in exactly the 
     # same way as tags are normally defined:
@@ -28,11 +28,11 @@ module TagDeprecation
     #   Please note that the old r:busted namespace is no longer supported. 
     #   Refer to the documentation for more about the new r:hotness tags.
     # }
-    # deprecate_tag 'busted' do |tag|
+    # deprecated_tag 'busted' do |tag|
     #   raise TagError "..."
     # end
     #
-    def deprecate_tag(name, options={}, &block)
+    def deprecated_tag(name, options={}, &block)
       @@tag_deprecations ||= {}
       @@tag_deprecations[name.to_sym] = options
       
@@ -40,6 +40,7 @@ module TagDeprecation
       Radiant::Taggable.last_description = nil
       
       if block
+        # notify_of_deprecation(name, options)
         define_method("tag:#{name}", &block)
       else
         define_method("tag:#{name}") do |tag|
