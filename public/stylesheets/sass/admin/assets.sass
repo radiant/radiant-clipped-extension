@@ -71,25 +71,13 @@ table.index#assets
   &.waiting
     opacity: 0.5
 
-#asset-bucket
-  width: 70%
-  padding: 20px
-  cursor: move
-
-#assets-container, #asset-bucket
+#assets-container
   background-color: #9e9e9e
 
 #page #assets-container
   margin-left: -20px
   margin-right: -20px
   padding: 20px
-
-#content #asset-bucket
-  form label
-    color: black
-    text-shadow: none
-  #search-assets form label
-    display: inline
 
 #close-link
   margin-top: 10px
@@ -104,9 +92,6 @@ div#assets
   height: auto !important
   height: 150px
   background: white
-
-#asset-bucket
-  +box-shadow(2px, 2px, 3px, rgba(0, 0, 0, 0.148))
 
 #assets .pane
   +box-shadow(2px, 2px, 3px, rgba(0, 0, 0, 0.148))
@@ -127,20 +112,18 @@ div#assets
     margin: 0
     line-height: 22px
 
-#clear-bucket, #reorder, #done
+#reorder, #done
   position: absolute
   right: 10px
-
-#clear-bucket a, #reorder a, #done a
-  text-align: right
-  font-weight: bold
-  font-size: 85%
-  color: black
-  text-decoration: none
-
-#clear-bucket a:hover, #reorder a:hover, #done a:hover
-  color: blue
-  text-decoration: underline
+  a
+    text-align: right
+    font-weight: bold
+    font-size: 85%
+    color: black
+    text-decoration: none
+    &:hover
+      color: blue
+      text-decoration: underline
 
 #asset-tabs
   margin: 0
@@ -161,10 +144,11 @@ div#assets
       background-color: white
       color: black
 
-#bucket ul, #page-attachments ul, #search-results ul
-  list-style: none
-  margin: 0
-  padding: 0 10px 0 0
+#page-attachments, #search-results
+  ul
+    list-style: none
+    margin: 0
+    padding: 0 10px 0 0
 
 div#assets
   li
@@ -272,10 +256,3 @@ p
 
 .move a
   cursor: move
-
-#show-bucket
-  font-size: 85%
-  padding: 0 0 0 4px
-
-#content form #show-bucket a
-  color: #44e

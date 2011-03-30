@@ -1,4 +1,6 @@
 - include_stylesheet 'admin/assets'
+- include_javascript 'ZeroClipboard'
+- include_javascript 'admin/assets'
 
 - content_for :toolbar do
   = render 'search'
@@ -11,8 +13,6 @@
           = link_to t('assets_extension.regenerate_all_thumbnails') , refresh_admin_assets_path, :confirm => 'Beware that this will take a while and consume considerable resources on your server. Are you sure you want to continue?'
   #assets_table
     = render :partial => 'asset_table', :locals => { :assets => @assets }
-
-= render :partial => 'assets_container'
     
 - render_region :bottom do |bottom|
   #actions

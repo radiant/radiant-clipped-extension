@@ -1,9 +1,7 @@
 Radiant Assets Extension
 ------------------------
 
-Based on Keith Bingman's excellent Paperclipped extension for Radiant. This
-extension provides Mephisto-style asset management for Radiant. Complete with
-an asset bucket and easy upload functionality.
+Based on Keith Bingman's excellent Paperclipped extension for Radiant.
 
 This extension is an experimental extension designed for Radiant version 1.0
 or higher. The goal is that it will be a drop-in replacement for both
@@ -60,9 +58,8 @@ page.
 
 The Radiant assets extension adds a variety of new tags. The basic tag is the
 <code><r:asset /></code> tag, which can be used either alone or as a double
-tag. This tag requires the "name" attribute, which references the asset. If
-you use the drag and drop from the asset bucket, this name will be added for
-you. The <code><r:asset /></code> tag can be combined with other tags for a
+tag. This tag requires the "name" attribute, which references the asset.
+The <code><r:asset /></code> tag can be combined with other tags for a
 variety of uses:
 
     <r:asset:image name="image.png" />  #=>  <img src="/path/to/image.png" />
@@ -136,11 +133,6 @@ extension:
 Radiant::Config[assets.s3.key] = "123456"
 Radiant::Config[assets.s3.secret] = "123456789ABCDEF"
 </code></pre>
-
-And finally the path you want to use within your bucket, which uses the same
-notation as the Paperclip plugin.
-
-Radiant::Config[assets.path] = ":class/:id/:basename_:style.:extension"
 
 The path setting, along with a new <code>url</code> setting can be used with
 the file system to customize both the path and url of your assets.

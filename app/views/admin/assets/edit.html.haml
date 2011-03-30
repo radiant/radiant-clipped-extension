@@ -16,7 +16,8 @@
               = "#{t("assets_extension.filename")}: #{@asset.asset_file_name unless @asset.new_record?}"
           %p.asset
             - if @asset.image?
-              = image_tag @asset.thumbnail(Radiant::Config['assets_extension.display_size'].to_sym)
+              - display_size = Radiant::Config['assets_extension.display_size'] || 'normal'
+              = image_tag @asset.thumbnail(display_size.to_sym)
             - else
               = link_to image_tag(@asset.thumbnail(:thumbnail)), @asset.asset.url
           = updated_stamp @asset
@@ -30,12 +31,7 @@
           = save_model_button(@asset)
           = save_model_and_continue_editing_button(@asset)
           = t("or")
-          = link_to_remote t("assets_extension.add_asset_to_bucket"), :url => add_bucket_path(:id => @asset)
-          = t("or")
           = link_to t("cancel"), admin_assets_path
-          
-  - main.assets_container do
-    = render :partial => 'assets_container'
     
   - main.edit_regenerate do
     - if current_user.admin? or current_user.designer?

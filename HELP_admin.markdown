@@ -21,11 +21,11 @@ The configuration settings also enable a list of the allowed file types, maximum
 
 ###Usage
 
-Once installed, you get a new Tab with the entire assets library, a Bucket à la Mephisto (though only the concept is stolen) and a search. You can also easily attach assets to any page and directly upload them to a page.
+This is changing fast and the new interface will be described shortly. You can think of it as reusable page attachments through a compact interface presented largely inside the page-editing view, with fuller asset-administration tools available under the asset tab.
 
 ###Asset Tags
 
-There are a veriety of new tags. The basic tag is the <r:assets /> tag, which can be used either alone or as a double tag. This tag requires the "title" attribute, which references the asset. If you use the drag and drop from the asset bucket, this title will be added for you. 
+There are a veriety of new tags. The basic tag is the <r:assets /> tag, which can be used either alone or as a double tag. This tag requires the "title" attribute, which references the asset.
 
 The *&lt;r:assets /&gt;* tag can be combined with other tags for a variety of uses: 
 

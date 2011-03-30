@@ -82,29 +82,7 @@ class Admin::AssetsController < Admin::ResourceController
       redirect_to edit_admin_asset_path(@asset)
     end
   end
-  
-  
-  # Bucket related actions. These may need to be spun out into a seperate controller
-  # update?
-  def add_bucket
-    @asset = Asset.find(params[:id])
-    if (session[:bucket] ||= {}).key?(@asset.asset.url)
-      render :nothing => true and return
-    end
-    asset_type = @asset.image? ? 'image' : 'link'
-    session[:bucket][@asset.asset.url] = { :thumbnail => @asset.thumbnail(:thumbnail), :id => @asset.id, :title => @asset.title, :type => asset_type }
 
-    render :update do |page|
-      page[:bucket_list].replace_html "#{render :partial => 'bucket'}"
-    end
-  end
-  
-  def clear_bucket
-    session[:bucket] = nil
-    render :update do |page|
-      page[:bucket_list].replace_html '<li><p class="note"><em>Your bucket is empty.</em></p></li>'
-    end
-  end
   
   # Attaches an asset to the current page
   def attach_asset
@@ -119,7 +97,7 @@ class Admin::AssetsController < Admin::ResourceController
   end
   
   # Removes asset from the current page
-  def remove_asset    
+  def detach_asset    
     @asset = Asset.find(params[:asset])
     @page = Page.find(params[:page])
     @page.assets.delete(@asset)

@@ -1,7 +1,4 @@
 document.observe("dom:loaded", function() {
-  if($('asset-bucket')){
-    new Draggable('asset-bucket', { starteffect: false, endeffect: false });
-  }
   if($('page-attachments')){
     Asset.ChooseTabByName('page-attachments');
   }
@@ -71,7 +68,6 @@ Asset.MakeDroppables = function () {
       Droppables.add(box, {
         accept: 'asset',
         onDrop: function(element) {
-          var link = element.select('a.bucket_link')[0];
           var asset_id = element.id.split('_').last();
           var classes = element.className.split(' ');
           var tag_type = classes[0];
@@ -94,24 +90,6 @@ Asset.MakeDroppables = function () {
     }
   });
 }
-
-Asset.ShowBucket = Behavior.create({
-  onclick: function(e){
-    e.stop();
-    var element = $('asset-bucket');
-    element.centerInViewport();
-    element.toggle();
-    Asset.MakeDroppables();
-  }
-});
-
-Asset.HideBucket = Behavior.create({
-  onclick: function(e){
-    e.stop();
-    var element = $('asset-bucket');
-    element.hide();
-  }
-});
 
 Asset.NoFileTypes = Behavior.create({
   onclick: function(e){
@@ -209,8 +187,6 @@ Asset.AddAsset = function (name) {
 
 Event.addBehavior({
   '#asset-tabs a'     : Asset.Tabs,
-  '#close-link a'     : Asset.HideBucket,
-  '#show-bucket a'    : Asset.ShowBucket,
   '#filesearchform a.deselective' : Asset.NoFileTypes,
   '#filesearchform a.selective ' : Asset.FileTypes,
   '#asset-upload'     : Asset.WaitingForm,

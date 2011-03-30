@@ -22,13 +22,8 @@ class AssetsExtension < Radiant::Extension
     # AssetType.new :movie, :mime_types => AssetType.mime_types_for(:video, :swf)        # this is an alias for backwards-compatibility: movie could previously be either video or flash. (existing mime-type lookup table is not affected but methods like Asset#movie? are created)
     AssetType.new :other                                                               #  # an AssetType declared with no (or unknown) mime-types is filed under 'everything else'
     
-    admin.asset ||= Radiant::AdminUI.load_default_asset_regions                        # loads the shards defined above
-    # admin.page.edit.add :main, "/admin/assets/show_bucket_link", :before => "edit_header"  
-    admin.pages.edit.add :part_controls, 'admin/assets/show_bucket_link'   
-    admin.page.edit.add :main, "/admin/assets/assets_bucket", :after => "edit_buttons"
-    admin.page.edit.asset_tabs.concat %w{attachment_tab upload_tab bucket_tab search_tab}
-    admin.page.edit.bucket_pane.concat %w{bucket_notes bucket bucket_bottom}
-    admin.page.edit.asset_panes.concat %w{page_attachments upload search}
+    admin.asset ||= Radiant::AdminUI.load_default_asset_regions                        # loads the shards defined in AssetsAdminUI
+    admin.page.edit.assets.concat %w{page_attachments upload search}                   # adds asset-attachment blocks to page edit view
     
     if Radiant::Config.table_exists? && Radiant::Config["assets.image_magick_path"]    # This is just needed for testing if you are using mod_rails
       Paperclip.options[:image_magick_path] = Radiant::Config["assets.image_magick_path"]

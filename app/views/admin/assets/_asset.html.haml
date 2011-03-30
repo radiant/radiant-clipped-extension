@@ -4,7 +4,7 @@
 
 %li{ :id => dom_id }
   %div{ :class => "#{asset_type} asset", :id => "asset_#{asset.id}"}
-    = link_to image_tag(asset.thumbnail(:thumbnail)), asset.thumbnail, :onclick => "return false;", :class => "bucket_link", :title => asset.title
+    = link_to image_tag(asset.thumbnail(:thumbnail)), asset.thumbnail, :onclick => "return false;", :title => asset.title
   .info{ :id => "#{dom_id}_info" }
     %strong
       = link_to image_tag('/images/assets/edit.png'), edit_admin_asset_path(asset), :class => "edit_asset", :title => t("assets_extension.edit_asset", :asset => asset.title)
