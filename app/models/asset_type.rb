@@ -74,13 +74,21 @@ class AssetType
   end
   
   def paperclip_styles
-    styles.merge(configured_styles)
+    styles.merge(name == :image ? image_styles : other_configured_styles)
   end
 
-  def configured_styles
+  def image_styles
+    required_thumbnails = {
+      :icon => ['42x42#', :png],
+      :thumbnail => ['100x100>', :png],
+      :sample => ['100x100#', :png]
+    }
+    Radiant::Config["assets.additional_thumbnails"].gsub(' ','').split(',').collect{|s| s.split('=')}.inject(required_thumbnails) {|ha, (k, v)| ha[k.to_sym] = v; ha}
+  end
+
+  def other_configured_styles
     styles = []
     styles = Radiant::Config["assets.additional_#{name}_thumbnails"].gsub(/\s+/,'').split(',') if Radiant::Config["assets.additional_#{name}_thumbnails"]
-    styles += Radiant::Config["assets.additional_thumbnails"].gsub(/\s+/,'').split(',') if name == :image && Radiant::Config["assets.additional_thumbnails"]
     styles.collect{|s| s.split('=')}.inject({}) {|ha, (k, v)| ha[k.to_sym] = v; ha}
   end
 

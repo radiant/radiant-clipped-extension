@@ -34,7 +34,6 @@ class Asset < ActiveRecord::Base
                     :path => Radiant::Config["assets.path"] ? Radiant::Config["assets.path"] : ":rails_root/public/:class/:id/:basename:no_original_style.:extension"
 
   before_save :assign_title
-  before_update :clear_dimensions
                                  
   validates_attachment_presence :asset, :message => "You must choose a file to upload!"
   validates_attachment_content_type :asset, 

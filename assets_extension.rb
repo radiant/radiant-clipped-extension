@@ -19,11 +19,12 @@ class AssetsExtension < Radiant::Extension
     AssetType.new :audio, :mime_types => %w[audio/mpeg audio/mpg audio/ogg application/ogg audio/x-ms-wma audio/vnd.rn-realaudio audio/x-wav]
     # AssetType.new :swf, :mime_types => %w[application/x-shockwave-flash]
     # AssetType.new :pdf, :mime_types => %w[application/pdf application/x-pdf]
-    # AssetType.new :movie, :mime_types => AssetType.mime_types_for(:video, :swf)        # this is an alias for backwards-compatibility: movie could previously be either video or flash. (existing mime-type lookup table is not affected but methods like Asset#movie? are created)
+    # AssetType.new :movie, :mime_types => AssetType.mime_types_for(:video, :swf)      # this is an alias for backwards-compatibility: movie could previously be either video or flash. (existing mime-type lookup table is not affected but methods like Asset#movie? are created)
     AssetType.new :other                                                               #  # an AssetType declared with no (or unknown) mime-types is filed under 'everything else'
     
     admin.asset ||= Radiant::AdminUI.load_default_asset_regions                        # loads the shards defined in AssetsAdminUI
-    admin.page.edit.assets.concat %w{page_attachments upload search}                   # adds asset-attachment blocks to page edit view
+    admin.page.edit.add :form, 'assets', :after => :edit_page_parts               # adds the asset-attachment picker to the page edit view
+    admin.page.edit.add :main, 'asset_popups', :after => :edit_popups               # adds the asset-attachment picker to the page edit view
     
     if Radiant::Config.table_exists? && Radiant::Config["assets.image_magick_path"]    # This is just needed for testing if you are using mod_rails
       Paperclip.options[:image_magick_path] = Radiant::Config["assets.image_magick_path"]

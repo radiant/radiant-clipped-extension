@@ -1,0 +1,29 @@
+#upload_asset.popup{:style => "display: none"}
+  #upload_asset_busy.busy{:style => "display: none"}= image('spinner.gif', :alt => "")
+
+  %h3.title
+    = t('assets_extension.upload_asset')
+
+  - form_for([:admin, @page.assets.build]) do |f|
+    %p
+      = f.label :title
+      = f.text_field :title, :class => "textbox big"
+    %p
+      = f.label :asset
+      = f.file_field :asset
+    %p
+      = f.label :caption
+      = f.text_area :caption, :rows => 3
+
+    %p.buttons
+      = f.submit t("assets_extension.save_and_upload"), :class => "button"
+      = t('or')
+      = link_to_function t('cancel'), "$(this).closePopup()"
+
+  %iframe{ :id => 'ulframe', :name => "ulframe", :src => "about:blank"}
+
+
+
+
+
+

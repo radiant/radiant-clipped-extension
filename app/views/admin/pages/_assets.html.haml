@@ -1,0 +1,16 @@
+- include_stylesheet 'admin/assets'
+
+#page-assets
+  .controls
+    = link_to t('assets_extension.upload_asset'), '#upload_asset', :class => 'popup'
+    = link_to t('assets_extension.attach_existing'), '#', :class => 'attach_asset'
+  %h2
+    = t('assets_extension.attached_assets')
+  - if @page.new_record? || @page.page_attachments.empty?
+    %span.note
+      = t('assets_extension.no_attachments')
+  - else
+    .attachments.box
+      %ul
+        - @page.page_attachments.each do |attachment|
+          = render :partial => 'admin/assets/attachment', :object => attachment
