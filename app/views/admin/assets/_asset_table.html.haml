@@ -32,7 +32,7 @@
             - tbody.actions_cell do
               %td.actions
                 = link_to_remote(image('plus') + ' ' + t("assets_extension.bucket"), {:url=>add_bucket_url(:id => asset)}, {:class=>"action"})
-                = link_to(image_tag('/images/assets/copy.png') + ' ' + t("assets_extension.copy"), '', :class=>"action")
+                = link_to(image_tag('/images/assets/copy.png', :alt => t('assets_extension.copy_alt')) + ' ' + t("assets_extension.copy"), '', :class=>"action copy", :id => "copy_#{asset.id}")
                 = link_to(image('minus') + ' ' + t("assets_extension.remove"), remove_admin_asset_path(asset), :class=>"action")
     - else
       %tr

@@ -40,6 +40,7 @@ en:
     audio: 'Audio'
     bucket: 'Bucket'
     copy: 'Copy'
+    copy_alt: 'copy radius tag to clipboard'
     documents: 'Documents'
     bucket_note: 'The Bucket provides temporary storage for your items. You can use it to place items in your pages or snippets.'
     caption: 'Caption'

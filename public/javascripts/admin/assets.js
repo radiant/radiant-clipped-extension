@@ -5,6 +5,7 @@ document.observe("dom:loaded", function() {
   if($('page-attachments')){
     Asset.ChooseTabByName('page-attachments');
   }
+  
 });
 
 var Asset = {};
@@ -76,20 +77,20 @@ Asset.MakeDroppables = function () {
           var tag_type = classes[0];
           var tag = '<r:assets:' + tag_type + ' id="' + asset_id + '" size="original" />';
           //Form.Element.focus(box);
-        	if(!!document.selection){
-        		box.focus();
-        		var range = (box.range) ? box.range : document.selection.createRange();
-        		range.text = tag;
-        		range.select();
-        	}else if(!!box.setSelectionRange){
-        		var selection_start = box.selectionStart;
-        		box.value = box.value.substring(0,selection_start) + tag + box.value.substring(box.selectionEnd);
-        		box.setSelectionRange(selection_start + tag.length,selection_start + tag.length);
-        	}
-        	box.focus();
+          if(!!document.selection){
+            box.focus();
+            var range = (box.range) ? box.range : document.selection.createRange();
+            range.text = tag;
+            range.select();
+          }else if(!!box.setSelectionRange){
+            var selection_start = box.selectionStart;
+            box.value = box.value.substring(0,selection_start) + tag + box.value.substring(box.selectionEnd);
+            box.setSelectionRange(selection_start + tag.length,selection_start + tag.length);
+          }
+          box.focus();
         }
       });      
-    	box.addClassName('droppable');
+      box.addClassName('droppable');
     }
   });
 }
@@ -165,6 +166,32 @@ Asset.WaitingForm = Behavior.create({
   }
 });
 
+Asset.CopyButton = Behavior.create({
+  initialize: function(){
+    var clip = new ZeroClipboard.Client();
+    var asset_id = this.element.id.replace('copy_', '');
+    clip.setText('<r:assets:image size="" id="' + asset_id + '" />');
+    clip.setHandCursor( true );
+    clip.glue(this.element);
+    clip.addEventListener( 'onComplete', Asset.ConfirmCopy );
+  },
+  onClick: function (e) {
+    e.stop();
+  }
+});
+
+Asset.ConfirmCopy = function (client, text) {
+  var element = client.domElement;
+  element.update(element.innerHTML.replace('Copy', 'Copied'));
+  element.addClassName('confirmed');
+  window.setTimeout(function() { Asset.ResetConfirmation(element); }, 2000);
+}
+
+Asset.ResetConfirmation = function (element) {
+  element.update(element.innerHTML.replace('Copied', 'Copy'));
+  element.removeClassName('confirmed');
+}
+
 Asset.ResetForm = function (name) {
   var element = $('asset-upload');
   element.removeClassName('waiting');
@@ -175,10 +202,6 @@ Asset.ResetForm = function (name) {
 Asset.AddAsset = function (name) {
   element = $(name); 
   asset = element.select('.asset')[0];
-  if (window.console && window.console.log) {
-    console.log('inserted element is ', element);
-    console.log('contained asset is ', asset);
-  }
   if (asset) {
     new Draggable(asset, { revert: true });
   }
@@ -192,5 +215,6 @@ Event.addBehavior({
   '#filesearchform a.selective ' : Asset.FileTypes,
   '#asset-upload'     : Asset.WaitingForm,
   'div.asset a'       : Asset.DisableLinks,
-  'a.add_asset'       : Asset.AddToPage
+  'a.add_asset'       : Asset.AddToPage,
+  'a.copy'            : Asset.CopyButton
 });
