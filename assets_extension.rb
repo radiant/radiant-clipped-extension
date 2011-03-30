@@ -17,9 +17,9 @@ class AssetsExtension < Radiant::Extension
     AssetType.new :image, :mime_types => %w[image/png image/x-png image/jpeg image/pjpeg image/jpg image/gif], :processors => [:thumbnail], :styles => {:icon => ['42x42#', :png], :thumbnail => ['100x100>', :png]}
     AssetType.new :video, :mime_types => %w[video/mpeg video/mp4 video/ogg video/quicktime video/x-ms-wmv video/x-flv]
     AssetType.new :audio, :mime_types => %w[audio/mpeg audio/mpg audio/ogg application/ogg audio/x-ms-wma audio/vnd.rn-realaudio audio/x-wav]
-    AssetType.new :swf, :mime_types => %w[application/x-shockwave-flash]
-    AssetType.new :pdf, :mime_types => %w[application/pdf application/x-pdf]
-    AssetType.new :movie, :mime_types => AssetType.mime_types_for(:video, :swf)        # this is an alias for backwards-compatibility: movie could previously be either video or flash. (existing mime-type lookup table is not affected but methods like Asset#movie? are created)
+    # AssetType.new :swf, :mime_types => %w[application/x-shockwave-flash]
+    # AssetType.new :pdf, :mime_types => %w[application/pdf application/x-pdf]
+    # AssetType.new :movie, :mime_types => AssetType.mime_types_for(:video, :swf)        # this is an alias for backwards-compatibility: movie could previously be either video or flash. (existing mime-type lookup table is not affected but methods like Asset#movie? are created)
     AssetType.new :other                                                               #  # an AssetType declared with no (or unknown) mime-types is filed under 'everything else'
     
     admin.asset ||= Radiant::AdminUI.load_default_asset_regions                        # loads the shards defined above

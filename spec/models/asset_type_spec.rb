@@ -34,6 +34,11 @@ describe AssetType do
   end
 
   context 'AssetType class methods' do
+    describe '.slice' do
+      AssetType.slice('simple', 'complex').should =~ [AssetType.find(:simple), AssetType.find(:complex)]
+      
+    end
+
     describe '.from' do
       AssetType.from('test/this').should == AssetType.find(:simple)
       AssetType.from('test/complex').should == AssetType.find(:complex)

@@ -112,18 +112,40 @@ Asset.HideBucket = Behavior.create({
   }
 });
 
+Asset.NoFileTypes = Behavior.create({
+  onclick: function(e){
+    e.stop();
+    var element = this.element;
+    var search_form = $('filesearchform');
+    if(!element.hasClassName('pressed')) {
+      $$('a.selective').each(function(el) { el.removeClassName('pressed'); });
+      $$('input.selective').each(function(el) { el.removeAttribute('checked'); });
+      element.addClassName('pressed');
+      new Ajax.Updater('assets_table', search_form.action, {
+        asynchronous: true, 
+        evalScripts:  true, 
+        parameters:   Form.serialize(search_form),
+        method: 'get',
+        onComplete: 'assets_table'
+      });
+    }
+  }
+});
+
 Asset.FileTypes = Behavior.create({
   onclick: function(e){
     e.stop();
     var element = this.element;
-    var type_id = element.text.downcase();
+    var type_id = element.readAttribute("rel");
     var type_check = $(type_id + '-check');
     var search_form = $('filesearchform');
     if(element.hasClassName('pressed')) {
       element.removeClassName('pressed');
       type_check.removeAttribute('checked');
+      if ($$('a.selective.pressed').length == 0) $('select_all').addClassName('pressed');
     } else {
       element.addClassName('pressed');
+      $$('a.deselective').each(function(el) { el.removeClassName('pressed'); });
       type_check.setAttribute('checked', 'checked');
     }
     new Ajax.Updater('assets_table', search_form.action, {
@@ -166,7 +188,8 @@ Event.addBehavior({
   '#asset-tabs a'     : Asset.Tabs,
   '#close-link a'     : Asset.HideBucket,
   '#show-bucket a'    : Asset.ShowBucket,
-  '#filesearchform a' : Asset.FileTypes,
+  '#filesearchform a.deselective' : Asset.NoFileTypes,
+  '#filesearchform a.selective ' : Asset.FileTypes,
   '#asset-upload'     : Asset.WaitingForm,
   'div.asset a'       : Asset.DisableLinks,
   'a.add_asset'       : Asset.AddToPage

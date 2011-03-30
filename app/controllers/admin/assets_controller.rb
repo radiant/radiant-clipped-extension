@@ -1,15 +1,27 @@
 class Admin::AssetsController < Admin::ResourceController
   skip_before_filter :verify_authenticity_token, :only => :create
-    
-  def index 
-    @assets = Asset.search(params[:search], params[:filter]).paginate(pagination_parameters)
-    @page = Page.find(params[:asset_page]) if params[:asset_page]
+  paginate_models
+  
+  def index
+    assets = Asset.scoped({})
+
+    @term = params[:search] || ''
+    assets = assets.matching(@term) if @term && !@term.blank?
+
+    @types = params[:filter] || []
+    if @types.include?('all')
+      params[:filter] = nil
+    elsif @types.any?
+      assets = assets.of_types(@types)
+    end
+
+    @assets = paginated? ? assets.paginate(pagination_parameters) : assets.all
 
     respond_to do |format|
       format.html { render }
       format.js {
         @template_name = 'index'
-        if !@page.nil?
+        if @page = Page.find_by_id(params[:asset_page])
           render :partial => 'admin/assets/search_results.html.haml', :layout => false
         else
           render :partial => 'admin/assets/asset_table.html.haml', :locals => { :assets => @assets }, :layout => false
@@ -17,7 +29,7 @@ class Admin::AssetsController < Admin::ResourceController
       }
     end
   end
-  
+
   def create
     @asset = Asset.new(params[:asset])
     if @asset.save

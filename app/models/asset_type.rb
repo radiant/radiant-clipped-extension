@@ -10,7 +10,8 @@ class AssetType
   #   * selectors and scopes for retrieving this (or not this) category of asset
   #   * radius tags for those subsets of assets (temporarily removed pending discussion of interface)
   
-  @@types = {}
+  @@types = []
+  @@type_lookup = {}
   @@mime_lookup = {}
   @@default_type = nil
   attr_reader :name, :processors, :styles, :catchall
@@ -28,11 +29,12 @@ class AssetType
     Asset.send :define_method, "#{name}?".intern do this.mime_types.include?(asset_content_type) end 
     Asset.send :define_class_method, "#{name}_condition".intern do this.condition; end
     Asset.send :define_class_method, "not_#{name}_condition".intern do this.non_condition; end
-    Asset.send :named_scope, name.to_s.pluralize.intern, :conditions => condition
-    Asset.send :named_scope, "not_#{name.to_s.pluralize}".intern, :conditions => non_condition
+    Asset.send :named_scope, plural.to_sym, :conditions => condition
+    Asset.send :named_scope, "not_#{plural}".to_sym, :conditions => non_condition
     
     # Page.define_radius_tags_for_asset_type self     #TODO discuss interface
-    @@types[@name] = self
+    @@types.push self
+    @@type_lookup[@name] = self
   end
   
   def plural
@@ -105,19 +107,23 @@ class AssetType
   end
   
   def self.known?(name)
-    !@@types[name.to_sym].nil?
+    !self.find(name).nil?
   end
 
-  def self.find(name)
-    @@types[name.to_sym]
+  def self.slice(*types)
+    @@type_lookup.slice(*types.map(&:to_sym)).values if types
+  end
+
+  def self.find(type)
+    @@type_lookup[type] if type
   end
   
   def self.all
-    @@types.values
+    @@types
   end
 
   def self.known_types
-    @@types.keys
+    @@types.map(&:name) # to preserve order
   end
 
   def self.known_mimetypes

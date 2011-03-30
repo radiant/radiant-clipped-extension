@@ -22,7 +22,7 @@ describe Page do
   
   context "substituting new tags for old" do
     it "should call the right substitute tag" do
-      AssetTags.deprecate_tag 'mither', :substitute => 'assets:filename', :deadline => '3.0.0'
+      AssetTags.deprecated_tag 'mither', :substitute => 'assets:filename', :deadline => '3.0.0'
       Rails.logger.should_receive(:warn).at_least(:once)
       page.should render("<r:assets:first><r:mither /></r:assets:first>").as( 'asset.jpg' )
     end    

@@ -6,6 +6,15 @@ class Asset < ActiveRecord::Base
 
   belongs_to :created_by, :class_name => 'User'
   belongs_to :updated_by, :class_name => 'User'
+
+  named_scope :of_types, lambda { |types|
+    mimes = AssetType.slice(*types).map(&:mime_types).flatten
+    { :conditions => ["asset_content_type IN (#{mimes.map{'?'}.join(',')})", *mimes] }
+  }
+
+  named_scope :matching, lambda { |term| 
+    { :conditions => ["LOWER(assets.asset_file_name) LIKE (:term) OR LOWER(title) LIKE (:term) OR LOWER(caption) LIKE (:term)", {:term => "%#{term.downcase}%" }] }
+  }
   
   has_attached_file :asset,
                     :styles => lambda { |attachment|
@@ -70,25 +79,7 @@ private
       AssetType.known_types
     end
     
-    # pagination moved to the controller
-
-    def search(search, filter)
-      unless search.blank?
-        search_cond_sql = []
-        search_cond_sql << 'LOWER(asset_file_name) LIKE (:term)'
-        search_cond_sql << 'LOWER(title) LIKE (:term)'
-        search_cond_sql << 'LOWER(caption) LIKE (:term)'
-        cond_sql = search_cond_sql.join(" OR ")
-
-        @conditions = [cond_sql, {:term => "%#{search.downcase}%" }]
-      else
-        @conditions = []
-      end
-
-      assets = Asset.scoped( :conditions => @conditions, :order => 'created_at DESC' )
-      assets = assets.scoped( :conditions => AssetType.conditions_for(filter.keys) ) unless filter.blank?
-      assets
-    end
+    # searching and pagination moved to the controller
 
     def find_all_by_asset_types(asset_types, *args)
       with_asset_types(asset_types) { find *args }
