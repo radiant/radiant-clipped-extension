@@ -1,4 +1,4 @@
-<mockup version="1.0" skin="sketch" measuredW="1856" measuredH="1158" mockupW="1799" mockupH="1134">
+<mockup version="1.0" skin="sketch" measuredW="1896" measuredH="1195" mockupW="1891" mockupH="1195">
   <controls>
     <control controlID="0" controlTypeID="com.balsamiq.mockups::TabBar" x="322" y="367" w="787" h="400" measuredW="294" measuredH="100" zOrder="1" locked="false" isInGroup="-1">
       <controlProperties>
@@ -421,6 +421,12 @@
       <controlProperties>
         <direction>center</direction>
         <text>Attach%20To%20Page</text>
+      </controlProperties>
+    </control>
+    <control controlID="115" controlTypeID="com.balsamiq.mockups::Canvas" x="5" y="0" w="1891" h="1195" measuredW="100" measuredH="70" zOrder="90" locked="true" isInGroup="-1">
+      <controlProperties>
+        <backgroundAlpha>0</backgroundAlpha>
+        <borderStyle>none</borderStyle>
       </controlProperties>
     </control>
   </controls>
