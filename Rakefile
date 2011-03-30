@@ -8,6 +8,7 @@ begin
     gem.homepage = "https://github.com/radiant/radiant-assets-extension"
     gem.authors = ["Keith Bingman", "Benny Degezelle", "William Ross", "John W. Long"]
     gem.add_dependency 'radiant', ">=0.9.1"
+    gem.add_dependency 'paperclip', "~> 2.3.3"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
 rescue LoadError
