@@ -1,16 +1,16 @@
 class Admin::PageAttachmentsController < Admin::ResourceController
-  before_filter :get_page
+  before_filter :get_page_and_asset
   
   # Attaches an asset to a page
   def create
     @attachment = @page.asset_attachments.create!(:asset => @asset)
-    render :partial => 'admin/page_attachments/attachment', :object => @attachment
+    render :partial => 'admin/page_attachments/attachment_list'
   end
   
   # Detaches asset from a page.
   def destroy    
     @page.assets.delete(@asset)
-    render :nothing => true
+    render :partial => 'admin/page_attachments/attachment_list'
   end
   
   # Saves (presumably revised) attachments order.

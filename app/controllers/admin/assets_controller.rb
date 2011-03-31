@@ -17,9 +17,15 @@ class Admin::AssetsController < Admin::ResourceController
 
     @assets = paginated? ? assets.paginate(pagination_parameters) : assets.all
 
+    # this isn't very satisfactory: it looks like it should limit the asset collection to a particular set of page attachments
+    # but really it just provides context for the 'attach' links
+    @page = Page.find_by_id(params[:page_id]) if params[:page_id]
+
     respond_to do |format|
       format.html { render }
-      format.js { render :partial => 'asset_table' }
+      format.js { 
+        render :partial => 'asset_table' 
+      }
     end
   end
 

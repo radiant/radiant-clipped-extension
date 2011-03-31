@@ -8,12 +8,5 @@
     = link_to t('assets_extension.attach_existing'), '#attach-asset', :class => 'popup'
   %h2
     = t('assets_extension.attached_assets')
-  .attachments.box
-    .attachment-list
-      %ul
-        - @page.page_attachments.each do |attachment|
-          = render :partial => 'admin/page_attachments/attachment', :object => attachment
-      - if @page.new_record? || @page.page_attachments.empty?
-        %span.note
-          = t('assets_extension.no_attachments')
-          
+  #attachments.box
+    = render :partial => 'admin/page_attachments/attachment_list'

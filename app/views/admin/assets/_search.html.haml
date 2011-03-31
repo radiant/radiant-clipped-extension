@@ -1,4 +1,6 @@
 - form_tag(admin_assets_path, :id=>'filesearchform', :method => 'get', :class=>"search") do
+  - if @page
+    %input{:type => 'hidden', :name => 'page_id', :value => @page.id}
   .asset_filters
     = link_to t("asset_types.all"), admin_assets_url, :id => "select_all", :class => params[:filter].blank? ? "deselective pressed" : "deselective"
     - AssetType.all.each do |type|

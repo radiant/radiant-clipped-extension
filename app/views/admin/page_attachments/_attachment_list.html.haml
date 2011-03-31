@@ -1,0 +1,6 @@
+%ul
+  - @page.page_attachments.each do |attachment|
+    = render :partial => 'admin/page_attachments/attachment', :object => attachment
+- if @page.new_record? || @page.page_attachments.empty?
+  %span.note
+    = t('assets_extension.no_attachments')
