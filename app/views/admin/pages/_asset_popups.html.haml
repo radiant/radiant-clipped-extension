@@ -33,7 +33,8 @@
 
       .toolbar
         = render :partial => 'admin/assets/search'
-      #attachables
+
+      #assets_table
         = render :partial => 'admin/assets/asset_table', :locals => {:assets => Asset.latest(10)}
 
       %p.buttons

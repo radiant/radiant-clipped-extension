@@ -186,11 +186,9 @@ Asset.AddAsset = function (name) {
 }
 
 Event.addBehavior({
-  '#asset-tabs a'     : Asset.Tabs,
   '#filesearchform a.deselective' : Asset.NoFileTypes,
   '#filesearchform a.selective ' : Asset.FileTypes,
-  '#asset-upload'     : Asset.WaitingForm,
-  'div.asset a'       : Asset.DisableLinks,
-  'a.add_asset'       : Asset.AddToPage,
+  // '#asset-upload'     : Asset.WaitingForm,
+  // 'a.add_asset'       : Asset.AddToPage,
   'a.copy'            : Asset.CopyButton
 });

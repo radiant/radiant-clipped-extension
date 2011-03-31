@@ -257,6 +257,9 @@ p
 .move a
   cursor: move
 
+
+// rough formatting for new page-editing components
+
 #page-assets
   .controls
     float: right
@@ -264,15 +267,102 @@ p
     padding: 1em
     margin: 1em 0
     height: 110px
-    ul
-      display: inline
-      list-style: none
-      li
-        display: inline
-        img
-          padding: 5px
-          background-color: white
-          +box-shadow
+    overflow-y: hidden
+    overflow-x: auto
+    
+#upload-asset
+  iframe
+    display: none
 
-#ulframe
-  display: none
+// some of this could do with being more reusable in _header.sass
+
+#attach-asset
+  width: 600px
+  height: 400px
+  overflow: hidden
+  h3
+    margin-bottom: 0
+  p.buttons, div.toolbar
+    position: relative
+    background: white
+    +linear-gradient(color-stops(white, darken(white, 5%), darken(white, 20%)))
+    width: 620px
+    margin: 0
+    margin-left: -20px
+    padding: 6px 10px 3px 10px
+    font-size: 95%
+    clear: both
+  p.buttons
+    position: absolute
+    bottom: 0
+    height: 20px
+  div.toolbar
+    height: 30px
+    +pie-clearfix
+    .right
+      float: right
+    form.search
+      padding: 2px 2px 0
+      input[type=search]
+        font-size: 12px
+        +border-radius(100px)
+        border: 1px solid #ccc
+        border-top-color: #999
+        border-left-color: #b0b0b0
+        border-right-color: #bbb
+        background: white image_url('admin/search.png') 4px center no-repeat
+        +box-shadow(rgba(black, 0.2), 0, 1px, 0, inset)
+        width: 180px
+        padding: 2px 8px 2px 20px
+  #assets_table
+    position: relative
+    margin-left: -20px
+    margin-right: -20px
+    height: 380px
+    overflow-x: hidden
+    overflow-y: auto
+
+.attachment-list
+  ul
+    position: relative
+    list-style: none
+    padding: 0
+    margin: 0
+    li
+      position: relative
+      display: inline
+      float: left
+      margin: 0 10px 0 0
+      img
+        padding: 5px
+        background-color: white
+        +box-shadow
+      .controls
+        position: absolute
+        display: none
+        top: 5px
+        left: 10px
+        a, span.label
+          display: block
+          margin: 5px 10px
+          width: 58px
+          padding: 4px 6px
+          font-size: 90%
+          text-decoration: none
+          text-align: center
+          white-space: nowrap
+        a
+          +border-radius(5px)
+          background-color: #666
+          color: white
+          &.remove, &.detach
+            background-color: #c00
+          &.attach, &.insert
+            background-color: #0c0
+        span.label
+          color: white
+          +text-shadow(#000, 0, 0, 3px)
+          
+      &:hover
+        .controls
+          display: block

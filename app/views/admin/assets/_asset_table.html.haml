@@ -1,3 +1,4 @@
+- assets ||= @assets
 %table.index#assets
   %thead
     %tr
@@ -32,7 +33,7 @@
             - tbody.actions_cell do
               %td.actions
                 - if @page
-                  = link_to(image('plus') + ' ' + t("assets_extension.attach"), '', :class=>"action copy", :id => "attach_#{asset.id}")
+                  = link_to(image('plus') + ' ' + t("assets_extension.attach"), '', :class=>"action attach", :id => "attach_#{asset.id}")
                   = link_to(image_tag('/images/assets/copy.png', :alt => t('assets_extension.copy_alt')) + ' ' + t("assets_extension.copy"), '', :class=>"action copy", :id => "copy_#{asset.id}")
                 - else
                   = link_to(image_tag('/images/assets/copy.png', :alt => t('assets_extension.copy_alt')) + ' ' + t("assets_extension.copy"), '', :class=>"action copy", :id => "copy_#{asset.id}")
