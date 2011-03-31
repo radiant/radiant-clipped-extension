@@ -7,14 +7,4 @@
 
   %li{:class => cssclass, :id => dom_id}
     = link_to image_tag(asset.thumbnail(:sample)), asset.thumbnail, :title => asset.title
-    - if @page
-      .controls
-        %span.label
-          = asset.title
-        - if asset.attached_to?(@page)
-          = link_to t('assets_extension.insert').downcase, '#', :class => 'insert'
-          = link_to t('assets_extension.detach').downcase, '#', :class => 'detach'
-        - else
-          = link_to t('assets_extension.attach').downcase, '#', :class => 'attach'
-          = link_to t('assets_extension.remove').downcase, '#', :class => 'remove'
         

@@ -1,0 +1,14 @@
+- attachment ||= @attachment
+- page = attachment.page
+- asset = attachment.asset
+- asset_type = asset.image? ? "image" : "link"
+- dom_id = "asset_#{asset.id}"
+
+%li{:class => "#{asset_type} asset", :id => dom_id}
+  = link_to image_tag(asset.thumbnail(:sample)), asset.thumbnail, :title => asset.title
+  .controls
+    %span.label
+      = asset.title
+    - if asset.attached_to?(page)
+      = link_to t('assets_extension.insert').downcase, '#', :class => 'insert'
+      = link_to t('assets_extension.detach').downcase, admin_page_page_attachments_url(page, :class => 'detach')

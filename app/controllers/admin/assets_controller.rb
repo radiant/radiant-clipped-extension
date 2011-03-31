@@ -19,7 +19,7 @@ class Admin::AssetsController < Admin::ResourceController
 
     respond_to do |format|
       format.html { render }
-      format.js { render :partial => 'asset_list' }
+      format.js { render :partial => 'asset_table' }
     end
   end
 
@@ -76,36 +76,4 @@ class Admin::AssetsController < Admin::ResourceController
     end
   end
 
-  
-  # Attaches an asset to the current page
-  def attach_asset
-    @asset = Asset.find(params[:asset])
-    @page = Page.find(params[:page])
-    @page.assets << @asset unless @page.assets.include?(@asset)
-    clear_model_cache
-    render :partial => 'page_assets', :locals => { :page => @page }
-    # render :update do |page|
-    #   page[:attachments].replace_html "#{render :partial => 'page_assets', :locals => {:page => @page}}"
-    # end
   end
-  
-  # Removes asset from the current page
-  def detach_asset    
-    @asset = Asset.find(params[:asset])
-    @page = Page.find(params[:page])
-    @page.assets.delete(@asset)
-    clear_model_cache
-    render :nothing => true
-  end
-  
-  def reorder
-    params[:attachments].each_with_index do |id,idx| 
-      page_attachment = PageAttachment.find(id)
-      page_attachment.position = idx+1
-      page_attachment.save
-    end
-    clear_model_cache
-    render :nothing => true
-  end
-  
-end

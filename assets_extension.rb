@@ -23,8 +23,11 @@ class AssetsExtension < Radiant::Extension
     AssetType.new :other                                                               #  # an AssetType declared with no (or unknown) mime-types is filed under 'everything else'
     
     admin.asset ||= Radiant::AdminUI.load_default_asset_regions                        # loads the shards defined in AssetsAdminUI
-    admin.page.edit.add :form, 'assets', :after => :edit_page_parts               # adds the asset-attachment picker to the page edit view
-    admin.page.edit.add :main, 'asset_popups', :after => :edit_popups               # adds the asset-attachment picker to the page edit view
+    admin.page.edit.add :form, 'assets', :after => :edit_page_parts                    # adds the asset-attachment picker to the page edit view
+    admin.page.edit.add :main, 'asset_popups', :after => :edit_popups                  # adds the asset-attachment picker to the page edit view
+    admin.page.edit.asset_popups.concat %w{upload_asset attach_asset}
+    admin.page.edit.thead.concat %w{thumbnail_header content_type_header actions_header}              # duplicates asset-index partials
+    admin.page.edit.tbody.concat %w{thumbnail_cell title_cell content_type_cell actions_cell}         # so that we can use the same asset table as a picker when editing pages
     
     if Radiant::Config.table_exists? && Radiant::Config["assets.image_magick_path"]    # This is just needed for testing if you are using mod_rails
       Paperclip.options[:image_magick_path] = Radiant::Config["assets.image_magick_path"]

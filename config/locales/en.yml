@@ -59,6 +59,7 @@ en:
     new_asset: 'New Asset'
     no_assets_found: 'There were no assets found'
     no_assets: 'No Assets'
+    no_attachments: 'No assets attached'
     no_attached_assets: 'You have no attached assets.'
     others: 'Others'
     regenerate_all_thumbnails: 'You can regenerate all thumbnails here. Beware that this will take a while and consume considerable resources on your server.'

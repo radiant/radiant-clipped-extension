@@ -1,8 +1,0 @@
-- assets ||= @assets
-- unless assets.empty?
-  .asset_list
-    %ul
-      = render :partial => 'admin/assets/asset', :collection => assets
-- else
-  %p.empty
-    = t("assets_extension.no_assets")

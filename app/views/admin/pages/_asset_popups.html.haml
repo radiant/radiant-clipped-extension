@@ -1,41 +1,41 @@
-#upload-asset.popup{:style => "display: none"}
-  #upload_asset_busy.busy{:style => "display: none"}= image('spinner.gif', :alt => "")
+- render_region :asset_popups do |popups|
+  - popups.upload_asset do
+    #upload-asset.popup{:style => "display: none"}
+      #upload_asset_busy.busy{:style => "display: none"}= image('spinner.gif', :alt => "")
 
-  %h3.title
-    = t('assets_extension.upload_asset')
+      %h3.title
+        = t('assets_extension.upload_asset')
 
-  - form_for([:admin, @page.assets.build]) do |f|
-    %p
-      = f.label :title
-      = f.text_field :title, :class => "textbox big"
-    %p
-      = f.label :asset
-      = f.file_field :asset
-    %p
-      = f.label :caption
-      = f.text_area :caption, :rows => 3
+      - form_for([:admin, @page.assets.build]) do |f|
+        %p
+          = f.label :title
+          = f.text_field :title, :class => "textbox big"
+        %p
+          = f.label :asset
+          = f.file_field :asset
+        %p
+          = f.label :caption
+          = f.text_area :caption, :rows => 3
 
-    %p.buttons
-      = f.submit t("assets_extension.save_and_upload"), :class => "button"
-      = t('or')
-      = link_to_function t('cancel'), "$(this).closePopup()"
+        %p.buttons
+          = f.submit t("assets_extension.save_and_upload"), :class => "button"
+          = t('or')
+          = link_to_function t('cancel'), "$(this).closePopup()"
 
-  %iframe{ :id => 'ulframe', :name => "ulframe", :src => "about:blank"}
+      %iframe{ :id => 'ulframe', :name => "ulframe", :src => "about:blank"}
 
+  - popups.attach_asset do
+    #attach-asset.popup{:style => "display: none;"}
+      #attach_asset_busy.busy{:style => "display: none"}= image('spinner.gif', :alt => "")
 
+      %h3.title
+        = t('assets_extension.attach_existing')
 
-#attach-asset.popup{:style => "display: none;"}
-  #attach_asset_busy.busy{:style => "display: none"}= image('spinner.gif', :alt => "")
+      .toolbar
+        = render :partial => 'admin/assets/search'
+      #attachables
+        = render :partial => 'admin/assets/asset_table', :locals => {:assets => Asset.latest(10)}
 
-  %h3.title
-    = t('assets_extension.attach_existing')
-
-  .toolbar
-    = render :partial => 'admin/assets/search'
-  
-  #attachables
-    = render :partial => 'admin/assets/asset_list', :locals => {:assets => Asset.latest(10)}
-
-  %p.buttons
-    = link_to_function t('close'), "$(this).closePopup()"
+      %p.buttons
+        = link_to_function t('close'), "$(this).closePopup()"
 
