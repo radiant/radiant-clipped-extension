@@ -19,14 +19,7 @@ class Admin::AssetsController < Admin::ResourceController
 
     respond_to do |format|
       format.html { render }
-      format.js {
-        @template_name = 'index'
-        if @page = Page.find_by_id(params[:asset_page])
-          render :partial => 'admin/assets/search_results.html.haml', :layout => false
-        else
-          render :partial => 'admin/assets/asset_table.html.haml', :locals => { :assets => @assets }, :layout => false
-        end
-      }
+      format.js { render :partial => 'asset_list' }
     end
   end
 

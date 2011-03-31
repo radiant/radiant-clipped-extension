@@ -7,6 +7,10 @@ class Asset < ActiveRecord::Base
   belongs_to :created_by, :class_name => 'User'
   belongs_to :updated_by, :class_name => 'User'
 
+  named_scope :latest, lambda { |limit|
+    { :order => "created_at DESC", :limit => limit }
+  }
+
   named_scope :of_types, lambda { |types|
     mimes = AssetType.slice(*types).map(&:mime_types).flatten
     { :conditions => ["asset_content_type IN (#{mimes.map{'?'}.join(',')})", *mimes] }
@@ -15,7 +19,7 @@ class Asset < ActiveRecord::Base
   named_scope :matching, lambda { |term| 
     { :conditions => ["LOWER(assets.asset_file_name) LIKE (:term) OR LOWER(title) LIKE (:term) OR LOWER(caption) LIKE (:term)", {:term => "%#{term.downcase}%" }] }
   }
-  
+    
   has_attached_file :asset,
                     :styles => lambda { |attachment|
                       AssetType.from(attachment.instance_read(:content_type)).paperclip_styles
@@ -62,6 +66,10 @@ class Asset < ActiveRecord::Base
 
   def extension
     asset_file_name.split('.').last.downcase if asset_file_name
+  end
+
+  def attached_to?(page)
+    pages.include?(page)
   end
 
   # geometry  methods will return here

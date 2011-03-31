@@ -1,4 +1,4 @@
-#upload_asset.popup{:style => "display: none"}
+#upload-asset.popup{:style => "display: none"}
   #upload_asset_busy.busy{:style => "display: none"}= image('spinner.gif', :alt => "")
 
   %h3.title
@@ -24,6 +24,18 @@
 
 
 
+#attach-asset.popup{:style => "display: none;"}
+  #attach_asset_busy.busy{:style => "display: none"}= image('spinner.gif', :alt => "")
 
+  %h3.title
+    = t('assets_extension.attach_existing')
 
+  .toolbar
+    = render :partial => 'admin/assets/search'
+  
+  #attachables
+    = render :partial => 'admin/assets/asset_list', :locals => {:assets => Asset.latest(10)}
+
+  %p.buttons
+    = link_to_function t('close'), "$(this).closePopup()"
 
