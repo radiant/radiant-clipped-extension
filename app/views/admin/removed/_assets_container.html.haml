@@ -11,7 +11,7 @@
           %a.asset-tab{ :href => "#page-attachments", :id => "tab_page-attachments" }
             = t("assets_extension.attached_assets")
         - asset_tabs.upload_tab do
-          %a.asset-tab{ :href => "#upload-assets", :id => "tab_upload-assets" }
+          %a.asset-tab{ :href => "#upload_assets", :id => "tab_upload_assets" }
             = t("assets_extension.upload")
         - asset_tabs.bucket_tab do
           %a.asset-tab{ :href => "#bucket", :id => "tab_bucket" }
@@ -37,7 +37,7 @@
             .clear
       
         - asset_panes.upload do
-          #upload-assets.pane
+          #upload_assets.pane
             %p
               %span.note
                 != t("assets_extension.asset_page_upload_note")

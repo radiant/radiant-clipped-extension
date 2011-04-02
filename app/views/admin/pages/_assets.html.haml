@@ -2,11 +2,13 @@
 - include_javascript 'ZeroClipboard'
 - include_javascript 'admin/assets'
 
-#page-assets
-  .controls
-    = link_to t('assets_extension.upload_asset'), '#upload-asset', :class => 'popup'
-    = link_to t('assets_extension.attach_existing'), '#attach-asset', :class => 'popup'
-  %h2
-    = t('assets_extension.attached_assets')
-  #attachments.box
-    = render :partial => 'admin/page_attachments/attachment_list'
+.attachment_tools
+  %ul
+    %li= link_to t('assets_extension.upload_asset'), '#upload_asset', :class => 'popup'
+    %li= link_to t('assets_extension.attach_existing'), '#attach_asset', :class => 'popup'
+
+.attachments{:style=>("display:none" if @page.new_record? || @page.page_attachments.empty?)}
+  %h2= t('assets_extension.attached_assets')
+  %ul
+    - @page.page_attachments.each do |attachment|
+      = render :partial => 'admin/page_attachments/attachment', :object => attachment
