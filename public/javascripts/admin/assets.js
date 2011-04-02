@@ -1,5 +1,17 @@
 var Asset = {};
 
+Asset.AttachmentListUpdater = Behavior.create({
+  onClick: function (e) {
+    e.stop();
+    var url = this.element.href;
+    new Ajax.Updater('attachments', url, {
+      asynchronous : true, 
+      evalScripts  : true, 
+      method       : 'post'
+    });
+  }
+});
+
 Asset.NoFileTypes = Behavior.create({
   onclick: function(e){
     e.stop();
@@ -46,31 +58,16 @@ Asset.FileTypes = Behavior.create({
   }
 });
 
-Asset.AttachButton = Behavior.create({
-  initialize: function(){
-    console.log('attacher:', this.element);
-  },
-  onClick: function (e) {
-    e.stop();
-    var url = this.element.href;
-    new Ajax.Updater('attachments', url, {
-      asynchronous : true, 
-      evalScripts  : true, 
-      method       : 'post'
-    });
-  }
-});
-
 Asset.CopyButton = Behavior.create({
-  initialize: function(){
-    console.log('copier:', this.element);
-  },
   initialize: function(){
     var clip = new ZeroClipboard.Client();
     var asset_id = this.element.id.replace('copy_', '');
     clip.setText('<r:assets:image size="" id="' + asset_id + '" />');
     clip.setHandCursor( true );
+
+    // this doesn't position the clip correctly if the buttons aren't visible at the time
     clip.glue(this.element);
+
     clip.addEventListener( 'onComplete', function (client, text) {
       var element = client.domElement;
       var contents = element.innerHTML;
@@ -85,8 +82,8 @@ Asset.CopyButton = Behavior.create({
 
 
 Event.addBehavior({
+  '#assets_table a.attach_asset': Asset.AttachmentListUpdater,
   '#filesearchform a.deselective': Asset.NoFileTypes,
   '#filesearchform a.selective': Asset.FileTypes,
-  'a.copy': Asset.CopyButton,
-  'a.attach': Asset.AttachButton
+  'a.copy': Asset.CopyButton
 });
