@@ -1,15 +1,17 @@
 class Admin::PageAttachmentsController < Admin::ResourceController
-  before_filter :get_page_and_asset
+  before_filter :get_page
   
   # Attaches an asset to a page
   def create
-    @attachment = @page.asset_attachments.create!(:asset => @asset)
+    if @asset = Asset.find(params[:asset_id])
+      @page.assets << @asset
+    end
     render :partial => 'admin/page_attachments/attachment_list'
   end
   
   # Detaches asset from a page.
-  def destroy    
-    @page.assets.delete(@asset)
+  def destroy
+    model.destroy
     render :partial => 'admin/page_attachments/attachment_list'
   end
   
@@ -26,9 +28,8 @@ class Admin::PageAttachmentsController < Admin::ResourceController
 
 protected
 
-  def get_page_and_asset
+  def get_page
     @page = Page.find(params[:page_id])
-    @asset = Asset.find(params[:asset_id]) if params[:asset_id]
   end
   
 end

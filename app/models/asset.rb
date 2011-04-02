@@ -24,26 +24,26 @@ class Asset < ActiveRecord::Base
                     :styles => lambda { |attachment|
                       AssetType.from(attachment.instance_read(:content_type)).paperclip_styles
                     },
-                    :processors => lambda { |asset| 
-                      asset.paperclip_processors 
+                    :processors => lambda { |asset|
+                      asset.paperclip_processors
                     },
                     :whiny => false,
-                    :storage => Radiant::Config["assets.storage"] == "s3" ? :s3 : :filesystem, 
+                    :storage => Radiant.config["assets.storage"] == "s3" ? :s3 : :filesystem,
                     :s3_credentials => {
-                      :access_key_id => Radiant::Config["assets.s3.key"],
-                      :secret_access_key => Radiant::Config["assets.s3.secret"]
+                      :access_key_id     => Radiant.config["assets.s3.key"],
+                      :secret_access_key => Radiant.config["assets.s3.secret"]
                     },
-                    :bucket => Radiant::Config["assets.s3.bucket"],
-                    :url => Radiant::Config["assets.url"] ? Radiant::Config["assets.url"] : "/:class/:id/:basename:no_original_style.:extension", 
-                    :path => Radiant::Config["assets.path"] ? Radiant::Config["assets.path"] : ":rails_root/public/:class/:id/:basename:no_original_style.:extension"
+                    :bucket => Radiant.config["assets.s3.bucket"],
+                    :url => Radiant.config["assets.url"],
+                    :path => Radiant.config["assets.path"]
 
   before_save :assign_title
                                  
   validates_attachment_presence :asset, :message => "You must choose a file to upload!"
-  validates_attachment_content_type :asset, 
-    :content_type => Radiant::Config["assets.content_types"].gsub(' ','').split(',') if Radiant::Config.table_exists? && Radiant::Config["assets.content_types"] && Radiant::Config["assets.skip_filetype_validation"] == nil
-  validates_attachment_size :asset, 
-    :less_than => Radiant::Config["assets.max_asset_size"].to_i.megabytes if Radiant::Config.table_exists? && Radiant::Config["assets.max_asset_size"]
+  validates_attachment_content_type :asset,
+    :content_type => Radiant.config["assets.content_types"].gsub(' ','').split(',') if Radiant.config["assets.skip_filetype_validation"] == "true"
+  validates_attachment_size :asset,
+    :less_than => Radiant.config["assets.max_asset_size"].to_i.megabytes
 
   def asset_type
     AssetType.from(asset.content_type)
@@ -55,7 +55,7 @@ class Asset < ActiveRecord::Base
     return asset.url(style_name.to_sym) if has_style?(style_name)
     return "/images/assets/#{asset_type.name}_#{style_name.to_s}.png"
   end
-  
+
   def has_style?(style_name)
     paperclip_styles.keys.include?(style_name.to_sym)
   end
@@ -91,11 +91,11 @@ private
     def find_all_by_asset_types(asset_types, *args)
       with_asset_types(asset_types) { find *args }
     end
-    
+
     def count_with_asset_types(asset_types, *args)
       with_asset_types(asset_types) { count *args }
     end
-    
+
     def with_asset_types(asset_types, &block)
       with_scope(:find => { :conditions => AssetType.conditions_for(asset_types) }, &block)
     end
@@ -110,16 +110,16 @@ private
   def self.eigenclass
     class << self; self; end
   end
-  
+
   # for backwards compatibility
   def self.thumbnail_sizes
     AssetType.find(:image).paperclip_styles
   end
-  
+
   def self.thumbnail_names
     thumbnail_sizes.keys
   end
-  
+
   # this is a convenience for image-pickers
   def self.thumbnail_options
     asset_sizes = thumbnail_sizes.collect{|k,v| 

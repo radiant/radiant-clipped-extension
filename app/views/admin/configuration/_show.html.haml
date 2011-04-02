@@ -1,0 +1,26 @@
+%h4 Assets
+%p.ruled
+  = show_config 'assets.storage'
+%p.ruled
+  = show_config 'assets.display_size'
+%p.ruled
+  = show_config 'assets.additional_thumbnails'
+%p.ruled
+  = show_config 'assets.url'
+%p.ruled
+  = show_config 'assets.path'
+%p.ruled
+  = show_config 'assets.content_types'
+%p.ruled
+  = show_config 'assets.skip_filetype_validation'
+%p.ruled
+  = show_config 'assets.max_asset_size'
+
+- if Radiant.config["assets.storage"] == "s3"
+  %h4 Amazon Credentials
+  %p.ruled
+    = show_config 'assets.s3.bucket'
+  %p.ruled
+    = show_config 'assets.s3.key'
+  %p.ruled
+    = show_config 'assets.s3.secret'

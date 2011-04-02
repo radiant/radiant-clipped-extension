@@ -19,7 +19,7 @@ en:
           attributes:
             asset:
               blank: 'You must choose a file to upload!'
-  
+
   assets_extension:
     actions: Actions
     all: 'All'
@@ -74,7 +74,22 @@ en:
     search_assets: 'Search for assets'
     search: 'Search'
     title: 'Title'
-    type: 'Type'  
+    type: 'Type'
     types_to_find: 'Types to find'
     upload: 'Upload'
     upload_asset: 'Upload Asset'
+
+  config:
+    assets:
+      additional_thumbnails: 'Additional Thumbnails'
+      content_types: 'Content Types'
+      display_size: 'Display Size'
+      max_asset_size: 'Max Asset Size'
+      path: 'Path'
+      skip_filetype_validation: 'Skip Filetype Validation'
+      storage: 'Storage'
+      url: 'Url'
+      s3:
+        bucket: 'Bucket'
+        key: 'Key'
+        secret: 'Secret'

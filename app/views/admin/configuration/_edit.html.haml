@@ -1,0 +1,16 @@
+%fieldset
+  %h3 Assets
+  %p= edit_config 'assets.storage'
+  %p= edit_config 'assets.display_size'
+  %p= edit_config 'assets.additional_thumbnails'
+  %p= edit_config 'assets.url'
+  %p= edit_config 'assets.path'
+  %p= edit_config 'assets.content_types'
+  %p= edit_config 'assets.skip_filetype_validation'
+  %p= edit_config 'assets.max_asset_size'
+
+%fieldset
+  %h3 Amazon Credentials
+  %p= edit_config 'assets.s3.bucket'
+  %p= edit_config 'assets.s3.key'
+  %p= edit_config 'assets.s3.secret'
