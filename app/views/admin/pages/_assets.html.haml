@@ -11,4 +11,4 @@
   %h2= t('assets_extension.attached_assets')
   %ul
     - @page.page_attachments.each do |attachment|
-      = render :partial => 'admin/page_attachments/attachment', :object => attachment
+      = render :partial => 'admin/page_attachments/attachment'
