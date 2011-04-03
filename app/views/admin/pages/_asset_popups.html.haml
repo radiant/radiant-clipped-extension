@@ -2,10 +2,9 @@
   - popups.upload_asset do
     #upload_asset.popup.textured{:style => "display: none; width: 28em"}
       #upload_asset_busy.busy{:style => "display: none"}= image('spinner.gif', :alt => "")
-
-      %h3.title
-        = t('assets_extension.upload_asset')
-
+      
+      .popup_title= t('assets_extension.upload_asset')
+      
       - form_for([:admin, @page.assets.build]) do |f|
         .head
           %p.intro
@@ -19,19 +18,19 @@
         %p
           = f.label :title, 'Alt-Text or Title <span class="hint">(optional)</span>'
           = f.text_field :title, :class => "textbox big", :size=>40
-
+        
         %p.buttons
           = f.submit "Upload", :class => "button"
           = t('or')
           = link_to_function t('cancel'), "$(this).closePopup()", :class=>"cancel"
-
+      
       %iframe{ :id => 'ulframe', :name => "ulframe", :src => "about:blank"}
-
+  
   - popups.attach_asset do
     #attach_asset.popup.textured{:style=>"display: none; width: 44em"}
       #attach_asset_busy.busy{:style => "display: none"}= image('spinner.gif', :alt => "")
       
-      %h3.title= t('assets_extension.attach_existing')
+      .popup_title= t('assets_extension.attach_existing')
       
       .toolbar
         = render :partial => 'admin/assets/search'
