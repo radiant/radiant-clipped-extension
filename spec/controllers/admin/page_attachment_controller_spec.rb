@@ -14,29 +14,30 @@ describe Admin::PageAttachmentsController do
 
   it "should handle PageAttachments" do
     controller.class.model_class.should == PageAttachment
+    controller.send(:model_symbol).should == :page_attachment
   end
 
   describe "create" do
     before do
-      post :create, :page_id => page_id(:pictured), :asset_id => asset_id(:document)
-    end
-
-    it "should render the attached asset list" do
-      response.should be_success
-      response.should render_template('admin/page_attachments/_attachment_list')
+      post :create, :format => :js, :page_attachment => {:page_id => page_id(:pictured), :asset_id => asset_id(:document)}
     end
 
     it "should attach the asset to the page" do
       assets(:document).attached_to?(pages(:pictured)).should be_true
     end
+
+    it "should render the attached-asset list" do
+      response.should be_success
+      response.should render_template('admin/page_attachments/_attachment_list')
+    end
   end
 
   describe "destroy" do
     before do
-      delete :destroy, :id => page_attachment_id(:tester_attachment)
+      delete :destroy, :format => :js, :id => page_attachment_id(:tester_attachment)
     end
 
-    it "should render the attached asset list" do
+    it "should render the attached-asset list" do
       response.should be_success
       response.should render_template('admin/page_attachments/_attachment_list')
     end

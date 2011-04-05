@@ -1,21 +1,18 @@
 class Admin::PageAttachmentsController < Admin::ResourceController
-  before_filter :get_page
-  
-  # Attaches an asset to a page
+
   def create
-    if @asset = Asset.find(params[:asset_id])
-      @page.assets << @asset
-    end
-    render :partial => 'admin/page_attachments/attachment_list'
+    @page_attachment.update_attributes!(params[:page_attachment])
+    @page = @page_attachment.page
+    render :partial => 'admin/page_attachments/attachment_list' 
   end
-  
-  # Detaches asset from a page.
+
   def destroy
-    model.destroy
-    render :partial => 'admin/page_attachments/attachment_list'
+    @page = @page_attachment.page
+    @page_attachment.destroy
+    render :partial => 'admin/page_attachments/attachment_list' 
   end
   
-  # Saves (presumably revised) attachments order.
+  # Saves (presumably revised) attachment order.
   def reorder
     params[:attachments].each_with_index do |id,idx| 
       page_attachment = PageAttachment.find(id)
@@ -26,10 +23,4 @@ class Admin::PageAttachmentsController < Admin::ResourceController
     render :nothing => true
   end
 
-protected
-
-  def get_page
-    @page = Page.find(params[:page_id])
-  end
-  
 end
