@@ -1,13 +1,28 @@
 var Asset = {};
 
-Asset.AttachmentListUpdater = Behavior.create({
-  onClick: function (e) {
+Asset.Detacher = Behavior.create({
+  onclick: function (e) {
     e.stop();
     var url = this.element.href;
     new Ajax.Updater('attachments', url, {
       asynchronous : true, 
-      evalScripts  : true, 
-      method       : 'post'
+      evalScripts : true, 
+      method: 'post'
+    });
+  }
+});
+
+Asset.Attacher = Behavior.create({
+  onclick: function (e) {
+    console.log("attach!");
+    if (e) e.stop();
+    var attachment_form = this.element.parentNode;
+    console.log("attaching!", attachment_form.action);
+    new Ajax.Updater('attachments', attachment_form.action, {
+      asynchronous: true, 
+      evalScripts: true, 
+      parameters: Form.serialize(attachment_form),
+      method: 'post'
     });
   }
 });
@@ -82,8 +97,9 @@ Asset.CopyButton = Behavior.create({
 
 
 Event.addBehavior({
-  '#assets_table a.attach_asset': Asset.AttachmentListUpdater,
-  '#filesearchform a.deselective': Asset.NoFileTypes,
-  '#filesearchform a.selective': Asset.FileTypes,
+  // 'a.detach_asset': Asset.Detacher,
+  'a.attach_asset': Asset.Attacher,
+  'a.deselective': Asset.NoFileTypes,
+  'a.selective': Asset.FileTypes,
   'a.copy': Asset.CopyButton
 });

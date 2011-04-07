@@ -11,4 +11,4 @@
       = asset.title
     - if asset.attached_to?(page)
       = link_to t('assets_extension.insert').downcase, '#', :class => 'insert'
-      = link_to t('assets_extension.detach').downcase, admin_page_page_attachments_url(page, :class => 'detach')
+      = link_to_remote t('assets_extension.detach').downcase, :url => admin_page_page_attachment_url(page, attachment), :class => 'detach', :method => 'delete', :update => 'attachments'

@@ -19,7 +19,7 @@ describe Admin::PageAttachmentsController do
 
   describe "create" do
     before do
-      post :create, :format => :js, :page_attachment => {:page_id => page_id(:pictured), :asset_id => asset_id(:document)}
+      post :create, :format => :js, :page_id => page_id(:pictured), :page_attachment => {:asset_id => asset_id(:document)}
     end
 
     it "should attach the asset to the page" do
@@ -34,7 +34,7 @@ describe Admin::PageAttachmentsController do
 
   describe "destroy" do
     before do
-      delete :destroy, :format => :js, :id => page_attachment_id(:tester_attachment)
+      delete :destroy, :format => :js, :page_id => page_id(:pictured), :id => page_attachment_id(:tester_attachment)
     end
 
     it "should render the attached-asset list" do

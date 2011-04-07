@@ -1,4 +1,5 @@
 class Admin::PageAttachmentsController < Admin::ResourceController
+  # only accessible as a nested route of page.
 
   def create
     @page_attachment.update_attributes!(params[:page_attachment])
@@ -10,6 +11,15 @@ class Admin::PageAttachmentsController < Admin::ResourceController
     @page = @page_attachment.page
     @page_attachment.destroy
     render :partial => 'admin/page_attachments/attachment_list' 
+  end
+  
+  def load_model
+    @page = Page.find(params[:page_id])
+    self.model = if params[:id]
+      @page.page_attachments.find(params[:id])
+    else
+      @page.page_attachments.build
+    end
   end
   
   # Saves (presumably revised) attachment order.
