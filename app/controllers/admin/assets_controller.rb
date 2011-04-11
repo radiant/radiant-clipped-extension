@@ -1,5 +1,4 @@
 class Admin::AssetsController < Admin::ResourceController
-  skip_before_filter :verify_authenticity_token, :only => :create
   paginate_models
   
   def index
@@ -27,24 +26,14 @@ class Admin::AssetsController < Admin::ResourceController
 
   def create
     @asset.update_attributes!(params[:asset])
-    respond_to do |format|
-      format.html { 
-        redirect_to continue_url(params)
-      }
-      format.js {
-        # called from the upload popup in page editing
-        # we only return a nested form, so page can be a new record
-        @page_attachment = @asset.page_attachments.build(:page_id => params[:page_id])
-        responds_to_parent do
-          render :update do |page|
-            page.insert_html :bottom, "new_attachments", :partial => 'admin/page_attachments/new_attachment'
-          end
-        end
-      } 
+    if params[:for_attachment]
+      @page_attachment = @asset.page_attachments.build(:page_id => params[:page_id])
+      render :partial => 'admin/page_attachments/new_attachment'
+    else 
+      response_for :create
     end
   end
-    
-  
+
   # Refreshes the paperclip thumbnails
   def refresh
     unless params[:id]

@@ -2,7 +2,6 @@ var Asset = {};
 
 Asset.AddNewAttachment = Behavior.create({
   onclick: function (e) {
-    console.log("attaching!");
     if (e) e.stop();
     var url = this.element.href;
     new Ajax.Request(url, {
@@ -13,6 +12,7 @@ Asset.AddNewAttachment = Behavior.create({
         // append response html to #attachments
         var new_id  = new Date().getTime();
         $('attachment_fields').insert(response.responseText.replace(/new_attachment/g, new_id));
+        $('attachments').down('span.note').update('save page to commit changes');
       }
     });
   }
@@ -20,7 +20,6 @@ Asset.AddNewAttachment = Behavior.create({
 
 Asset.RemoveNewAttachment = Behavior.create({
   onclick: function (e) {
-    console.log("unattaching!");
     if (e) e.stop();
     var container = this.element.up('li');
     container.down('input').remove();
@@ -30,15 +29,26 @@ Asset.RemoveNewAttachment = Behavior.create({
 
 Asset.DetachAttachment = Behavior.create({
   onclick: function (e) {
-    console.log("detaching!");
     if (e) e.stop();
     var container = this.element.up('li');
     container.down('input.destroyer').value = 1;
     container.dropOut();
+    $('attachments').down('span.note').update('Save page to commit changes');
   }
 });
 
-
+Asset.CatchUpload = Behavior.create({
+  onload: function (e) {
+    if (e) e.stop();
+    var html = this.element.contentDocument.body.innerHTML;
+    if (html && html != "") {
+      var new_id  = new Date().getTime();
+      $('attachment_fields').insert(html.replace(/new_attachment/g, new_id));
+      $('upload-asset').closePopup();
+      this.element.empty();
+    }
+  }
+});
 
 
 
@@ -74,7 +84,7 @@ Asset.Detacher = Behavior.create({
 });
 
 
-
+// Asset-filter and search functions are available wherever the asset_table partial is displayed
 
 Asset.NoFileTypes = Behavior.create({
   onclick: function(e){
@@ -146,6 +156,7 @@ Asset.CopyButton = Behavior.create({
 
 
 Event.addBehavior({
+  'iframe#ulframe': Asset.CatchUpload,
   'a.attach_asset': Asset.AddNewAttachment,
   'a.unattach_asset': Asset.RemoveNewAttachment,
   'a.detach_asset': Asset.DetachAttachment,

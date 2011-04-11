@@ -6,7 +6,10 @@
       %h3.title
         = t('assets_extension.upload_asset')
 
-      - form_for([:admin, Asset.new]) do |f|
+      - form_for([:admin, Asset.new], :html => {:method => 'post', :multipart => true, :target => 'ulframe'}) do |f|
+        = hidden_field_tag "for_attachment", 1
+        = hidden_field_tag "page_id", @page.id
+        
         %p
           = f.label :title
           = f.text_field :title, :class => "textbox big"
