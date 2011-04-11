@@ -8,10 +8,9 @@ Asset.AddNewAttachment = Behavior.create({
       asynchronous: true, 
       evalScripts: true, 
       method: 'get',
-      onSuccess: function(response) {
-        // append response html to #attachments
+      onSuccess: function(transport) {
         var new_id  = new Date().getTime();
-        $('attachment_fields').insert(response.responseText.replace(/new_attachment/g, new_id));
+        $('attachment_fields').insert(transport.responseText.replace(/new_attachment/g, new_id));
         $('attachments').down('span.note').update('save page to commit changes');
       }
     });
@@ -52,36 +51,34 @@ Asset.CatchUpload = Behavior.create({
 
 
 
-
-
-// alternatively, you can create an attachment immediately. The whole attachments list is refreshed.
-
-Asset.Attacher = Behavior.create({
-  onclick: function (e) {
-    console.log("attach!");
-    if (e) e.stop();
-    var attachment_form = this.element.parentNode;
-    console.log("attaching!", attachment_form.action);
-    new Ajax.Updater('attachments', attachment_form.action, {
-      asynchronous: true, 
-      evalScripts: true, 
-      parameters: Form.serialize(attachment_form),
-      method: 'post'
-    });
-  }
-});
-
-Asset.Detacher = Behavior.create({
-  onclick: function (e) {
-    e.stop();
-    var url = this.element.href;
-    new Ajax.Updater('attachments', url, {
-      asynchronous : true, 
-      evalScripts : true, 
-      method: 'post'
-    });
-  }
-});
+// 
+// 
+// // alternatively, you can create an attachment immediately. The whole attachments list is refreshed.
+// 
+// Asset.Attacher = Behavior.create({
+//   onclick: function (e) {
+//     if (e) e.stop();
+//     var attachment_form = this.element.parentNode;
+//     new Ajax.Updater('attachments', attachment_form.action, {
+//       asynchronous: true, 
+//       evalScripts: true, 
+//       parameters: Form.serialize(attachment_form),
+//       method: 'post'
+//     });
+//   }
+// });
+// 
+// Asset.Detacher = Behavior.create({
+//   onclick: function (e) {
+//     e.stop();
+//     var url = this.element.href;
+//     new Ajax.Updater('attachments', url, {
+//       asynchronous : true, 
+//       evalScripts : true, 
+//       method: 'post'
+//     });
+//   }
+// });
 
 
 // Asset-filter and search functions are available wherever the asset_table partial is displayed

@@ -1,7 +1,7 @@
 - render_region :asset_popups do |popups|
   - popups.upload_asset do
-    #upload-asset.popup{:style => "display: none"}
-      #upload_asset_busy.busy{:style => "display: none"}= image('spinner.gif', :alt => "")
+    #upload-asset.popup.textured{:style => "display: none; width: 28em"}
+      #upload-asset_busy.busy{:style => "display: none"}= image('spinner.gif', :alt => "")
 
       %h3.title
         = t('assets_extension.upload_asset')
@@ -11,35 +11,32 @@
         = hidden_field_tag "page_id", @page.id
         
         %p
-          = f.label :title
-          = f.text_field :title, :class => "textbox big"
-        %p
-          = f.label :asset
+          = f.label :asset, "Choose File"
           = f.file_field :asset
+        
         %p
-          = f.label :caption
-          = f.text_area :caption, :rows => 3
+          = f.label :title, 'Alt-Text or Title <span class="hint">(optional)</span>'
+          = f.text_field :title, :class => "textbox big"
 
         %p.buttons
-          = f.submit t("assets_extension.save_and_upload"), :class => "button"
+          = f.submit t("assets_extension.upload"), :class => "button"
           = t('or')
-          = link_to_function t('cancel'), "$(this).closePopup()"
-
+          = link_to_function t('cancel'), "$(this).closePopup()", :class=>"cancel"
+      
       %iframe{ :id => 'ulframe', :name => "ulframe", :src => "about:blank"}
-
+  
   - popups.attach_asset do
-    #attach-asset.popup{:style => "display: none;"}
-      #attach_asset_busy.busy{:style => "display: none"}= image('spinner.gif', :alt => "")
-
-      %h3.title
-        = t('assets_extension.attach_existing')
-
+    #attach-asset.popup.textured{:style=>"display: none; width: 44em"}
+      #attach-asset_busy.busy{:style => "display: none"}= image('spinner.gif', :alt => "")
+      
+      .popup_title= t('assets_extension.attach_existing')
+      
       .toolbar
         = render :partial => 'admin/assets/search'
 
-      #assets_table
+      #assets_table.viewport{:style=>"height: 20em"}
         = render :partial => 'admin/assets/asset_table', :locals => {:assets => Asset.latest(10), :for_attachment => true}
 
-      %p.buttons
+      %p.close_link
         = link_to_function t('close'), "$(this).closePopup()"
 
