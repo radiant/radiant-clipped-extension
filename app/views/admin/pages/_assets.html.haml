@@ -9,4 +9,12 @@
   %h2
     = t('assets_extension.attached_assets')
   #attachments.box
-    = render :partial => 'admin/page_attachments/attachment_list'
+    %ul#attachment_fields
+      - fields_for @page do |f|
+        - f.fields_for :page_attachments do |paf|
+          = render :partial => 'admin/page_attachments/attachment', :locals => {:attachment_form => paf}
+        
+    %span.note
+      - if @page.page_attachments.empty?
+        = t('assets_extension.no_attachments')
+  

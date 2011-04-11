@@ -1,4 +1,9 @@
-- attachment ||= @attachment
+- attachment_form ||= false
+- if attachment_form
+  - attachment ||= attachment_form.object
+- else 
+  - attachment ||= @attachment
+
 - page = attachment.page
 - asset = attachment.asset
 - asset_type = asset.image? ? "image" : "link"
@@ -10,5 +15,7 @@
     %span.label
       = asset.title
     - if asset.attached_to?(page)
-      = link_to t('assets_extension.insert').downcase, '#', :class => 'insert'
-      = link_to_remote t('assets_extension.detach').downcase, :url => admin_page_page_attachment_url(page, attachment), :class => 'detach', :method => 'delete', :update => 'attachments'
+      = link_to t('assets_extension.insert').downcase, '#', :class => 'insert_asset'
+      - if attachment_form
+        = attachment_form.hidden_field :_destroy, :class => 'destroyer'
+        = link_to t('assets_extension.detach').downcase, '#', :class => 'detach_asset'

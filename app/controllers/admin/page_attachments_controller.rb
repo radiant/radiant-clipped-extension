@@ -1,5 +1,9 @@
 class Admin::PageAttachmentsController < Admin::ResourceController
-  # only accessible as a nested route of page.
+
+  def new
+    Rails.logger.warn "!!! New page attachment: #{@page_attachment.inspect}"
+    render :partial => 'admin/page_attachments/new_attachment'
+  end
 
   def create
     @page_attachment.update_attributes!(params[:page_attachment])
@@ -14,11 +18,11 @@ class Admin::PageAttachmentsController < Admin::ResourceController
   end
   
   def load_model
-    @page = Page.find(params[:page_id])
+    @page = Page.find_by_id(params[:page_id]) || Page.new
     self.model = if params[:id]
       @page.page_attachments.find(params[:id])
     else
-      @page.page_attachments.build
+      @page.page_attachments.build(:asset_id => params[:asset_id])
     end
   end
   

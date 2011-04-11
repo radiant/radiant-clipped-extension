@@ -16,51 +16,31 @@ class Admin::AssetsController < Admin::ResourceController
     end
 
     @assets = paginated? ? assets.paginate(pagination_parameters) : assets.all
-
-    # this isn't very satisfactory: it looks like it should limit the asset collection to a particular set of page attachments
-    # but really it just provides context for the 'attach' links
-    @page = Page.find_by_id(params[:page_id]) if params[:page_id]
-
     respond_to do |format|
       format.html { render }
       format.js { 
-        render :partial => 'asset_table' 
+        @page = Page.find_by_id(params[:page_id])
+        render :partial => 'asset_table', :locals => {:for_attachment => true}
       }
     end
   end
 
   def create
-    @asset = Asset.new(params[:asset])
-    if @asset.save
-      if params[:page]
-        @page = Page.find(params[:page])
-        @asset.pages << @page
-      end
-      respond_to do |format|
-        format.html { 
-          flash[:notice] = "Asset successfully uploaded."
-          redirect_to(@page ? edit_admin_page_path(@page) : (params[:continue] ? edit_admin_asset_path(@asset) : admin_assets_path)) 
-        }
-        format.js {
-          responds_to_parent do
-            render :update do |page|
-              @attachment = PageAttachment.find(:first, :conditions => { :page_id => @page.id, :asset_id => @asset.id })
-              page.call('Asset.ChooseTabByName', 'page-attachments')
-              page.insert_html :bottom, "attachments", :partial => 'admin/assets/asset', :locals => {:attachment => @attachment } 
-              page.call('Asset.AddAsset', "attachment_#{@attachment.id}")  # we ought to reinitialise the sortable attachments too
-              page.visual_effect :highlight, "attachment_#{@attachment.id}" 
-              page.call('Asset.ResetForm')
-            end
+    @asset.update_attributes!(params[:asset])
+    respond_to do |format|
+      format.html { 
+        redirect_to continue_url(params)
+      }
+      format.js {
+        # called from the upload popup in page editing
+        # we only return a nested form, so page can be a new record
+        @page_attachment = @asset.page_attachments.build(:page_id => params[:page_id])
+        responds_to_parent do
+          render :update do |page|
+            page.insert_html :bottom, "new_attachments", :partial => 'admin/page_attachments/new_attachment'
           end
-        } 
-      end
-    else
-      respond_to do |format|
-        format.html { 
-          flash[:error] = "Sorry: asset could not be saved."
-          render :action => 'new'
-        }
-      end
+        end
+      } 
     end
   end
     

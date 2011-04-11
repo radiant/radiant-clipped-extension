@@ -1,16 +1,50 @@
 var Asset = {};
 
-Asset.Detacher = Behavior.create({
+Asset.AddNewAttachment = Behavior.create({
   onclick: function (e) {
-    e.stop();
+    console.log("attaching!");
+    if (e) e.stop();
     var url = this.element.href;
-    new Ajax.Updater('attachments', url, {
-      asynchronous : true, 
-      evalScripts : true, 
-      method: 'post'
+    new Ajax.Request(url, {
+      asynchronous: true, 
+      evalScripts: true, 
+      method: 'get',
+      onSuccess: function(response) {
+        // append response html to #attachments
+        var new_id  = new Date().getTime();
+        $('attachment_fields').insert(response.responseText.replace(/new_attachment/g, new_id));
+      }
     });
   }
 });
+
+Asset.RemoveNewAttachment = Behavior.create({
+  onclick: function (e) {
+    console.log("unattaching!");
+    if (e) e.stop();
+    var container = this.element.up('li');
+    container.down('input').remove();
+    container.dropOut();
+  }
+});
+
+Asset.DetachAttachment = Behavior.create({
+  onclick: function (e) {
+    console.log("detaching!");
+    if (e) e.stop();
+    var container = this.element.up('li');
+    container.down('input.destroyer').value = 1;
+    container.dropOut();
+  }
+});
+
+
+
+
+
+
+
+// alternatively, you can create an attachment immediately. The whole attachments list is refreshed.
 
 Asset.Attacher = Behavior.create({
   onclick: function (e) {
@@ -26,6 +60,21 @@ Asset.Attacher = Behavior.create({
     });
   }
 });
+
+Asset.Detacher = Behavior.create({
+  onclick: function (e) {
+    e.stop();
+    var url = this.element.href;
+    new Ajax.Updater('attachments', url, {
+      asynchronous : true, 
+      evalScripts : true, 
+      method: 'post'
+    });
+  }
+});
+
+
+
 
 Asset.NoFileTypes = Behavior.create({
   onclick: function(e){
@@ -97,8 +146,10 @@ Asset.CopyButton = Behavior.create({
 
 
 Event.addBehavior({
-  // 'a.detach_asset': Asset.Detacher,
-  'a.attach_asset': Asset.Attacher,
+  'a.attach_asset': Asset.AddNewAttachment,
+  'a.unattach_asset': Asset.RemoveNewAttachment,
+  'a.detach_asset': Asset.DetachAttachment,
+  'form.upload_asset': Asset.Uploader,
   'a.deselective': Asset.NoFileTypes,
   'a.selective': Asset.FileTypes,
   'a.copy': Asset.CopyButton

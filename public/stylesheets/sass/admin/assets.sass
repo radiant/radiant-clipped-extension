@@ -344,6 +344,8 @@ p
         display: none
         top: 5px
         left: 10px
+        input
+          display: none
         a, span.label
           display: block
           margin: 5px 10px
@@ -364,7 +366,8 @@ p
         span.label
           color: white
           +text-shadow(#000, 0, 0, 3px)
-          
+      &.unsaved
+        opacity: 0.4
       &:hover
         .controls
           display: block

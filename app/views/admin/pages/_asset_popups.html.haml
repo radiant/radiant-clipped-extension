@@ -6,7 +6,7 @@
       %h3.title
         = t('assets_extension.upload_asset')
 
-      - form_for([:admin, @page.assets.build]) do |f|
+      - form_for([:admin, Asset.new]) do |f|
         %p
           = f.label :title
           = f.text_field :title, :class => "textbox big"
@@ -35,7 +35,7 @@
         = render :partial => 'admin/assets/search'
 
       #assets_table
-        = render :partial => 'admin/assets/asset_table', :locals => {:assets => Asset.latest(10)}
+        = render :partial => 'admin/assets/asset_table', :locals => {:assets => Asset.latest(10), :for_attachment => true}
 
       %p.buttons
         = link_to_function t('close'), "$(this).closePopup()"

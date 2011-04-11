@@ -1,4 +1,6 @@
 - assets ||= @assets
+- for_attachment ||= false
+
 %table.index#assets
   %thead
     %tr
@@ -32,12 +34,9 @@
                 = asset.asset_content_type
             - tbody.actions_cell do
               %td.actions
-                - if @page
-                  /= link_to(image_tag('/images/assets/copy.png', :alt => t('assets_extension.copy_alt')) + ' ' + t("assets_extension.copy"), '', :class=>"action copy", :id => "copy_#{asset.id}")
-                  - pa = @page.page_attachments.build(:asset_id => asset.id)
-                  - form_for [:admin, @page, pa], :html => {:id => "attach_asset_#{asset.id}"} do |f|
-                    = f.hidden_field :asset_id
-                    = link_to(image('plus') + ' ' + t("assets_extension.attach"), '#', :class=>"action attach_asset")
+                - if for_attachment
+                  = link_to(image_tag('/images/assets/copy.png', :alt => t('assets_extension.copy_alt')) + ' ' + t("assets_extension.copy"), '', :class=>"action copy", :id => "copy_#{asset.id}")
+                  = link_to(image('plus') + ' ' + t("assets_extension.attach"), new_admin_page_attachment_url(:asset_id => asset.id, :page_id => @page.id) , :class=>"action attach_asset")
                 - else
                   = link_to(image_tag('/images/assets/copy.png', :alt => t('assets_extension.copy_alt')) + ' ' + t("assets_extension.copy"), '', :class=>"action copy", :id => "copy_#{asset.id}")
                   = link_to(image('minus') + ' ' + t("assets_extension.remove"), remove_admin_asset_path(asset), :class=>"action")
