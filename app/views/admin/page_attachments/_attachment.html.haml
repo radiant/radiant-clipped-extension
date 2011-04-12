@@ -10,12 +10,13 @@
 - dom_id = "asset_#{asset.id}"
 
 %li{:class => "#{asset_type} asset", :id => dom_id}
-  = link_to image_tag(asset.thumbnail(:sample)), asset.thumbnail, :title => asset.title
+  = image_tag asset.thumbnail(:sample)
   .controls
-    %span.label
-      = asset.title
+    .title= asset.title
     - if asset.attached_to?(page)
-      = link_to t('assets_extension.insert').downcase, '#', :class => 'insert_asset'
-      - if attachment_form
-        = attachment_form.hidden_field :_destroy, :class => 'destroyer'
-        = link_to t('assets_extension.detach').downcase, '#', :class => 'detach_asset'
+      %ul.actions
+        %li= link_to t('assets_extension.insert'), 'javascript:void(0)', :class => 'insert_asset'
+        - if attachment_form
+          %li
+            = attachment_form.hidden_field :_destroy, :class => 'destroyer'
+            = link_to t('assets_extension.detach'), 'javascript:void(0)', :class => 'detach_asset'

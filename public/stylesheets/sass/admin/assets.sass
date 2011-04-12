@@ -67,38 +67,7 @@ table.index#assets
   &.waiting
     opacity: 0.5
 
-#upload_assets a
-  color: black
-  font-weight: bold
-  text-decoration: none
-  &:hover
-    color: blue
-    text-decoration: underline
-
-.attachment_tools
-  float: right
-  ul
-    +inline-list
-  li
-    padding-left: 1em
-  a
-    color: white !important
-    text-shadow: 1px 1px 0 #888
-
-#upload_asset
-  p.upload
-    background: #e5e5e5
-    +linear-gradient(color-stops(#f5f5f5, #ddd))
-    border: 1px solid #ccc
-    +border-radius(4px)
-    +box-shadow(white, 0, 1px, 0, inset)
-    padding: 1em
-    label
-      display: none
-  iframe
-    display: none
-
-#attach_asset
+.popup
   div.toolbar
     background: white
     +linear-gradient(color-stops(white, #ddd))
@@ -124,54 +93,70 @@ table.index#assets
         +box-shadow(rgba(black, 0.2), 0, 1px, 0, inset)
         width: 180px
         padding: 2px 8px 2px 20px
+
+#upload_asset
+  iframe
+    display: none
+
+#attach_asset
   .viewport
     overflow-x: hidden
 
-.attachment_list
+.attachment_actions
+  text-align: right
+  margin-bottom: -1em
   ul
+    +inline-list
+  li
+    padding-left: 1em
+  a
+    color: white !important
+    text-shadow: 1px 1px 0 #888
+
+.attachment_list
+  > ul
+    background: rgba(black, 0.4)
+    +border-radius
     padding: 1em
     margin: 1em 0
     height: 110px
     overflow-y: hidden
     overflow-x: auto
-    li
-      position: relative
-      display: inline
+    > li
+      background: white
+      +box-shadow
+      display: block
       float: left
       margin: 0 10px 0 0
+      width: 110px
+      height: 110px
+      overflow: hidden
       img
         padding: 5px
-        background-color: white
-        +box-shadow
       .controls
-        position: absolute
         display: none
-        top: 5px
-        left: 10px
-        input
-          display: none
-        a, span.label
-          display: block
-          margin: 5px 10px
-          width: 58px
-          padding: 4px 6px
-          font-size: 90%
-          text-decoration: none
-          text-align: center
-          white-space: nowrap
+        color: #333
+        text-align: center
+      .title
+        height: 30px
+        line-height: 30px
+        font-size: 10px
+        overflow: hidden
+      ul.actions
+        li
+          margin: 5px 0
+          padding: 0 10px
         a
-          +border-radius(5px)
-          background-color: #666
+          background: #666
+          +border-radius
           color: white
-          &.remove, &.detach
-            background-color: #c00
-          &.attach, &.insert
-            background-color: #0c0
-        span.label
-          color: white
-          +text-shadow(#000, 0, 0, 3px)
+          display: block
+          padding: 2px 10px
+          text-decoration: none
       &.unsaved
         opacity: 0.4
       &:hover
+        img
+          display: none
         .controls
           display: block

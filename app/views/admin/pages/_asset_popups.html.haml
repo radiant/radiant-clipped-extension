@@ -1,11 +1,10 @@
 - render_region :asset_popups do |popups|
   - popups.upload_asset do
-    #upload-asset.popup.textured{:style => "display: none; width: 28em"}
-      #upload-asset_busy.busy{:style => "display: none"}= image('spinner.gif', :alt => "")
-
-      %h3.title
-        = t('assets_extension.upload_asset')
-
+    #upload_asset.popup.textured{:style => "display: none; width: 28em"}
+      #upload_asset_busy.busy{:style => "display: none"}= image('spinner.gif', :alt => "")
+      
+      .popup_title= t('assets_extension.upload_asset')
+      
       - form_for([:admin, Asset.new], :html => {:method => 'post', :multipart => true, :target => 'ulframe'}) do |f|
         = hidden_field_tag "for_attachment", 1
         = hidden_field_tag "page_id", @page.id
@@ -17,26 +16,25 @@
         %p
           = f.label :title, 'Alt-Text or Title <span class="hint">(optional)</span>'
           = f.text_field :title, :class => "textbox big"
-
-        %p.buttons
+        
+        .buttons
           = f.submit t("assets_extension.upload"), :class => "button"
           = t('or')
-          = link_to_function t('cancel'), "$(this).closePopup()", :class=>"cancel"
+          %a.cancel.close_popup{:href=>"javascript:void(0)"}= t('cancel')
       
-      %iframe{ :id => 'ulframe', :name => "ulframe", :src => "about:blank"}
+      %iframe{:id => 'ulframe', :name => "ulframe", :src => "about:blank"}
   
   - popups.attach_asset do
-    #attach-asset.popup.textured{:style=>"display: none; width: 44em"}
-      #attach-asset_busy.busy{:style => "display: none"}= image('spinner.gif', :alt => "")
+    #attach_asset.popup.textured{:style=>"display: none; width: 44em"}
+      #attach_asset_busy.busy{:style => "display: none"}= image('spinner.gif', :alt => "")
       
       .popup_title= t('assets_extension.attach_existing')
       
       .toolbar
         = render :partial => 'admin/assets/search'
-
+      
       #assets_table.viewport{:style=>"height: 20em"}
         = render :partial => 'admin/assets/asset_table', :locals => {:assets => Asset.latest(10), :for_attachment => true}
-
+      
       %p.close_link
-        = link_to_function t('close'), "$(this).closePopup()"
-
+        %a.close_popup{:href=>"javascript:void(0)"}= t('close')
