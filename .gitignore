@@ -7,3 +7,4 @@ tmp/**/*
 db/schema.rb
 
 *.swp
+pkg/*

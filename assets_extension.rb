@@ -3,7 +3,7 @@ require File.dirname(__FILE__) + '/lib/url_additions'
 include UrlAdditions
 
 class AssetsExtension < Radiant::Extension
-  version "1.0"
+  version "1.0.0.rc1"
   description "Assets extension based Keith Bingman's original Paperclipped extension."
   url "http://github.com/radiant/radiant-assets-extension"
 
