@@ -9,7 +9,7 @@
 
 - unless @page.page_attachments.empty?
   .attachment_list
-    %h2= t('assets_extension.attached_assets')
+    %label= t('assets_extension.attached_assets')
     %ul#attachment_fields
       - fields_for @page do |f|
         - f.fields_for :page_attachments do |paf|
