@@ -11,7 +11,8 @@ Asset.AddNewAttachment = Behavior.create({
       onSuccess: function(transport) {
         var new_id  = new Date().getTime();
         $('attachment_fields').insert(transport.responseText.replace(/new_attachment/g, new_id));
-        $('attachments').down('span.note').update('save page to commit changes');
+        // Need to restore this some how
+        // $('attachments').down('span.note').update('save page to commit changes');
       }
     });
   }
@@ -20,7 +21,7 @@ Asset.AddNewAttachment = Behavior.create({
 Asset.RemoveNewAttachment = Behavior.create({
   onclick: function (e) {
     if (e) e.stop();
-    var container = this.element.up('li');
+    var container = this.element.up('li.asset');
     container.down('input').remove();
     container.dropOut();
   }
@@ -29,7 +30,7 @@ Asset.RemoveNewAttachment = Behavior.create({
 Asset.DetachAttachment = Behavior.create({
   onclick: function (e) {
     if (e) e.stop();
-    var container = this.element.up('li');
+    var container = this.element.up('li.asset');
     container.down('input.destroyer').value = 1;
     container.dropOut();
     $('attachments').down('span.note').update('Save page to commit changes');
@@ -43,7 +44,7 @@ Asset.CatchUpload = Behavior.create({
     if (html && html != "") {
       var new_id  = new Date().getTime();
       $('attachment_fields').insert(html.replace(/new_attachment/g, new_id));
-      $('upload-asset').closePopup();
+      $('upload_asset').closePopup();
       this.element.empty();
     }
   }
