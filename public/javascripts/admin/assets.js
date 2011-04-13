@@ -51,9 +51,6 @@ Asset.CatchUpload = Behavior.create({
 });
 
 
-
-// 
-// 
 // // alternatively, you can create an attachment immediately. The whole attachments list is refreshed.
 // 
 // Asset.Attacher = Behavior.create({
@@ -136,10 +133,10 @@ Asset.CopyButton = Behavior.create({
     var asset_id = this.element.id.replace('copy_', '');
     clip.setText('<r:assets:image size="" id="' + asset_id + '" />');
     clip.setHandCursor( true );
-
+    
     // this doesn't position the clip correctly if the buttons aren't visible at the time
     clip.glue(this.element);
-
+    
     clip.addEventListener( 'onComplete', function (client, text) {
       var element = client.domElement;
       var contents = element.innerHTML;
