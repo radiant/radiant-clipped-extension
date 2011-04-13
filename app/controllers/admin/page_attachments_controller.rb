@@ -1,16 +1,16 @@
 class Admin::PageAttachmentsController < Admin::ResourceController
-
+  
   def new
     Rails.logger.warn "!!! New page attachment: #{@page_attachment.inspect}"
     render :partial => 'admin/page_attachments/new_attachment'
   end
-
+  
   def create
     @page_attachment.update_attributes!(params[:page_attachment])
     @page = @page_attachment.page
     render :partial => 'admin/page_attachments/attachment_list' 
   end
-
+  
   def destroy
     @page = @page_attachment.page
     @page_attachment.destroy

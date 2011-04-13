@@ -3,17 +3,17 @@ class Admin::AssetsController < Admin::ResourceController
   
   def index
     assets = Asset.scoped({})
-
+    
     @term = params[:search] || ''
     assets = assets.matching(@term) if @term && !@term.blank?
-
+    
     @types = params[:filter] || []
     if @types.include?('all')
       params[:filter] = nil
     elsif @types.any?
       assets = assets.of_types(@types)
     end
-
+    
     @assets = paginated? ? assets.paginate(pagination_parameters) : assets.all
     respond_to do |format|
       format.html { render }
@@ -23,7 +23,7 @@ class Admin::AssetsController < Admin::ResourceController
       }
     end
   end
-
+  
   def create
     @asset.update_attributes!(params[:asset])
     if params[:for_attachment]
@@ -33,7 +33,7 @@ class Admin::AssetsController < Admin::ResourceController
       response_for :create
     end
   end
-
+  
   # Refreshes the paperclip thumbnails
   def refresh
     unless params[:id]
@@ -50,5 +50,5 @@ class Admin::AssetsController < Admin::ResourceController
       redirect_to edit_admin_asset_path(@asset)
     end
   end
-
-  end
+  
+end
