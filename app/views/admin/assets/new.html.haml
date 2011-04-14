@@ -4,24 +4,23 @@
 - render_region :main do |main|
   - main.edit_header do
     %h1= t("assets_extension.new_asset")
-    %p 
-      != t("assets_extension.asset_upload_note")
-
+  
   - main.edit_form do  
     - form_for :asset, :url => admin_assets_path, :html => { :method => "post", :multipart => true } do |f|
-      .form-area
-        = render :partial => "form", :locals => { :f => f }
-
-        %p.upload
-          %label.upload
-            = t("assets_extension.choose_upload")
-          = f.file_field :asset, :class => "", :style => "width: 100%"
-     
-        %p.buttons
-          = save_model_button(@asset)
-          = save_model_and_continue_editing_button(@asset)
-          = t("or")
-          = link_to t("cancel"), admin_assets_path
-
+      
+      = render :partial => "form", :locals => { :f => f }
+      
+      = @asset.errors.full_messages.inspect
+      
+      %p
+        %label= t("assets_extension.choose_file")
+        = f.file_field :asset, :style => "width: 100%"
+      
+      .buttons
+        = save_model_button(@asset)
+        = save_model_and_continue_editing_button(@asset)
+        = t("or")
+        = link_to t("cancel"), admin_assets_path
+  
   - main.edit_regenerate do
     &nbsp;

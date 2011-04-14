@@ -6,11 +6,6 @@
   = render 'search'
 
 .outset
-  - render_region :top do |top|
-    - top.filters do
-      - if false #current_user.admin? # turned off for now, this might be too dangerous to reveal
-        .regenerator
-          = link_to t('assets_extension.regenerate_all_thumbnails') , refresh_admin_assets_path, :confirm => 'Beware that this will take a while and consume considerable resources on your server. Are you sure you want to continue?'
   #assets_table
     = render :partial => 'asset_table', :locals => { :assets => @assets }
     
@@ -19,3 +14,5 @@
     = pagination_for @assets, :depaginate => false
     %ul
       %li= link_to((image('upload') + ' ' + t('assets_extension.upload_asset')), new_admin_asset_path)
+      - if current_user.admin?
+        %li= link_to t('assets_extension.regenerate_thumbnails'), refresh_admin_assets_path, :confirm => 'Beware that this will take a while and consume considerable resources on your server. Are you sure you want to continue?'

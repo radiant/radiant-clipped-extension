@@ -22,7 +22,7 @@ namespace :radiant do
           directory = File.dirname(path)
           puts "Copying #{path}..."
           mkdir_p RAILS_ROOT + directory, :verbose => false
-          cp file, RAILS_ROOT + path, :verbose => false
+          cp_r file, RAILS_ROOT + path, :verbose => false
         end
         
         # unless AssetsExtension.starts_with? RAILS_ROOT # don't need to copy vendored tasks

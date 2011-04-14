@@ -10,7 +10,7 @@
         = hidden_field_tag "page_id", @page.id
         
         %p
-          = f.label :asset, "Choose File"
+          = f.label :asset, t("assets_extension.choose_file")
           = f.file_field :asset
         
         %p

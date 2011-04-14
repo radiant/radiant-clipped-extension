@@ -129,27 +129,33 @@ table.index#assets
       width: 110px
       height: 110px
       position: relative
-      img, .controls
+      .front, .back
         display: block
-        padding: 5px
+        background: #e6eaed
+        border: 5px solid white
         position: absolute
         width: 100px
         height: 100px
-      img  
-        background: white
-        +box-shadow
-      .controls
-        background: #e5e5e5
-        background: rgba(white, 0.6)
-        color: #333
         text-align: center
+      .front
+        +box-shadow
+        text-align: center
+      .back
+        color: #333
         overflow: hidden
         +opacity(0)
       .title
-        height: 30px
-        line-height: 30px
+        color: #333
         font-size: 10px
         overflow: hidden
+        margin: 10px 4px
+        height: 15px
+        line-height: 15px
+      .icon
+        height: 63px
+        line-height: 63px
+        img
+          vertical-align: bottom
       ul.actions
         li
           margin: 5px 0
@@ -168,8 +174,11 @@ table.index#assets
             background: rgba(black, 0.6)
             color: white
       &.unsaved
-        img
+        .front
           opacity: 0.4
       &:hover
-        .controls
+        .back
           +opacity(1)
+      &.image:hover
+        .back
+          background: rgba(white, 0.6)

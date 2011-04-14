@@ -6,14 +6,12 @@
     %tr
       - render_region :thead do |thead|
         - thead.thumbnail_header do
-          %th.asset{:colspan=>2}
-            = t("assets_extension.asset")
+          %th.asset{:colspan=>2}= t("assets_extension.asset")
         - thead.content_type_header do
-          %th.content_type
-            = t("assets_extension.type")
+          - unless for_attachment
+            %th.content_type= t("assets_extension.type")
         - thead.actions_header do
-          %th.actions
-            = t('assets_extension.actions')
+          %th.actions= t('assets_extension.actions')
   %tbody
     - unless assets.empty?
       - for asset in assets 
@@ -22,23 +20,28 @@
             - tbody.thumbnail_cell do
               %td.icon
                 - asset_id = "asset_#{asset.id.to_s}"
-                = link_to image_tag(asset.thumbnail(:icon)), edit_admin_asset_path(asset), :class => 'icon'
+                - if for_attachment
+                  = image_tag(asset.thumbnail(:icon))
+                -else
+                  = link_to image_tag(asset.thumbnail(:icon)), edit_admin_asset_path(asset), :class => 'icon'
             - tbody.title_cell do
               %td.name
-                = link_to asset.title, edit_admin_asset_path(asset) 
-                &nbsp;
-                %span.caption
-                  = asset.caption
+                - if for_attachment
+                  = asset.title
+                - else
+                  = link_to asset.title, edit_admin_asset_path(asset) 
+                  &nbsp;
+                  %span.caption= asset.caption
             - tbody.content_type_cell do
-              %td.content_type
-                = asset.asset_content_type
+              - unless for_attachment
+                %td.content_type
+                  = asset.asset_content_type
             - tbody.actions_cell do
               %td.actions
                 - if for_attachment
-                  = link_to(image_tag('/images/assets/copy.png', :alt => t('assets_extension.copy_alt')) + ' ' + t("assets_extension.copy"), '', :class=>"action copy", :id => "copy_#{asset.id}")
                   = link_to(image('plus') + ' ' + t("assets_extension.attach"), new_admin_page_attachment_url(:asset_id => asset.id, :page_id => @page.id) , :class=>"action attach_asset")
                 - else
-                  = link_to(image_tag('/images/assets/copy.png', :alt => t('assets_extension.copy_alt')) + ' ' + t("assets_extension.copy"), '', :class=>"action copy", :id => "copy_#{asset.id}")
+                  = link_to(image('assets/copy', :alt => t('assets_extension.copy_alt')) + ' ' + t("assets_extension.copy"), '', :class=>"action copy", :id => "copy_#{asset.id}")
                   = link_to(image('minus') + ' ' + t("assets_extension.remove"), remove_admin_asset_path(asset), :class=>"action")
 
     - else
