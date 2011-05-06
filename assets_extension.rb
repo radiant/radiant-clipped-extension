@@ -28,8 +28,6 @@ class AssetsExtension < Radiant::Extension
     admin.page.edit.asset_popups.concat %w{upload_asset attach_asset}
     admin.page.edit.thead.concat %w{thumbnail_header content_type_header actions_header}              # duplicates asset-index partials
     admin.page.edit.tbody.concat %w{thumbnail_cell title_cell content_type_cell actions_cell}         # so that we can use the same asset table as a picker when editing pages
-    admin.configuration.show.add :config, 'admin/configuration/show', :after => 'defaults'
-    admin.configuration.edit.add :form,   'admin/configuration/edit', :after => 'edit_defaults'
     
     if Radiant::Config.table_exists? && Radiant::Config["assets.image_magick_path"]    # This is just needed for testing if you are using mod_rails
       Paperclip.options[:image_magick_path] = Radiant::Config["assets.image_magick_path"]
