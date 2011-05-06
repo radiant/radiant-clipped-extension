@@ -12,7 +12,7 @@ Radiant.config do |config|
                              :select_from => {'File System' => 'filesystem', 'Amazon S3' => 's3'},
                              :allow_blank => false
 
-    assets.namespace 's3', :allow_display => false do |s3|
+    assets.namespace 's3' do |s3|
       s3.define 'bucket'
       s3.define 'key'
       s3.define 'secret'
