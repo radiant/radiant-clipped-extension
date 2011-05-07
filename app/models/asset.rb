@@ -19,7 +19,7 @@ class Asset < ActiveRecord::Base
   named_scope :matching, lambda { |term| 
     { :conditions => ["LOWER(assets.asset_file_name) LIKE (:term) OR LOWER(title) LIKE (:term) OR LOWER(caption) LIKE (:term)", {:term => "%#{term.downcase}%" }] }
   }
-    
+
   has_attached_file :asset,
                     :styles => lambda { |attachment|
                       AssetType.from(attachment.instance_read(:content_type)).paperclip_styles
@@ -33,12 +33,13 @@ class Asset < ActiveRecord::Base
                       :access_key_id     => Radiant.config["assets.s3.key"],
                       :secret_access_key => Radiant.config["assets.s3.secret"]
                     },
+                    :s3_host_alias => Radiant.config["assets.s3.bucket"],
                     :bucket => Radiant.config["assets.s3.bucket"],
                     :url => Radiant.config["assets.url"],
                     :path => Radiant.config["assets.path"]
 
   before_save :assign_title
-                                 
+
   validates_attachment_presence :asset, :message => "You must choose a file to upload!"
   validates_attachment_content_type :asset, :content_type => Radiant.config["assets.content_types"].gsub(' ','').split(',') unless Radiant.config["assets.skip_filetype_validation"] == "true"
   validates_attachment_size :asset, :less_than => Radiant.config["assets.max_asset_size"].to_i.megabytes
@@ -78,12 +79,12 @@ private
   def assign_title
     self.title = basename if title.blank?
   end
-  
+
   class << self
     def known_types
       AssetType.known_types
     end
-    
+
     # searching and pagination moved to the controller
 
     def find_all_by_asset_types(asset_types, *args)
