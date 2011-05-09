@@ -21,6 +21,7 @@
           = f.submit t("assets_extension.upload"), :class => "button"
           = t('or')
           %a.cancel.close_popup{:href=>"javascript:void(0)"}= t('cancel')
+          %a.popup{:href=>"#attach_asset", :style => 'color: #666; float: left'}= t('assets_extension.attach_existing')
       
       %iframe{:id => 'ulframe', :name => "ulframe", :src => "about:blank"}
   
@@ -32,9 +33,10 @@
       
       .toolbar
         = render :partial => 'admin/assets/search'
-      
+            
       #assets_table.viewport{:style=>"height: 20em"}
         = render :partial => 'admin/assets/asset_table', :locals => {:assets => Asset.latest(10), :for_attachment => true}
       
-      %p.close_link
-        %a.close_popup{:href=>"javascript:void(0)"}= t('close')
+      .buttons
+        %a.cancel.close_popup{:href=>"javascript:void(0)"}= t('cancel')
+        %a.popup{:href=>"#upload_asset", :style => 'color: #666; float: left'}= t('assets_extension.upload_asset')

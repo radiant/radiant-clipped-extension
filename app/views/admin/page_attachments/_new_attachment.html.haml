@@ -4,14 +4,14 @@
 - dom_id = "asset_#{asset.id}"
 
 %li{:class => "#{asset_type} asset unsaved", :id => dom_id}
-  = link_to image_tag(asset.thumbnail(:sample)), asset.thumbnail, :title => asset.title
-  .controls
-    %span.label
-      = asset.title
-    = link_to t('assets_extension.insert').downcase, '#', :class => 'insert_asset'
-    = link_to t('assets_extension.detach').downcase, '#', :class => 'unattach_asset'
-
-    - fields_for :page, page do |f|
-      - f.fields_for :page_attachments, @page_attachment, :child_index => "new_attachment" do |paf|
-        = paf.hidden_field :asset_id
-
+  .front
+    .thumbnail
+      = image_tag asset.thumbnail(:sample)
+  .back
+    .title= asset.title
+    %ul.actions
+      %li= link_to t('assets_extension.insert'), 'javascript:void(0)', :class => 'insert_asset'
+      %li= link_to t('assets_extension.detach').downcase, '#', :class => 'unattach_asset'
+      - fields_for :page, page do |f|
+        - f.fields_for :page_attachments, @page_attachment, :child_index => "new_attachment" do |paf|
+          = paf.hidden_field :asset_id, :class => 'attacher'

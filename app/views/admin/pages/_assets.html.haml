@@ -2,15 +2,9 @@
 - include_javascript 'ZeroClipboard'
 - include_javascript 'admin/assets'
 
-.attachment_actions
-  %ul
-    %li= link_to t('assets_extension.upload_asset'), '#upload_asset', :class => 'popup'
-    %li= link_to t('assets_extension.attach_existing'), '#attach_asset', :class => 'popup'
-
-- unless @page.page_attachments.empty?
-  .attachment_list
-    %label= t('assets_extension.attached_assets')
-    %ul#attachment_fields
-      - fields_for @page do |f|
-        - f.fields_for :page_attachments do |paf|
-          = render :partial => 'admin/page_attachments/attachment', :locals => {:attachment_form => paf}
+#attachment_list{:class => @page.page_attachments.empty? ? 'empty' : 'populated'}
+  %label= t('assets_extension.attached_assets')
+  %ul#attachment_fields
+    - fields_for @page do |f|
+      - f.fields_for :page_attachments do |paf|
+        = render :partial => 'admin/page_attachments/attachment', :locals => {:attachment_form => paf}

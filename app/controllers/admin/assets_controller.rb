@@ -19,7 +19,7 @@ class Admin::AssetsController < Admin::ResourceController
       format.html { render }
       format.js { 
         @page = Page.find_by_id(params[:page_id])
-        render :partial => 'asset_table', :locals => {:for_attachment => true}
+        render :partial => 'asset_table', :locals => {:for_attachment => !!@page}
       }
     end
   end
