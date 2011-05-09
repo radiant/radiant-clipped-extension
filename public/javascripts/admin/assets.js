@@ -1,6 +1,6 @@
 var Asset = {};
 
-Asset.AddNewAttachment = Behavior.create({
+Asset.Attach = Behavior.create({
   onclick: function (e) {
     if (e) e.stop();
     var url = this.element.href;
@@ -8,76 +8,54 @@ Asset.AddNewAttachment = Behavior.create({
       asynchronous: true, 
       evalScripts: true, 
       method: 'get',
-      onSuccess: function(transport) {
-        var new_id  = new Date().getTime();
-        $('attachment_fields').insert(transport.responseText.replace(/new_attachment/g, new_id));
-        // Need to restore this some how
-        // $('attachments').down('span.note').update('save page to commit changes');
+      onSuccess: function(transport) { 
+        Asset.AddToList(transport.responseText);
+        $('attach_asset').closePopup();
       }
     });
   }
 });
 
-Asset.RemoveNewAttachment = Behavior.create({
+Asset.Detach = Behavior.create({
   onclick: function (e) {
     if (e) e.stop();
-    var container = this.element.up('li.asset');
-    container.down('input').remove();
-    container.dropOut();
+    Asset.RemoveFromList(this.element.up('li.asset'));
   }
 });
 
-Asset.DetachAttachment = Behavior.create({
-  onclick: function (e) {
-    if (e) e.stop();
-    var container = this.element.up('li.asset');
-    container.down('input.destroyer').value = 1;
-    container.dropOut();
-    $('attachments').down('span.note').update('Save page to commit changes');
-  }
-});
-
-Asset.CatchUpload = Behavior.create({
+Asset.Upload = Behavior.create({
   onload: function (e) {
     if (e) e.stop();
     var html = this.element.contentDocument.body.innerHTML;
-    if (html && html != "") {
-      var new_id  = new Date().getTime();
-      $('attachment_fields').insert(html.replace(/new_attachment/g, new_id));
+    if (html && html != "") { // the iframe is empty on initial page load
+      Asset.AddToList(html);
       $('upload_asset').closePopup();
       this.element.empty();
     }
   }
 });
 
+Asset.AddToList = function (html) {
+  var new_id  = new Date().getTime();
+  $('attachment_fields').insert(html.replace(/new_attachment/g, new_id));
+  if ($('attachment_list').hasClassName('empty')) {
+    $('attachment_list').removeClassName('empty');
+    $('attachment_list').slideDown();
+  }
+  Asset.Notify('Save page to commit changes');
+}
 
-// // alternatively, you can create an attachment immediately. The whole attachments list is refreshed.
-// 
-// Asset.Attacher = Behavior.create({
-//   onclick: function (e) {
-//     if (e) e.stop();
-//     var attachment_form = this.element.parentNode;
-//     new Ajax.Updater('attachments', attachment_form.action, {
-//       asynchronous: true, 
-//       evalScripts: true, 
-//       parameters: Form.serialize(attachment_form),
-//       method: 'post'
-//     });
-//   }
-// });
-// 
-// Asset.Detacher = Behavior.create({
-//   onclick: function (e) {
-//     e.stop();
-//     var url = this.element.href;
-//     new Ajax.Updater('attachments', url, {
-//       asynchronous : true, 
-//       evalScripts : true, 
-//       method: 'post'
-//     });
-//   }
-// });
+Asset.RemoveFromList = function (container) {
+  var el = null;
+  if (!!(el = $('attachment_list').down('input.attacher'))) el.remove();
+  if (!!(el = $('attachment_list').down('input.destroyer'))) el.value = 1;
+  container.dropOut();
+  Asset.Notify('Save page to commit changes');
+}
 
+Asset.Notify = function (message) {
+  // $('attachment_list').down('span.note').update(message);
+}
 
 // Asset-filter and search functions are available wherever the asset_table partial is displayed
 
@@ -149,12 +127,11 @@ Asset.CopyButton = Behavior.create({
   }
 });
 
-
 Event.addBehavior({
-  'iframe#ulframe': Asset.CatchUpload,
-  'a.attach_asset': Asset.AddNewAttachment,
-  'a.unattach_asset': Asset.RemoveNewAttachment,
-  'a.detach_asset': Asset.DetachAttachment,
+  'iframe#ulframe': Asset.Upload,
+  'a.attach_asset': Asset.Attach,
+  'a.unattach_asset': Asset.Detach,
+  'a.detach_asset': Asset.Detach,
   'form.upload_asset': Asset.Uploader,
   'a.deselective': Asset.NoFileTypes,
   'a.selective': Asset.FileTypes,

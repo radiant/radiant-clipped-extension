@@ -7,31 +7,16 @@
 - page = attachment.page
 - asset = attachment.asset
 - asset_type = asset.image? ? "image" : "link"
-- dom_id = "asset_#{asset.id}"
 
-%li{:class => "#{asset_type} asset", :id => dom_id}
-  - if asset_type == "image"
-    .front
-      .thumbnail= image_tag asset.thumbnail(:sample)
-    .back
-      .title= asset.title
-      - if asset.attached_to?(page)
-        %ul.actions
-          %li= link_to t('assets_extension.insert'), 'javascript:void(0)', :class => 'insert_asset'
-          - if attachment_form
-            %li
-              = attachment_form.hidden_field :_destroy, :class => 'destroyer'
-              = link_to t('assets_extension.detach'), 'javascript:void(0)', :class => 'detach_asset'
-  - else
-    .front
-      .icon= image_for_asset(asset)
-      .title= asset.title
-    .back
-      .title= asset.title
-      - if asset.attached_to?(page)
-        %ul.actions
-          %li= link_to t('assets_extension.insert'), 'javascript:void(0)', :class => 'insert_asset'
-          - if attachment_form
-            %li
-              = attachment_form.hidden_field :_destroy, :class => 'destroyer'
-              = link_to t('assets_extension.detach'), 'javascript:void(0)', :class => 'detach_asset'
+%li{:class => "#{asset_type} asset", :id => "asset_#{asset.id}"}
+  .front
+    .thumbnail= image_tag asset.thumbnail(:sample)
+  .back
+    .title= asset.title
+    - if asset.attached_to?(page)
+      %ul.actions
+        %li= link_to t('assets_extension.insert'), 'javascript:void(0)', :class => 'insert_asset'
+        - if attachment_form
+          %li
+            = attachment_form.hidden_field :_destroy, :class => 'destroyer'
+            = link_to t('assets_extension.detach'), 'javascript:void(0)', :class => 'detach_asset'

@@ -14,7 +14,7 @@ class AssetType
   @@type_lookup = {}
   @@mime_lookup = {}
   @@default_type = nil
-  attr_reader :name, :processors, :styles, :catchall
+  attr_reader :name, :processors, :styles, :icons, :catchall
   
   def initialize(name, options = {})
     options = options.symbolize_keys
@@ -22,6 +22,7 @@ class AssetType
     @processors = options[:processors]
     @styles = options[:styles] || {}
     @mimes = options[:mime_types] || []
+    @icons = options[:icons] || {}
     if @mimes.any?
       @mimes.each { |mimetype| @@mime_lookup[mimetype] ||= self }
     end
@@ -39,6 +40,11 @@ class AssetType
   
   def plural
     name.to_s.pluralize
+  end
+
+  def icon(style_name='icon')
+    return icons unless icons.respond_to :keys
+    return icons['all'] || icons[style_name] || icons['default']
   end
 
   def condition
