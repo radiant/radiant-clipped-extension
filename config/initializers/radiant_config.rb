@@ -14,6 +14,7 @@ Radiant.config do |config|
 
     assets.namespace 's3' do |s3|
       s3.define 'bucket'
+      s3.define 'host_alias'
       s3.define 'key'
       s3.define 'secret'
     end

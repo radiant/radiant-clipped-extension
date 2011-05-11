@@ -30,10 +30,10 @@ class Asset < ActiveRecord::Base
                     :whiny => false,
                     :storage => Radiant.config["assets.storage"] == "s3" ? :s3 : :filesystem,
                     :s3_credentials => {
-                      :access_key_id     => Radiant.config["assets.s3.key"],
+                      :access_key_id => Radiant.config["assets.s3.key"],
                       :secret_access_key => Radiant.config["assets.s3.secret"]
                     },
-                    :s3_host_alias => Radiant.config["assets.s3.bucket"],
+                    :s3_host_alias => Radiant.config["assets.s3.host_alias"] || Radiant.config["assets.s3.bucket"],
                     :bucket => Radiant.config["assets.s3.bucket"],
                     :url => Radiant.config["assets.url"],
                     :path => Radiant.config["assets.path"]
