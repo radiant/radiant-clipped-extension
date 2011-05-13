@@ -26,17 +26,21 @@
       %iframe{:id => 'ulframe', :name => "ulframe", :src => "about:blank"}
   
   - popups.attach_asset do
-    #attach_asset.popup.textured{:style=>"display: none; width: 44em"}
-      #attach_asset_busy.busy{:style => "display: none"}= image('spinner.gif', :alt => "")
+    #attach_asset.popup.textured{:style=>"display: none;"}
       
       .popup_title= t('assets_extension.attach_existing')
       
       .toolbar
         = render :partial => 'admin/assets/search'
-            
-      #assets_table.viewport{:style=>"height: 20em"}
-        = render :partial => 'admin/assets/asset_table', :locals => {:assets => Asset.latest(10), :for_attachment => true}
       
-      .buttons
-        %a.cancel.close_popup{:href=>"javascript:void(0)"}= t('cancel')
-        %a.popup{:href=>"#upload_asset", :style => 'color: #666; float: left'}= t('assets_extension.upload_asset')
+      %form{:action => new_admin_page_page_attachment_path(@page), :class => 'attach_assets'}
+      
+        #assets_table.assets.viewport{:style=>"height: 320px; width: 610px"}
+          = render :partial => 'admin/assets/asset_table', :locals => {:assets => Asset.except(@page.assets).latest(10), :for_attachment => true}
+      
+        .busy{:style => "display: none"}= image('spinner.gif', :alt => "")
+        .buttons
+          = submit_tag t("assets_extension.attach"), :class => "button commit"
+          = t('or')
+          %a.cancel.close_popup{:href=>"javascript:void(0)"}= t('cancel')
+          %a.popup{:href=>"#upload_asset", :style => 'color: #666; float: left'}= t('assets_extension.upload_asset')

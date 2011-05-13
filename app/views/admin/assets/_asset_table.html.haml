@@ -1,50 +1,23 @@
 - assets ||= @assets
-- for_attachment ||= false
+- page ||= @page
 
-%table.index#assets
-  %thead
-    %tr
-      - render_region :thead do |thead|
-        - thead.thumbnail_header do
-          %th.asset{:colspan=>2}= t("assets_extension.asset")
-        - thead.content_type_header do
-          - unless for_attachment
-            %th.content_type= t("assets_extension.type")
-        - thead.actions_header do
-          %th.actions= t('assets_extension.actions')
-  %tbody
-    - unless assets.empty?
-      - for asset in assets 
-        %tr[asset]
-          - render_region :tbody, :locals => { :asset => asset } do |tbody|
-            - tbody.thumbnail_cell do
-              %td.icon
-                - asset_id = "asset_#{asset.id.to_s}"
-                - if for_attachment
-                  = image_tag(asset.thumbnail(:icon))
-                -else
-                  = link_to image_tag(asset.thumbnail(:icon)), edit_admin_asset_path(asset), :class => 'icon'
-            - tbody.title_cell do
-              %td.name
-                - if for_attachment
-                  = asset.title
-                - else
-                  = link_to asset.title, edit_admin_asset_path(asset) 
-                  &nbsp;
-                  %span.caption= asset.caption
-            - tbody.content_type_cell do
-              - unless for_attachment
-                %td.content_type
-                  = asset.asset_content_type
-            - tbody.actions_cell do
-              %td.actions
-                - if for_attachment
-                  = link_to(image('plus') + ' ' + t("assets_extension.attach"), new_admin_page_attachment_url(:asset_id => asset.id, :page_id => @page.id) , :class=>"action attach_asset")
-                - else
-                  = link_to(image('assets/copy', :alt => t('assets_extension.copy_alt')) + ' ' + t("assets_extension.copy"), '', :class=>"action copy", :id => "copy_#{asset.id}")
-                  = link_to(image('minus') + ' ' + t("assets_extension.remove"), remove_admin_asset_path(asset), :class=>"action")
-
-    - else
-      %tr
-        %td.empty{:colspan=>"4"} 
-          = t("assets_extension.no_assets")
+- if assets.empty?
+  %p
+    = t("assets_extension.no_assets")
+- else
+  %ul
+    - assets.each_with_index do |asset, index|
+      - asset_type = asset.image? ? "image" : "link"
+      %li{:class => "#{asset_type} asset", :id => "asset_#{asset.id}"}
+        .front
+          .thumbnail= image_tag asset.thumbnail(:sample)
+        .back
+          - if @page
+            = link_to asset.title, '#', :class => 'select_asset title'
+            = check_box_tag :'asset_ids[]', asset.id, false, :class => 'selector'
+          - else
+            .title
+              = asset.title
+            %ul.actions
+              %li= link_to t('assets_extension.edit'), admin_asset_path(asset), :class => 'edit'
+              %li= link_to t("assets_extension.remove"), remove_admin_asset_path(asset), :class => "delete"

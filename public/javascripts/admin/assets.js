@@ -1,18 +1,33 @@
 var Asset = {};
 
-Asset.Attach = Behavior.create({
-  onclick: function (e) {
+Asset.Attacher = Behavior.create({
+  onsubmit: function (e) {
     if (e) e.stop();
-    var url = this.element.href;
-    new Ajax.Request(url, {
+    var form = this.element;
+    form.down('input.commit').disable();
+    form.down('.busy').show();
+    new Ajax.Request(form.action, {
       asynchronous: true, 
       evalScripts: true, 
       method: 'get',
+      parameters: form.serialize(),
       onSuccess: function(transport) { 
         Asset.AddToList(transport.responseText);
         $('attach_asset').closePopup();
+        Asset.ResetAttachmentForm();
+        form.down('.busy').hide();
+        form.down('.commit').enable();
       }
     });
+  }
+});
+
+Asset.Select = Behavior.create({
+  onclick: function (e) {
+    if (e) e.stop();
+    var container = this.element.up('li.asset');
+    container.toggleClassName('selected');
+    container.down('input.selector').checked = container.hasClassName('selected');
   }
 });
 
@@ -20,6 +35,7 @@ Asset.Detach = Behavior.create({
   onclick: function (e) {
     if (e) e.stop();
     Asset.RemoveFromList(this.element.up('li.asset'));
+    Asset.ResetAttachmentForm();
   }
 });
 
@@ -36,25 +52,58 @@ Asset.Upload = Behavior.create({
 });
 
 Asset.AddToList = function (html) {
+  var list = $('attachment_fields');
   var new_id  = new Date().getTime();
-  $('attachment_fields').insert(html.replace(/new_attachment/g, new_id));
-  if ($('attachment_list').hasClassName('empty')) {
-    $('attachment_list').removeClassName('empty');
-    $('attachment_list').slideDown();
+  list.insert(html.replace(/new_attachment/g, new_id));
+  if (list.hasClassName('empty')) {
+    list.removeClassName('empty');
+    list.slideDown();
   }
   Asset.Notify('Save page to commit changes');
+  Asset.UpdateSearchFilter();
 }
 
 Asset.RemoveFromList = function (container) {
   var el = null;
-  if (!!(el = $('attachment_list').down('input.attacher'))) el.remove();
-  if (!!(el = $('attachment_list').down('input.destroyer'))) el.value = 1;
-  container.dropOut();
-  Asset.Notify('Save page to commit changes');
+  if (!!(el = container.down('input.attacher'))) el.remove();
+  if (!!(el = container.down('input.destroyer'))) el.value = 1;
+  container.dropOut({afterFinish: Asset.HideListIfEmpty});
+  container.addClassName('detached');
+  Asset.UpdateSearchFilter();
 }
 
 Asset.Notify = function (message) {
-  // $('attachment_list').down('span.note').update(message);
+  $('attachment_list').down('span.message').update(message).addClassName('important');
+}
+
+Asset.HideListIfEmpty = function () {
+  var list = $('attachment_fields');
+  if (!list.down('li.asset:not(.detached)')) {
+    list.addClassName('empty');
+    list.slideUp();
+    Asset.Notify('All assets detached. Save page to commit changes');
+  } else {
+    Asset.Notify('Assets detached. Save page to commit changes');
+  }
+}
+
+Asset.ResetAttachmentForm = function () {
+  var search_form = $('filesearchform');
+  new Ajax.Updater('assets_table', search_form.action, {
+    asynchronous: true, 
+    evalScripts:  true, 
+    parameters:   Form.serialize(search_form),
+    method: 'get',
+    onComplete: 'assets_table'
+  });
+}
+
+Asset.UpdateSearchFilter = function () {
+  var ids = [];
+  $$('#attachment_fields > li.asset:not(.detached)').each(function (element) {
+    ids.push(element.id.split('_').last());
+  });
+  $('omit_asset_ids').value = ids.join(',');
 }
 
 // Asset-filter and search functions are available wherever the asset_table partial is displayed
@@ -129,10 +178,11 @@ Asset.CopyButton = Behavior.create({
 
 Event.addBehavior({
   'iframe#ulframe': Asset.Upload,
+  'a.select_asset': Asset.Select,
   'a.attach_asset': Asset.Attach,
-  'a.unattach_asset': Asset.Detach,
   'a.detach_asset': Asset.Detach,
-  'form.upload_asset': Asset.Uploader,
+  'form.attach_assets': Asset.Attacher,
+  'form.upload_assets': Asset.Uploader,
   'a.deselective': Asset.NoFileTypes,
   'a.selective': Asset.FileTypes,
   'a.copy': Asset.CopyButton

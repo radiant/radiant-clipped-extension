@@ -1,8 +1,12 @@
 class Admin::PageAttachmentsController < Admin::ResourceController
   
   def new
-    Rails.logger.warn "!!! New page attachment: #{@page_attachment.inspect}"
-    render :partial => 'admin/page_attachments/new_attachment'
+    if params[:asset_ids] && params[:asset_ids].any?            
+      @page_attachments = params[:asset_ids].collect{ |aid| @page.page_attachments.build(:asset_id => aid) }
+      render :partial => 'admin/page_attachments/new_attachment', :collection => @page_attachments
+    else
+      render :partial => 'admin/page_attachments/new_attachment', :object => @page_attachment
+    end
   end
   
   def create
@@ -21,14 +25,14 @@ class Admin::PageAttachmentsController < Admin::ResourceController
     @page = Page.find_by_id(params[:page_id]) || Page.new
     self.model = if params[:id]
       @page.page_attachments.find(params[:id])
-    else
+    elsif params[:asset_id]
       @page.page_attachments.build(:asset_id => params[:asset_id])
     end
   end
   
   # Saves (presumably revised) attachment order.
   def reorder
-    params[:attachments].each_with_index do |id,idx| 
+    params[:page_attachments].each_with_index do |id,idx| 
       page_attachment = PageAttachment.find(id)
       page_attachment.position = idx+1
       page_attachment.save

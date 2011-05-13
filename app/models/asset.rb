@@ -19,6 +19,16 @@ class Asset < ActiveRecord::Base
   named_scope :matching, lambda { |term| 
     { :conditions => ["LOWER(assets.asset_file_name) LIKE (:term) OR LOWER(title) LIKE (:term) OR LOWER(caption) LIKE (:term)", {:term => "%#{term.downcase}%" }] }
   }
+
+  named_scope :except, lambda { |assets| 
+    if assets.any?
+      assets = assets.split(',') if assets.is_a?(String)
+      asset_ids = assets.first.is_a?(Asset) ? assets.map(&:id) : assets
+      { :conditions => ["assets.id NOT IN(#{asset_ids.map{ '?' }.join(',')})", *asset_ids] }
+    else
+      {}
+    end
+  }
     
   has_attached_file :asset,
                     :styles => lambda { |attachment|

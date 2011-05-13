@@ -1,5 +1,10 @@
 @import "base"
 
+p.asset
+  img.preview
+    border: 5px solid white
+    +box-shadow
+    
 .asset_filters
   float: left
   padding: 2px 0
@@ -101,6 +106,8 @@ table.index#assets
 #attach_asset
   .viewport
     overflow-x: hidden
+    width: 610px
+    height: 310px
 
 .attachment_actions
   text-align: right
@@ -113,21 +120,12 @@ table.index#assets
     color: white !important
     text-shadow: 1px 1px 0 #888
 
-#attachment_list
-  &.empty
-    display: none
-  > ul
-    background: #7e7e7e
-    +border-radius
-    padding: 1em
-    margin: 1em 0
-    height: 110px
-    overflow-y: hidden
-    overflow-x: auto
-    > li
+.assets
+  ul
+    li.asset
       display: block
       float: left
-      margin: 0 10px 0 0
+      margin: 8px 0 0 8px
       width: 110px
       height: 110px
       position: relative
@@ -185,3 +183,36 @@ table.index#assets
       &.image:hover
         .back
           background: rgba(white, 0.6)
+  
+#attachment_list.assets
+  background: #7e7e7e
+  +border-bottom-radius
+  margin: -1em 0.5em 1em 0.5em
+  overflow-y: hidden
+  overflow-x: auto
+  ul.empty
+    display: none
+  p.note
+    font-size: 80%
+    margin: 0
+    padding: 8px
+    clear: left
+    span.message
+      color: #aaa
+      &.important
+        color: #d99
+      
+#assets_table.assets
+  background: #7e7e7e
+  ul
+    li.asset
+      input
+        display: none
+      &.selected
+        .front, .back
+          border-color: #c00
+      a.title
+        display: block
+        width: 100px
+        height: 100px
+        margin: 0

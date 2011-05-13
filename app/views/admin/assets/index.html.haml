@@ -6,7 +6,7 @@
   = render 'search'
 
 .outset
-  #assets_table
+  #assets_table.assets
     = render :partial => 'asset_table', :locals => { :assets => @assets }
     
 - render_region :bottom do |bottom|

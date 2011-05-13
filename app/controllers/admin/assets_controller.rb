@@ -2,7 +2,8 @@ class Admin::AssetsController < Admin::ResourceController
   paginate_models
   
   def index
-    assets = Asset.scoped({})
+    assets = Asset.scoped({:order => "created_at DESC"})
+    assets = assets.except(params[:omit_asset_ids]) if params[:omit_asset_ids]
     
     @term = params[:search] || ''
     assets = assets.matching(@term) if @term && !@term.blank?
@@ -19,7 +20,7 @@ class Admin::AssetsController < Admin::ResourceController
       format.html { render }
       format.js { 
         @page = Page.find_by_id(params[:page_id])
-        render :partial => 'asset_table', :locals => {:for_attachment => !!@page}
+        render :partial => 'asset_table'
       }
     end
   end
