@@ -6,7 +6,7 @@ class Asset < ActiveRecord::Base
 
   belongs_to :created_by, :class_name => 'User'
   belongs_to :updated_by, :class_name => 'User'
-
+  
   named_scope :latest, lambda { |limit|
     { :order => "created_at DESC", :limit => limit }
   }
@@ -48,6 +48,7 @@ class Asset < ActiveRecord::Base
                     :path => Radiant.config["assets.path"]
 
   before_save :assign_title
+  before_save :assign_uuid
                                  
   validates_attachment_presence :asset, :message => "You must choose a file to upload!"
   validates_attachment_content_type :asset, :content_type => Radiant.config["assets.content_types"].gsub(' ','').split(',') unless Radiant.config["assets.skip_filetype_validation"] == "true"
@@ -80,14 +81,18 @@ class Asset < ActiveRecord::Base
   def attached_to?(page)
     pages.include?(page)
   end
-
-  # geometry  methods will return here
+  
+  # geometry methods will return here
   # if they can be made more S3-friendly
 
 private
 
   def assign_title
     self.title = basename if title.blank?
+  end
+  
+  def assign_uuid
+    self.uuid = UUIDTools::UUID.timestamp_create.to_s if uuid.blank?
   end
   
   class << self

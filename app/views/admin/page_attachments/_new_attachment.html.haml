@@ -14,5 +14,5 @@
       %li= link_to t('assets_extension.insert'), 'javascript:void(0)', :class => 'insert_asset'
       %li= link_to t('assets_extension.detach').downcase, '#', :class => 'detach_asset'
       - fields_for :page, page do |f|
-        - f.fields_for :page_attachments, new_attachment, :child_index => "new_attachment" do |paf|
+        - f.fields_for :page_attachments, new_attachment, :child_index => asset.uuid do |paf|
           = paf.hidden_field :asset_id, :class => 'attacher'

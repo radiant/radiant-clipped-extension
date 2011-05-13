@@ -6,6 +6,10 @@ class AssetsExtension < Radiant::Extension
   version "1.0.0.rc1"
   description "Assets extension based Keith Bingman's original Paperclipped extension."
   url "http://github.com/radiant/radiant-assets-extension"
+
+  extension_config do |config|
+    config.gem "uuidtools"
+  end
   
   def activate
     Page.send :include, PageAssetAssociations                                          # defines page-asset associations. likely to be generalised soon.
