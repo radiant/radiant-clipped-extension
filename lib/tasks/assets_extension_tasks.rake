@@ -5,6 +5,8 @@ namespace :radiant do
       desc "Runs the migration of the Assets extension"
       task :migrate => :environment do
         require 'radiant/extension_migrator'
+        last_pc_migration = ActiveRecord::Base.connection.select_values("SELECT version FROM #{ActiveRecord::Migrator.schema_migrations_table_name} WHERE version LIKE 'Paperclipped-%'").map{|v| v.sub(/^Paperclipped\-/, '').to_i}.max
+        AssetsExtension.migrator.new(:up, AssetsExtension.migrations_path).send(:assume_migrated_upto_version, last_pc_migration) if last_pc_migration
         if ENV["VERSION"]
           AssetsExtension.migrator.migrate(ENV["VERSION"].to_i)
           Rake::Task['db:schema:dump'].invoke
