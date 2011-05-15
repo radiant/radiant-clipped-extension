@@ -36,7 +36,8 @@
       %form{:action => new_admin_page_page_attachment_path(@page), :class => 'attach_assets'}
       
         #assets_table.assets.viewport{:style=>"height: 320px; width: 610px"}
-          = render :partial => 'admin/assets/asset_table', :locals => {:assets => Asset.except(@page.assets).latest(10), :for_attachment => true}
+          - assets = Asset.all.paginate(Admin::AssetsController.will_paginate_options)
+          = render :partial => 'admin/assets/asset_table', :locals => {:assets => assets, :for_attachment => true}
       
         .busy{:style => "display: none"}= image('spinner.gif', :alt => "")
         .buttons
