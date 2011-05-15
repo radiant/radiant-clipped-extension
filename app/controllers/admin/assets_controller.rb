@@ -1,5 +1,5 @@
 class Admin::AssetsController < Admin::ResourceController
-  paginate_models
+  paginate_models(:per_page => 5)
   
   def index
     assets = Asset.scoped({:order => "created_at DESC"})
@@ -19,7 +19,7 @@ class Admin::AssetsController < Admin::ResourceController
       format.html { render }
       format.js { 
         @page = Page.find_by_id(params[:page_id])
-        render :partial => 'asset_table'
+        render :partial => 'asset_table', :locals => {:with_pagination => true}
       }
     end
   end
