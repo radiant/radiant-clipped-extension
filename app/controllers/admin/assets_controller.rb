@@ -3,7 +3,6 @@ class Admin::AssetsController < Admin::ResourceController
   
   def index
     assets = Asset.scoped({:order => "created_at DESC"})
-    assets = assets.except(params[:omit_asset_ids]) if params[:omit_asset_ids]
     
     @term = params[:search] || ''
     assets = assets.matching(@term) if @term && !@term.blank?

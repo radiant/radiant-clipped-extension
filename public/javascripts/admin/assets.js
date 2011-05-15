@@ -1,5 +1,34 @@
 var Asset = {};
 
+Asset.Uploader = Behavior.create({
+  onsubmit: function (e) {
+    if (e) e.stop();
+    var form = this.element;
+    var filefield = form.down('input.file');
+    
+    // remove file field
+    // get to new asset
+    // place results in attachment bar
+    // add file field
+    // post form again
+    
+    new Ajax.Request(form.action, {
+      asynchronous: true, 
+      evalScripts: true, 
+      method: 'get',
+      parameters: form.serialize(),
+      onSuccess: function(transport) { 
+        Asset.AddToList(transport.responseText);
+        $('attach_asset').closePopup();
+        Asset.ResetAttachmentForm();
+        form.down('.busy').hide();
+        form.down('.commit').enable();
+      }
+    });
+
+  }
+});
+
 Asset.Attacher = Behavior.create({
   onsubmit: function (e) {
     if (e) e.stop();
@@ -39,18 +68,6 @@ Asset.Detach = Behavior.create({
   }
 });
 
-Asset.Upload = Behavior.create({
-  onload: function (e) {
-    if (e) e.stop();
-    var html = this.element.contentDocument.body.innerHTML;
-    if (html && html != "") { // the iframe is empty on initial page load
-      Asset.AddToList(html);
-      $('upload_asset').closePopup();
-      this.element.empty();
-    }
-  }
-});
-
 Asset.GenerateUUID = function () {
   // http://www.ietf.org/rfc/rfc4122.txt
   var s = [];
@@ -69,7 +86,6 @@ Asset.AddToList = function (html) {
     list.slideDown();
   }
   Asset.Notify('Save page to commit changes');
-  Asset.UpdateSearchFilter();
 }
 
 Asset.RemoveFromList = function (container) {
@@ -78,7 +94,10 @@ Asset.RemoveFromList = function (container) {
   if (!!(el = container.down('input.destroyer'))) el.value = 1;
   container.dropOut({afterFinish: Asset.HideListIfEmpty});
   container.addClassName('detached');
-  Asset.UpdateSearchFilter();
+}
+
+Asset.AddUploaderToList = function (argument) {
+  
 }
 
 Asset.Notify = function (message) {
@@ -105,14 +124,6 @@ Asset.ResetAttachmentForm = function () {
     method: 'get',
     onComplete: 'assets_table'
   });
-}
-
-Asset.UpdateSearchFilter = function () {
-  var ids = [];
-  $$('#attachment_fields > li.asset:not(.detached)').each(function (element) {
-    ids.push(element.id.split('_').last());
-  });
-  $('omit_asset_ids').value = ids.join(',');
 }
 
 // Asset-filter and search functions are available wherever the asset_table partial is displayed
@@ -186,12 +197,11 @@ Asset.CopyButton = Behavior.create({
 });
 
 Event.addBehavior({
-  'iframe#ulframe': Asset.Upload,
   'a.select_asset': Asset.Select,
   'a.attach_asset': Asset.Attach,
   'a.detach_asset': Asset.Detach,
   'form.attach_assets': Asset.Attacher,
-  'form.upload_assets': Asset.Uploader,
+  'form.upload_asset': Asset.Uploader,
   'a.deselective': Asset.NoFileTypes,
   'a.selective': Asset.FileTypes,
   'a.copy': Asset.CopyButton
