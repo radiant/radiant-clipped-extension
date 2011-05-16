@@ -87,6 +87,7 @@ en:
       additional_thumbnails: 'Additional Thumbnails'
       content_types: 'Content Types'
       display_size: 'Display Size'
+      insertion_size: 'Insertion Size'
       max_asset_size: 'Max Asset Size'
       path: 'Path'
       skip_filetype_validation: 'Skip Filetype Validation'

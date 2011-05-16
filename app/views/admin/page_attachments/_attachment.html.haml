@@ -15,7 +15,7 @@
     .title= asset.title
     - if asset.attached_to?(page)
       %ul.actions
-        - asset_size = Radiant::Config['assets.insertion_size'] || 'normal'
+        - asset_size = Radiant.config['assets.insertion_size'] || 'normal'
         %li= link_to t('assets_extension.insert'), '#', :class => 'insert_asset', :rel => "#{asset_size}_#{asset.id}"
         - if attachment_form
           %li
