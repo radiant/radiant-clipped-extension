@@ -5,13 +5,13 @@
       
       .popup_title= t('assets_extension.upload_asset')
       
-      - form_for([:admin, Asset.new], :html => {:method => 'post', :multipart => true, :target => 'ulframe'}) do |f|
+      - form_for([:admin, Asset.new], :html => {:method => 'post', :multipart => true, :class => 'upload_asset'}) do |f|
         = hidden_field_tag "for_attachment", 1
         = hidden_field_tag "page_id", @page.id
         
         %p
           = f.label :asset, t("assets_extension.choose_file")
-          = f.file_field :asset
+          = f.file_field :asset, :class => 'file'
         
         %p
           = f.label :title, 'Alt-Text or Title <span class="hint">(optional)</span>'
@@ -22,9 +22,8 @@
           = t('or')
           %a.cancel.close_popup{:href=>"javascript:void(0)"}= t('cancel')
           %a.popup{:href=>"#attach_asset", :style => 'color: #666; float: left'}= t('assets_extension.attach_existing')
-      
-      %iframe{:id => 'ulframe', :name => "ulframe", :src => "about:blank"}
-  
+    #upload_holders
+    
   - popups.attach_asset do
     #attach_asset.popup.textured{:style=>"display: none;"}
       

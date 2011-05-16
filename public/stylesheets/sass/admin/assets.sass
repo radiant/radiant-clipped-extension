@@ -99,16 +99,15 @@ table.index#assets
         width: 180px
         padding: 2px 8px 2px 20px
 
-#upload_asset
-  iframe
-    display: none
+#upload_holders
+  display: none
 
 #attach_asset
   .viewport
     overflow-x: hidden
     width: 610px
     height: 310px
-
+    
 .attachment_actions
   text-align: right
   margin-bottom: -1em
@@ -183,7 +182,13 @@ table.index#assets
       &.image:hover
         .back
           background: rgba(white, 0.6)
-  
+      &.uploading
+        background-color: #E6EAED
+        form
+          display: none
+        .front
+          background: transparent url(/images/admin/spinner.gif) no-repeat center center
+    
 #attachment_list.assets
   background: #7e7e7e
   +border-bottom-radius
@@ -203,6 +208,7 @@ table.index#assets
         color: #d99
       
 #assets_table.assets
+  position: relative
   background: #7e7e7e
   ul
     li.asset
@@ -216,3 +222,28 @@ table.index#assets
         width: 100px
         height: 100px
         margin: 0
+        padding-top: 20px
+  div.pagination
+    position: absolute
+    bottom: 0
+    height: 2.3em
+    font-size: 80%
+    text-align: center
+    a
+      color: white
+      text-decoration: none
+      &:hover
+        background-color: #bbb
+        color: #444
+    span
+      color: #bbb
+    span, a
+      display: block
+      float: left
+      padding: 5px
+      line-height: 1.5em
+      
+  div.pagination
+    left: 0
+    width: 100%
+    background-color: #444

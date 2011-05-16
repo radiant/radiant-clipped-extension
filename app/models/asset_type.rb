@@ -22,7 +22,13 @@ class AssetType
     @processors = options[:processors]
     @styles = options[:styles] || {}
     @mimes = options[:mime_types] || []
-    @icons = options[:icons] || {}
+    if options[:icons]
+      @icons = options[:icons].symbolize_keys
+    elsif options[:icon]
+      @icons = {:all => options[:icon]}
+    else
+      @icons = {}
+    end
     if @mimes.any?
       @mimes.each { |mimetype| @@mime_lookup[mimetype] ||= self }
     end
@@ -42,9 +48,8 @@ class AssetType
     name.to_s.pluralize
   end
 
-  def icon(style_name='icon')
-    return icons unless icons.respond_to :keys
-    return icons['all'] || icons[style_name] || icons['default']
+  def icon(style_name=:icon)
+    return icons[:all] || icons[style_name.to_sym] || icons[:default]
   end
 
   def condition
@@ -117,7 +122,10 @@ class AssetType
   end
   
   def self.catchall
-    @@default_type ||= new :other
+    @@default_type ||= new :other, :icons => {
+      :icon => "/images/admin/assets/document_icon.png",
+      :default => "/images/admin/assets/document_thumbnail.png"
+    }
   end
   
   def self.known?(name)

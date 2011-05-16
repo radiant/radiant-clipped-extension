@@ -3,29 +3,44 @@ var Asset = {};
 Asset.Uploader = Behavior.create({
   onsubmit: function (e) {
     if (e) e.stop();
-    var form = this.element;
-    var filefield = form.down('input.file');
+    var uuid = Asset.GenerateUUID();
+    var ulframe = document.createElement('iframe');
+    ulframe.setAttribute('name', uuid);   // this doesn't work on ie7: will need bodging
+    $('upload_holders').insert(ulframe);
+
+    var form = this.element.clone();
+    var title = 'uploading';
+    this.element.select('input').each(function (i) { 
+      form.insert(i.clone()); 
+      if (i.getAttribute('id') == 'asset_asset') {
+        if (title == 'uploading') title = i.value;
+        i.clear();
+      } 
+      if (i.getAttribute('id') == 'asset_title') {
+        if (i.value != "") title = i.value;
+        i.clear();
+      } 
+    });
+    form.setAttribute('target', uuid);
     
-    // remove file field
-    // get to new asset
-    // place results in attachment bar
-    // add file field
-    // post form again
+    var placeholder = document.createElement('li').addClassName('asset').addClassName('uploading');
+    placeholder.insert(document.createElement('div').addClassName('front'));
+    placeholder.insert(document.createElement('div').addClassName('back').insert(document.createElement('div').addClassName('title').update(title)));
+    placeholder.insert(form);
+    $('attachment_fields').insert(placeholder);
     
-    new Ajax.Request(form.action, {
-      asynchronous: true, 
-      evalScripts: true, 
-      method: 'get',
-      parameters: form.serialize(),
-      onSuccess: function(transport) { 
-        Asset.AddToList(transport.responseText);
-        $('attach_asset').closePopup();
-        Asset.ResetAttachmentForm();
-        form.down('.busy').hide();
-        form.down('.commit').enable();
+    ulframe.observe('load', function (e) {
+      if (e) e.stop();
+      var html = ulframe.contentDocument.body.innerHTML;
+      if (html && html != "") {
+        placeholder.remove();
+        Asset.AddToList(html);
+        ulframe.remove();
       }
     });
-
+    
+    $('upload_asset').closePopup();
+    form.submit();
   }
 });
 
@@ -57,6 +72,20 @@ Asset.Select = Behavior.create({
     var container = this.element.up('li.asset');
     container.toggleClassName('selected');
     container.down('input.selector').checked = container.hasClassName('selected');
+  }
+});
+
+Asset.Pager = Behavior.create({
+  onclick: function (e) {
+    console.log('paged!');
+    if (e) e.stop();
+    var url = this.element.readAttribute('href');
+    new Ajax.Updater('assets_table', url, {
+      asynchronous: true, 
+      evalScripts:  true, 
+      method: 'get',
+      onComplete: 'assets_table'
+    });
   }
 });
 
@@ -96,8 +125,8 @@ Asset.RemoveFromList = function (container) {
   container.addClassName('detached');
 }
 
-Asset.AddUploaderToList = function (argument) {
-  
+Asset.AddUploaderToList = function (filefield) {
+  console.log(filefield);
 }
 
 Asset.Notify = function (message) {
@@ -116,13 +145,9 @@ Asset.HideListIfEmpty = function () {
 }
 
 Asset.ResetAttachmentForm = function () {
-  var search_form = $('filesearchform');
-  new Ajax.Updater('assets_table', search_form.action, {
-    asynchronous: true, 
-    evalScripts:  true, 
-    parameters:   Form.serialize(search_form),
-    method: 'get',
-    onComplete: 'assets_table'
+  $$('#assets_table li.asset').each(function (element) {
+    $(element).removeClassName('selected');
+    $(element).down('input.selector').checked = false;
   });
 }
 
@@ -181,7 +206,7 @@ Asset.CopyButton = Behavior.create({
     clip.setText('<r:assets:image size="" id="' + asset_id + '" />');
     clip.setHandCursor( true );
     
-    // this doesn't position the clip correctly if the buttons aren't visible at the time
+    // #TODO this doesn't position the clip correctly if the buttons aren't visible at the time
     clip.glue(this.element);
     
     clip.addEventListener( 'onComplete', function (client, text) {
@@ -197,11 +222,12 @@ Asset.CopyButton = Behavior.create({
 });
 
 Event.addBehavior({
+  'form.upload_asset': Asset.Uploader,
   'a.select_asset': Asset.Select,
   'a.attach_asset': Asset.Attach,
   'a.detach_asset': Asset.Detach,
   'form.attach_assets': Asset.Attacher,
-  'form.upload_asset': Asset.Uploader,
+  '#assets_table .pagination a': Asset.Pager,
   'a.deselective': Asset.NoFileTypes,
   'a.selective': Asset.FileTypes,
   'a.copy': Asset.CopyButton

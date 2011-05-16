@@ -18,12 +18,10 @@ class AssetsExtension < Radiant::Extension
     Page.send :include, AssetTags                                                      # radius tags for selecting sets of assets and presenting each one
     UserActionObserver.instance.send :add_observer!, Asset                             # the usual creator- and updater-stamping
     
-    AssetType.new :image, :icons => "/images/admin/assets/image_icon.png", :mime_types => %w[image/png image/x-png image/jpeg image/pjpeg image/jpg image/gif], :processors => [:thumbnail], :styles => {:icon => ['42x42#', :png], :thumbnail => ['100x100>', :png]}
-    AssetType.new :video, :icons => "/images/admin/assets/video_icon.png", :mime_types => %w[video/mpeg video/mp4 video/ogg video/quicktime video/x-ms-wmv video/x-flv]
-    AssetType.new :audio, :icons => "/images/admin/assets/audio_icon.png", :mime_types => %w[audio/mpeg audio/mpg audio/ogg application/ogg audio/x-ms-wma audio/vnd.rn-realaudio audio/x-wav]
-    # AssetType.new :swf, :mime_types => %w[application/x-shockwave-flash]
-    # AssetType.new :pdf, :mime_types => %w[application/pdf application/x-pdf]
-    AssetType.new :other, :icons => "/images/admin/assets/document_icon.png"          # an AssetType declared with no (or unknown) mime-types is filed under misc
+    AssetType.new :image, :icons => {:icon => "/images/admin/assets/image_icon.png", :default => "/images/admin/assets/image_thumbnail.png"}, :mime_types => %w[image/png image/x-png image/jpeg image/pjpeg image/jpg image/gif], :processors => [:thumbnail], :styles => {:icon => ['42x42#', :png], :thumbnail => ['100x100>', :png]}
+    AssetType.new :video, :icons => {:icon => "/images/admin/assets/video_icon.png", :default => "/images/admin/assets/video_thumbnail.png"}, :mime_types => %w[video/mpeg video/mp4 video/ogg video/quicktime video/x-ms-wmv video/x-flv]
+    AssetType.new :audio, :icons => {:icon => "/images/admin/assets/audio_icon.png", :default => "/images/admin/assets/audio_thumbnail.png"}, :mime_types => %w[audio/mpeg audio/mpg audio/ogg application/ogg audio/x-ms-wma audio/vnd.rn-realaudio audio/x-wav]
+    # more asset types will follow to use the new icon set
     
     admin.asset ||= Radiant::AdminUI.load_default_asset_regions                        # loads the shards defined in AssetsAdminUI
     admin.page.edit.add :form, 'assets', :after => :edit_page_parts                    # adds the asset-attachment picker to the page edit view

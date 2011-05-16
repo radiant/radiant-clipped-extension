@@ -10,7 +10,7 @@
       
       = render :partial => "form", :locals => { :f => f }
       
-      = @asset.errors.full_messages.inspect
+      = @asset.errors.inspect
       
       %p
         %label= t("assets_extension.choose_file")
