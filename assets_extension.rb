@@ -1,6 +1,4 @@
 require_dependency 'application_controller'
-require File.dirname(__FILE__) + '/lib/url_additions'
-include UrlAdditions
 
 class AssetsExtension < Radiant::Extension
   version "1.0.0.rc1"
@@ -9,6 +7,8 @@ class AssetsExtension < Radiant::Extension
 
   extension_config do |config|
     config.gem "uuidtools"
+    config.gem 'paperclip', :version => '~> 2.3.3'
+    config.gem 'acts_as_list'
   end
   
   def activate
@@ -21,6 +21,8 @@ class AssetsExtension < Radiant::Extension
     AssetType.new :image, :icons => {:icon => "/images/admin/assets/image_icon.png", :default => "/images/admin/assets/image_thumbnail.png"}, :mime_types => %w[image/png image/x-png image/jpeg image/pjpeg image/jpg image/gif], :processors => [:thumbnail], :styles => {:icon => ['42x42#', :png], :thumbnail => ['100x100>', :png]}
     AssetType.new :video, :icons => {:icon => "/images/admin/assets/video_icon.png", :default => "/images/admin/assets/video_thumbnail.png"}, :mime_types => %w[video/mpeg video/mp4 video/ogg video/quicktime video/x-ms-wmv video/x-flv]
     AssetType.new :audio, :icons => {:icon => "/images/admin/assets/audio_icon.png", :default => "/images/admin/assets/audio_thumbnail.png"}, :mime_types => %w[audio/mpeg audio/mpg audio/ogg application/ogg audio/x-ms-wma audio/vnd.rn-realaudio audio/x-wav]
+    AssetType.new :other, :icons => {:icon => "/images/admin/assets/document_icon.png", :default => "/images/admin/assets/document_thumbnail.png"}
+
     # more asset types will follow to use the new icon set
     
     admin.asset ||= Radiant::AdminUI.load_default_asset_regions                        # loads the shards defined in AssetsAdminUI

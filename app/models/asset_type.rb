@@ -122,10 +122,7 @@ class AssetType
   end
   
   def self.catchall
-    @@default_type ||= new :other, :icons => {
-      :icon => "/images/admin/assets/document_icon.png",
-      :default => "/images/admin/assets/document_thumbnail.png"
-    }
+    @@default_type ||= self.find(:other)
   end
   
   def self.known?(name)
