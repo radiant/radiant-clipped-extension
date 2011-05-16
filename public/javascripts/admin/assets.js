@@ -252,3 +252,4 @@ Event.addBehavior({
   'a.selective': Asset.FileTypes,
   'a.copy': Asset.CopyButton
 });
+

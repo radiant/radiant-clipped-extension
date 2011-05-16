@@ -166,3 +166,4 @@ class AssetType
   end
 
 end
+

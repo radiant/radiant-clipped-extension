@@ -17,3 +17,4 @@
       - fields_for :page, page do |f|
         - f.fields_for :page_attachments, new_attachment, :child_index => asset.uuid do |paf|
           = paf.hidden_field :asset_id, :class => 'attacher'
+
