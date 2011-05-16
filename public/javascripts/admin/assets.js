@@ -7,28 +7,17 @@ Asset.Uploader = Behavior.create({
     var ulframe = document.createElement('iframe');
     ulframe.setAttribute('name', uuid);   // this doesn't work on ie7: will need bodging
     $('upload_holders').insert(ulframe);
-    var baseform = this.element;
-    var form = baseform.clone();
-    var title = 'uploading';
-    this.element.select('input').each(function (i) { 
-      if (i.getAttribute('id') == 'asset_asset') {
-        if (title == 'uploading') title = i.value;
-        form.insert(i.clone()); 
-        i.clear();
-      } else if (i.getAttribute('id') == 'asset_title') {
-        if (i.value != "") title = i.value;
-        i.parentNode.insertBefore(i.clone(), i);
-        form.insert(i);
-      } else {
-        form.insert(i.clone()); 
-      }
-    });
+
+    var form = this.element;
+    var title = form.down('input.textbox').value || form.down('input.file').value;
     form.setAttribute('target', uuid);
+    
+    console.log('title', form.down('input.textbox').value);
+    console.log('file', form.down('input.file').value);
     
     var placeholder = document.createElement('li').addClassName('asset').addClassName('uploading');
     placeholder.insert(document.createElement('div').addClassName('front'));
     placeholder.insert(document.createElement('div').addClassName('back').insert(document.createElement('div').addClassName('title').update(title)));
-    placeholder.insert(form);
     $('attachment_fields').insert(placeholder);
     Asset.ShowListIfHidden();
     
@@ -44,6 +33,9 @@ Asset.Uploader = Behavior.create({
     
     $('upload_asset').closePopup();
     form.submit();
+    
+    form.down('input.textbox').clear();
+    form.down('input.file').clear();
   }
 });
 
