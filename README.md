@@ -46,6 +46,12 @@ work, you'll need to load that extension before the assets extension:
 
     config.extensions = [ :sns, :all ]
 
+Due to the order which the extensions are loaded the Assets extension may have
+some partials overwritten by other extensions being loaded afterward.  To make sure
+the partials for the Assets extension take precedence make sure it's the last one loaded
+in environment.rb.  Otherwise you may not see the "attach asset" link when you edit a page.
+
+    config.extensions = [ :all, :assets ]
 
 ## Usage
 
