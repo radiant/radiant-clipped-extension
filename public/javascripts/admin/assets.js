@@ -87,6 +87,30 @@ Asset.Detach = Behavior.create({
   }
 });
 
+Asset.Insert = Behavior.create({
+  onclick: function(e) {
+    if (e) e.stop();
+    var parts = this.element.getAttribute('rel').split('_');
+    Asset.InsertAtCursor($('part_body_content'), '<r:assets:image id="' + parts[1] + '" size="' + parts[0] + '" />');
+  }
+});
+
+// this was originally lifted from phpMyAdmin
+Asset.InsertAtCursor = function(field, insertion) {
+  if (document.selection) {  // ie
+    field.focus();
+    var sel = document.selection.createRange();
+    sel.text = insertion;
+  }
+  else if (field.selectionStart || field.selectionStart == '0') {  // moz
+    var startPos = field.selectionStart;
+    var endPos = field.selectionEnd;
+    field.value = field.value.substring(0, startPos) + insertion + field.value.substring(endPos, field.value.length);
+  } else {
+    field.value += value;
+  }
+}
+
 Asset.GenerateUUID = function () {
   // http://www.ietf.org/rfc/rfc4122.txt
   var s = [];
@@ -218,6 +242,7 @@ Event.addBehavior({
   'a.select_asset': Asset.Select,
   'a.attach_asset': Asset.Attach,
   'a.detach_asset': Asset.Detach,
+  'a.insert_asset': Asset.Insert,
   'form.attach_assets': Asset.Attacher,
   '#assets_table .pagination a': Asset.Pager,
   'a.deselective': Asset.NoFileTypes,
