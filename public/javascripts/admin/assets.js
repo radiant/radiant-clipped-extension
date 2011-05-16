@@ -30,6 +30,7 @@ Asset.Uploader = Behavior.create({
     
     form.submit();
     $('upload_asset').closePopup();
+    // these need a bit of delay while safari assembles the payload
     // form.down('input.textbox').clear();
     // form.down('input.file').clear();
   }
@@ -90,12 +91,14 @@ Asset.Detach = Behavior.create({
 Asset.Insert = Behavior.create({
   onclick: function(e) {
     if (e) e.stop();
-    var parts = this.element.getAttribute('rel').split('_');
-    Asset.InsertAtCursor($('part_body_content'), '<r:assets:image id="' + parts[1] + '" size="' + parts[0] + '" />');
+    var part_name = TabControlBehavior.instances[0].controller.selected.caption;
+    var textbox = $('part_' + part_name + '_content');
+    var id_and_style = this.element.getAttribute('rel').split('_');
+    Asset.InsertAtCursor(textbox, '<r:assets:image id="' + id_and_style[1] + '" size="' + id_and_style[0] + '" />');
   }
 });
 
-// this was originally lifted from phpMyAdmin
+// originally lifted from phpMyAdmin
 Asset.InsertAtCursor = function(field, insertion) {
   if (document.selection) {  // ie
     field.focus();
