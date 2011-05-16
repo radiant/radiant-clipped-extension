@@ -77,7 +77,6 @@ Asset.Select = Behavior.create({
 
 Asset.Pager = Behavior.create({
   onclick: function (e) {
-    console.log('paged!');
     if (e) e.stop();
     var url = this.element.readAttribute('href');
     new Ajax.Updater('assets_table', url, {
@@ -123,10 +122,6 @@ Asset.RemoveFromList = function (container) {
   if (!!(el = container.down('input.destroyer'))) el.value = 1;
   container.dropOut({afterFinish: Asset.HideListIfEmpty});
   container.addClassName('detached');
-}
-
-Asset.AddUploaderToList = function (filefield) {
-  console.log(filefield);
 }
 
 Asset.Notify = function (message) {
