@@ -7,19 +7,21 @@ Asset.Uploader = Behavior.create({
     var ulframe = document.createElement('iframe');
     ulframe.setAttribute('name', uuid);   // this doesn't work on ie7: will need bodging
     $('upload_holders').insert(ulframe);
-
-    var form = this.element.clone();
+    var baseform = this.element;
+    var form = baseform.clone();
     var title = 'uploading';
     this.element.select('input').each(function (i) { 
-      form.insert(i.clone()); 
       if (i.getAttribute('id') == 'asset_asset') {
         if (title == 'uploading') title = i.value;
+        form.insert(i.clone()); 
         i.clear();
-      } 
-      if (i.getAttribute('id') == 'asset_title') {
+      } else if (i.getAttribute('id') == 'asset_title') {
         if (i.value != "") title = i.value;
-        i.clear();
-      } 
+        i.parentNode.insertBefore(i.clone(), i);
+        form.insert(i);
+      } else {
+        form.insert(i.clone()); 
+      }
     });
     form.setAttribute('target', uuid);
     
@@ -28,6 +30,7 @@ Asset.Uploader = Behavior.create({
     placeholder.insert(document.createElement('div').addClassName('back').insert(document.createElement('div').addClassName('title').update(title)));
     placeholder.insert(form);
     $('attachment_fields').insert(placeholder);
+    Asset.ShowListIfHidden();
     
     ulframe.observe('load', function (e) {
       if (e) e.stop();
@@ -109,11 +112,9 @@ Asset.GenerateUUID = function () {
 Asset.AddToList = function (html) {
   var list = $('attachment_fields');
   list.insert(html);
-  if (list.hasClassName('empty')) {
-    list.removeClassName('empty');
-    list.slideDown();
-  }
+  Asset.ShowListIfHidden();
   Asset.Notify('Save page to commit changes');
+  Event.addBehavior.reload();
 }
 
 Asset.RemoveFromList = function (container) {
@@ -128,11 +129,19 @@ Asset.Notify = function (message) {
   $('attachment_list').down('span.message').update(message).addClassName('important');
 }
 
+Asset.ShowListIfHidden = function () {
+  var list = $('attachment_fields');
+  if (list.hasClassName('empty')) {
+    list.removeClassName('empty');
+    // list.slideDown();
+  }
+}
+
 Asset.HideListIfEmpty = function () {
   var list = $('attachment_fields');
   if (!list.down('li.asset:not(.detached)')) {
     list.addClassName('empty');
-    list.slideUp();
+    // list.slideUp();
     Asset.Notify('All assets detached. Save page to commit changes');
   } else {
     Asset.Notify('Assets detached. Save page to commit changes');
