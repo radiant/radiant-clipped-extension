@@ -12,9 +12,6 @@ Asset.Uploader = Behavior.create({
     var title = form.down('input.textbox').value || form.down('input.file').value;
     form.setAttribute('target', uuid);
     
-    console.log('title', form.down('input.textbox').value);
-    console.log('file', form.down('input.file').value);
-    
     var placeholder = document.createElement('li').addClassName('asset').addClassName('uploading');
     placeholder.insert(document.createElement('div').addClassName('front'));
     placeholder.insert(document.createElement('div').addClassName('back').insert(document.createElement('div').addClassName('title').update(title)));
@@ -23,19 +20,18 @@ Asset.Uploader = Behavior.create({
     
     ulframe.observe('load', function (e) {
       if (e) e.stop();
-      var html = ulframe.contentDocument.body.innerHTML;
-      if (html && html != "") {
+      var response = ulframe.contentDocument.body.innerHTML;
+      if (response && response != "") {
         placeholder.remove();
-        Asset.AddToList(html);
+        Asset.AddToList(response);
         ulframe.remove();
       }
     });
     
-    $('upload_asset').closePopup();
     form.submit();
-    
-    form.down('input.textbox').clear();
-    form.down('input.file').clear();
+    $('upload_asset').closePopup();
+    // form.down('input.textbox').clear();
+    // form.down('input.file').clear();
   }
 });
 
