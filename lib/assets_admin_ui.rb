@@ -9,7 +9,7 @@ module AssetsAdminUI
       protected
 
         def load_default_asset_regions
-          returning OpenStruct.new do |asset|
+          OpenStruct.new.tap do |asset|
             asset.edit = Radiant::AdminUI::RegionSet.new do |edit|
               edit.main.concat %w{edit_header edit_form edit_regenerate}
               edit.form.concat %w{edit_title edit_metadata}
