@@ -54,8 +54,10 @@ class Asset < ActiveRecord::Base
   before_save :assign_uuid
                                  
   validates_attachment_presence :asset, :message => "You must choose a file to upload!"
-  validates_attachment_content_type :asset, :content_type => Radiant.config["assets.content_types"].gsub(' ','').split(',') unless Radiant.config["assets.skip_filetype_validation"] == "true"
-  validates_attachment_size :asset, :less_than => Radiant.config["assets.max_asset_size"].to_i.megabytes
+  if Radiant.config["assets.skip_filetype_validation"] != "true" && Radiant.config['assets.content_types']
+    validates_attachment_content_type :asset, :content_type => Radiant.config["assets.content_types"].gsub(' ','').split(',')
+  end
+  validates_attachment_size :asset, :less_than => ( Radiant.config["assets.max_asset_size"] || 5 ).to_i.megabytes
 
   def asset_type
     AssetType.from(asset.content_type)
