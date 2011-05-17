@@ -21,7 +21,8 @@ class AssetsExtension < Radiant::Extension
     AssetType.new :image, :icons => {:icon => "/images/admin/assets/image_icon.png", :default => "/images/admin/assets/image_thumbnail.png"}, :mime_types => %w[image/png image/x-png image/jpeg image/pjpeg image/jpg image/gif], :processors => [:thumbnail], :styles => {:icon => ['42x42#', :png], :thumbnail => ['100x100>', :png]}
     AssetType.new :video, :icons => {:icon => "/images/admin/assets/video_icon.png", :default => "/images/admin/assets/video_thumbnail.png"}, :mime_types => %w[video/mpeg video/mp4 video/ogg video/quicktime video/x-ms-wmv video/x-flv]
     AssetType.new :audio, :icons => {:icon => "/images/admin/assets/audio_icon.png", :default => "/images/admin/assets/audio_thumbnail.png"}, :mime_types => %w[audio/mpeg audio/mpg audio/ogg application/ogg audio/x-ms-wma audio/vnd.rn-realaudio audio/x-wav]
-    AssetType.new :other, :icons => {:icon => "/images/admin/assets/document_icon.png", :default => "/images/admin/assets/document_thumbnail.png"}
+    AssetType.new :document, :icons => {:icon => "/images/admin/assets/document_icon.png", :default => "/images/admin/assets/document_thumbnail.png"}, :mime_types => %w[application/msword application/pdf application/rtf application/vnd.ms-excel application/vnd.ms-powerpoint application/vnd.ms-project application/vnd.ms-works text/plain text/html]
+    AssetType.new :other, :icons => {:icon => "/images/admin/assets/unknown_icon.png", :default => "/images/admin/assets/unknown_thumbnail.png"}
 
     # more asset types will follow to use the new icon set
     

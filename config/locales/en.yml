@@ -2,15 +2,15 @@
 en:
   assets: 'Assets'
   asset_types:
-    all:    'All'
+    all: 'All'
+    documents: 'Documents'
     images: 'Images'
     others: 'Others'
-    audios:  'Audio'
-    movies: 'Movies'
+    audios: 'Audio'
     videos: 'Video'
     pdfs: 'PDFs'
     swfs: 'Flash'
-    others: 'Documents'
+    others: 'Other'
   
   activerecord:
     errors:
