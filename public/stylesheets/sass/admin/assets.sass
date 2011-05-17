@@ -128,6 +128,7 @@ table.index#assets
       width: 110px
       height: 110px
       position: relative
+      line-height: 1.2em
       .front, .back
         display: block
         background: #e6eaed
@@ -182,12 +183,14 @@ table.index#assets
       &.image:hover
         .back
           background: rgba(white, 0.6)
-      &.uploading
+      &.waiting
         background-color: #E6EAED
-        form
+        .back
           display: none
         .front
           background: transparent url(/images/admin/spinner.gif) no-repeat center center
+          img
+            opacity: 0.2
     
 #attachment_list.assets
   background: #7e7e7e
@@ -203,6 +206,7 @@ table.index#assets
     padding: 8px
     clear: left
     span.message
+      float: right
       color: #aaa
       &.important
         color: #d99

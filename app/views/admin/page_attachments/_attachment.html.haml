@@ -15,8 +15,7 @@
     .title= asset.title
     - if asset.attached_to?(page)
       %ul.actions
-        - asset_size = Radiant.config['assets.insertion_size'] || 'normal'
-        %li= link_to t('assets_extension.insert'), '#', :class => 'insert_asset', :rel => "#{asset_size}_#{asset.id}"
+        %li= link_to t('assets_extension.insert'), '#', :class => 'insert_asset', :rel => "#{Radiant.config['assets.insertion_size']}_#{asset.id}"
         - if attachment_form
           %li
             = attachment_form.hidden_field :_destroy, :class => 'destroyer'

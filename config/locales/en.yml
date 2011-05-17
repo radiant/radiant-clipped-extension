@@ -52,6 +52,7 @@ en:
     edit: 'Edit'
     edit_asset: 'Edit {{asset}}'
     filename: 'Filename'
+    find_assets: 'Find Assets'
     images: 'Images'
     images_automatically_created: 'images are automatically created'
     insert: 'Insert'
