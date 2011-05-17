@@ -36,7 +36,7 @@ class AssetsExtension < Radiant::Extension
       admin.configuration.show.add :config, 'admin/configuration/show', :after => 'defaults'
       admin.configuration.edit.add :form,   'admin/configuration/edit', :after => 'edit_defaults'
     
-      if Radiant::Config.table_exists? && Radiant::Config["assets.image_magick_path"]    # This is just needed for testing if you are using mod_rails
+      if Radiant::Config["assets.image_magick_path"]    # This is just needed for testing if you are using mod_rails
         Paperclip.options[:image_magick_path] = Radiant::Config["assets.image_magick_path"]
       end
     
