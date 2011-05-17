@@ -12,7 +12,7 @@
     .title= asset.title
     %ul.actions
       %li= link_to t('assets_extension.insert'), '#', :class => 'insert_asset', :rel => "#{Radiant.config['assets.insertion_size']}_#{asset.id}"
-      %li= link_to t('assets_extension.detach').downcase, '#', :class => 'detach_asset'
+      %li= link_to t('assets_extension.cancel_attachment'), '#', :class => 'detach_asset'
       - fields_for :page, page do |f|
         - f.fields_for :page_attachments, new_attachment, :child_index => asset.uuid do |paf|
           = paf.hidden_field :asset_id, :class => 'attacher'

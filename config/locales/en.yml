@@ -40,6 +40,7 @@ en:
     attach_existing: 'Attach Existing Assets'
     attach_to_page: 'Attach to page'
     audio: 'Audio'
+    cancel_attachment: 'Unattach'
     copy: 'Copy'
     copy_alt: 'copy radius tag to clipboard'
     choose_file: 'Choose File'
