@@ -212,7 +212,7 @@ module AssetTags
     Renders an image tag for the asset.
     
     Using the optional @size@ attribute, different sizes can be display.
-    “thumbnail” and “icon” sizes are built in, but custom ones can be set
+    "thumbnail" and "icon" sizes are built in, but custom ones can be set
     using by changing assets.addition_thumbnails in the Radiant::Config
     settings.
     
