@@ -43,10 +43,10 @@ class AssetType
   end
 
   def icon(style_name='icon')
-    if File.exist?("#{RAILS_ROOT}/public/images/admin/assets/#{asset_type.icon_name}_#{style_name.to_s}.png")
-      return "/images/admin/assets/#{asset_type.icon_name}_#{style_name.to_s}.png"
+    if File.exist?("#{RAILS_ROOT}/public/images/admin/assets/#{icon_name}_#{style_name.to_s}.png")
+      return "/images/admin/assets/#{icon_name}_#{style_name.to_s}.png"
     else
-      return "/images/admin/assets/#{asset_type.icon_name}_icon.png"
+      return "/images/admin/assets/#{icon_name}_icon.png"
     end
   end
 
