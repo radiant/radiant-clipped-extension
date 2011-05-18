@@ -11,7 +11,6 @@ en:
     videos: 'Video'
     pdfs: 'PDFs'
     swfs: 'Flash'
-    others: 'Other'
   
   activerecord:
     errors:
@@ -24,6 +23,7 @@ en:
   assets_extension:
     actions: Actions
     all: 'All'
+    alt_text_or_title: 'Alt-Text or Title <span class="hint">(optional)</span>'
     asset: 'Asset'
     asset_edit_title: 'Edit Asset'
     asset_errors: 'Sorry. {{errors}}'
@@ -58,7 +58,6 @@ en:
     images: 'Images'
     images_automatically_created: 'images are automatically created'
     insert: 'Insert'
-    less: 'Less'
     modify: 'Modify'
     movies: 'Movies'
     need_to_upload: 'Need to upload?'
