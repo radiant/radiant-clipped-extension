@@ -49,6 +49,10 @@ class AssetType
       return "/images/admin/assets/#{icon_name}_icon.png"
     end
   end
+  
+  def icon_path(style_name='icon')
+    "#{RAILS_ROOT}/public#{icon(style_name)}"
+  end
 
   def condition
     if @mimes.any?
@@ -83,24 +87,15 @@ class AssetType
   end
   
   def paperclip_styles
-    if processors.include?(:thumbnail)
-      styles.merge(required_styles).merge(configured_styles)
-    else
-      styles
+    if paperclip_processors.any?
+      styles.merge(configured_styles)
     end
   end
   
   def configured_styles
-    Radiant::Config["assets.additional_thumbnails"].gsub(' ','').split(',').collect{|s| s.split('=')}.inject({}) {|ha, (k, v)| ha[k.to_sym] = v; ha}
+    Radiant::Config["assets.additional_thumbnails"].gsub(' ','').split(',').collect{|s| s.split('=')}.inject({}) {|ha, (k, v)| ha[k.to_sym] = [v, :jpg]; ha}
   end
   
-  def required_styles
-    required_thumbnails = {
-      :icon => ['42x42#', :png],
-      :thumbnail => ['100x100#', :png]
-    }
-  end
-
   def style_dimensions(style_name)
     if style = paperclip_styles[style_name.to_sym]
       style.is_a?(Array) ? style.first : style

@@ -10,8 +10,6 @@
       
       = render :partial => "form", :locals => { :f => f }
       
-      = @asset.errors.inspect
-      
       %p
         %label= t("assets_extension.choose_file")
         = f.file_field :asset, :style => "width: 100%"
