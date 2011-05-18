@@ -10,7 +10,7 @@
 
 %li{:class => "#{asset_type} asset", :id => "asset_#{asset.id}"}
   .front
-    .thumbnail= image_tag asset.thumbnail(:sample)
+    .thumbnail= image_tag asset.thumbnail(:thumbnail)
   .back
     .title= asset.title
     - if asset.attached_to?(page)

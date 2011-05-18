@@ -65,8 +65,7 @@ class Asset < ActiveRecord::Base
   def thumbnail(style_name='original')
     return asset.url if style_name.to_sym == :original
     return asset.url(style_name.to_sym) if has_style?(style_name)
-    return asset_type.icon(style_name) if asset_type.icon(style_name)
-    return "/images/assets/#{asset_type.name}_#{style_name.to_s}.png"
+    return asset_type.icon(style_name)
   end
 
   def has_style?(style_name)

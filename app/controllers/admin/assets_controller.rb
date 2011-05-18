@@ -41,12 +41,12 @@ class Admin::AssetsController < Admin::ResourceController
       @assets.each do |asset|
         asset.asset.reprocess!
       end
-      flash[:notice] = "Thumbnails successfully refreshed."
+      flash[:notice] = t('assets_extension.thumbnails_refreshed')
       redirect_to admin_assets_path
     else
       @asset = Asset.find(params[:id])
       @asset.asset.reprocess!
-      flash[:notice] = "Thumbnail successfully refreshed."
+      flash[:notice] = t('assets_extension.thumbnails_refreshed')
       redirect_to edit_admin_asset_path(@asset)
     end
   end

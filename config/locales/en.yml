@@ -78,6 +78,7 @@ en:
     search_assets: 'Search for assets'
     search: 'Search'
     select: 'Select'
+    thumbnails_refreshed: "Thumbnail successfully refreshed."
     title: 'Title'
     type: 'Type'
     types_to_find: 'Types to find'

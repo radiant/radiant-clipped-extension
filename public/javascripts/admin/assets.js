@@ -106,8 +106,7 @@ Asset.DeselectFileTypes = Behavior.create({
         asynchronous: true, 
         evalScripts:  false, 
         parameters:   Form.serialize(search_form),
-        method: 'get',
-        onComplete: 'assets_table'
+        method: 'get'
       });
     }
   }
@@ -134,8 +133,7 @@ Asset.SelectFileType = Behavior.create({
       asynchronous: true, 
       evalScripts:  false, 
       parameters:   Form.serialize(search_form),
-      method: 'get',
-      onComplete: 'assets_table'
+      method: 'get'
     });
   }
 });
@@ -148,8 +146,7 @@ Asset.PageTable = Behavior.create({
     new Ajax.Updater('assets_table', url, {
       asynchronous: true, 
       evalScripts:  false, 
-      method: 'get',
-      onComplete: 'asset_table'
+      method: 'get'
     });
   }
 });

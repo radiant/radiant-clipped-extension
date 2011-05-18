@@ -14,21 +14,15 @@ class AssetType
   @@type_lookup = {}
   @@mime_lookup = {}
   @@default_type = nil
-  attr_reader :name, :processors, :styles, :icons, :catchall
+  attr_reader :name, :processors, :styles, :icon_name, :catchall
   
   def initialize(name, options = {})
     options = options.symbolize_keys
     @name = name
-    @processors = options[:processors]
+    @icon_name = options[:icon] || name
+    @processors = options[:processors] || []
     @styles = options[:styles] || {}
     @mimes = options[:mime_types] || []
-    if options[:icons]
-      @icons = options[:icons].symbolize_keys
-    elsif options[:icon]
-      @icons = {:all => options[:icon]}
-    else
-      @icons = {}
-    end
     if @mimes.any?
       @mimes.each { |mimetype| @@mime_lookup[mimetype] ||= self }
     end
@@ -48,8 +42,12 @@ class AssetType
     name.to_s.pluralize
   end
 
-  def icon(style_name=:icon)
-    return icons[:all] || icons[style_name.to_sym] || icons[:default]
+  def icon(style_name='icon')
+    if File.exist?("#{RAILS_ROOT}/public/images/admin/assets/#{asset_type.icon_name}_#{style_name.to_s}.png")
+      return "/images/admin/assets/#{asset_type.icon_name}_#{style_name.to_s}.png"
+    else
+      return "/images/admin/assets/#{asset_type.icon_name}_icon.png"
+    end
   end
 
   def condition
@@ -81,26 +79,26 @@ class AssetType
   end
 
   def paperclip_processors
-    processors || []
+    processors
   end
   
   def paperclip_styles
-    styles.merge(name == :image ? image_styles : other_configured_styles)
+    if processors.include?(:thumbnail)
+      styles.merge(required_styles).merge(configured_styles)
+    else
+      styles
+    end
   end
-
-  def image_styles
+  
+  def configured_styles
+    Radiant::Config["assets.additional_thumbnails"].gsub(' ','').split(',').collect{|s| s.split('=')}.inject({}) {|ha, (k, v)| ha[k.to_sym] = v; ha}
+  end
+  
+  def required_styles
     required_thumbnails = {
       :icon => ['42x42#', :png],
-      :thumbnail => ['100x100>', :png],
-      :sample => ['100x100#', :png]
+      :thumbnail => ['100x100#', :png]
     }
-    Radiant::Config["assets.additional_thumbnails"].gsub(' ','').split(',').collect{|s| s.split('=')}.inject(required_thumbnails) {|ha, (k, v)| ha[k.to_sym] = v; ha}
-  end
-
-  def other_configured_styles
-    styles = []
-    styles = Radiant::Config["assets.additional_#{name}_thumbnails"].gsub(/\s+/,'').split(',') if Radiant::Config["assets.additional_#{name}_thumbnails"]
-    styles.collect{|s| s.split('=')}.inject({}) {|ha, (k, v)| ha[k.to_sym] = v; ha}
   end
 
   def style_dimensions(style_name)
