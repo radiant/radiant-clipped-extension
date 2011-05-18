@@ -83,13 +83,11 @@ class AssetType
   end
 
   def paperclip_processors
-    processors
+    Radiant.config["assets.skip_#{name}_processing?"] ? [] : processors
   end
   
   def paperclip_styles
-    if paperclip_processors.any?
-      styles.merge(configured_styles)
-    end
+    paperclip_processors.any? ? styles.merge(configured_styles) : {}
   end
   
   def configured_styles
