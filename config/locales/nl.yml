@@ -1,0 +1,102 @@
+---
+nl:
+  assets: 'Bestanden'
+  asset_types:
+    all: 'Alle'
+    documents: 'Documenten'
+    images: 'Afbeeldingen'
+    others: 'Andere'
+    audios: 'Audio'
+    flashes: 'Flash'
+    videos: 'Video'
+    pdfs: 'PDFs'
+    swfs: 'Flash'
+  
+  activerecord:
+    errors:
+      models:
+        asset:
+          attributes:
+            asset:
+              blank: 'Er werd geen bestand geselecteerd om te uploaden!'
+
+  assets_extension:
+    actions: Acties
+    all: 'Alle'
+    alt_text_or_title: 'Alt-Tekst of Titel <span class="hint">(optioneel)</span>'
+    asset: 'Bestand'
+    asset_edit_title: 'Bestand aanpassen'
+    asset_errors: 'Sorry. {{errors}}'
+    asset_page_attachment_note: 'Gekoppelde bestanden. Deze kunnen ingevoegd worden d.m.v. "drag & drop" of met de <code>&lt;r:assets:each /&gt;</code> tag.'
+    asset_note: 'Gekoppelde bestanden. '
+    assets: 'Bestanden'
+    assets_explanation: "Bestanden en afbeeldingen kunnen geüpload worden, en daarna gekoppeld of ingevoegd in pagina's pages, snippets en layouts. Klik op de naam van een bestand om het aan te passen."
+    assets_title: 'Bestanden'
+    asset_page_upload_note: 'Bestanden die je hier uploadt, zullen automatisch gekoppeld zijn aan deze pagina.'
+    asset_upload_note: 'Kies hier een bestand dat je wil uploaden. Als je het <code>Titel</code> veld leeg laat, wordt de naam afgeleid van de bestandsnaam. Klik <code>More</code> om een onderschrift toe te voegen.'
+    attached_assets: 'Gekoppelde bestanden'
+    attach: 'Koppelen'
+    attach_asset: 'Bestand koppelen'
+    attach_assets: 'Bestanden koppelen'
+    attach_existing: 'Bestaande bestanden koppelen'
+    attach_to_page: 'Koppelen aan pagina'
+    audio: 'Audio'
+    cancel_attachment: 'Ontkoppelen'
+    copy: 'Kopieren'
+    copy_alt: 'kopieer radius tag naar je klembord'
+    choose_file: 'Kies bestand'
+    documents: 'Documenten'
+    caption: 'Onderschrift'
+    confirm_remove_asset: 'Ben je zeker dat je dit bestand <strong class="warning">permanent</strong> wil verwijderen?'
+    confirm_remove_from_page: 'Ben je zeker dat je dit bestand wilt ontkoppelen van deze pagina?'
+    delete_asset: 'Bestand Verwijderen'
+    detach: 'Ontkoppelen'
+    edit: 'Aanpassen'
+    edit_asset: '{{asset}} aanpassen'
+    filename: 'Bestandsnaam'
+    find_assets: 'Bestanden zoeken'
+    images: 'Afbeeldingen'
+    images_automatically_created: 'afbeeldingen worden automatisch gecreëerd'
+    insert: 'Invoegen'
+    modify: 'Bijwerken'
+    movies: 'Filmpjes'
+    need_to_upload: 'Een afbeelding uploaden?'
+    new_asset: 'Nieuw bestand'
+    no_assets_found: 'Er werden geen bestanden gevonden'
+    no_assets: 'Geen bestanden'
+    no_attached_assets: 'Geen gekoppelde bestanden.'
+    others: 'Andere'
+    regenerate_all_thumbnails: 'Je kunt hier alle thumbnails opnieuw genereren. Hou er rekening mee dat dit even kan duren, en zeer belastend kan zijn voor de server.'
+    regenerate: 'Opnieuw genereren'
+    regenerate_thumbnails: 'Thumbnails opnieuw genereren'
+    remove_asset: 'Bestand verwijderen'
+    remove_from_page: 'Verwijderen van pagina'
+    reorder: 'Herschikken'
+    remove: 'Verwijderen'
+    replace_file: 'Bestand vervangen'
+    save_and_upload: 'Opslaan en uploaden'
+    search_assets: 'Zoek naar bestanden'
+    search: 'Zoek'
+    select: 'Selecteer'
+    thumbnails_refreshed: "Thumbnails successvol vernieuwd."
+    title: 'Titel'
+    type: 'Type'
+    types_to_find: 'Te doorzoeken types'
+    upload: 'Uploaden'
+    upload_asset: 'Bestand Uploaden'
+
+  config:
+    assets:
+      additional_thumbnails: 'Bijkomende thumbnail types'
+      content_types: 'Content Types'
+      display_size: 'Display Size'
+      insertion_size: 'Insertion Size'
+      max_asset_size: 'Max Asset Size'
+      path: 'Pad'
+      skip_filetype_validation: 'Laat alle bestandstypes toe'
+      storage: 'Storage'
+      url: 'Url'
+      s3:
+        bucket: 'Bucket'
+        key: 'Key'
+        secret: 'Secret'
