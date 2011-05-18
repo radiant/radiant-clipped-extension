@@ -82,7 +82,7 @@ module AssetTags
     assets. You can also filter by extensions with the @extensions@ attribute.
   
     *Usage:*
-    <pre><code><r:if_assets [min_count="n"] [extensions="pdf|jpg"]>...</r:if_assets></code></pre>
+    <pre><code><r:if_assets [min_count="n"]>...</r:if_assets></code></pre>
   }
   tag 'if_assets' do |tag|
     count = tag.attr['min_count'] && tag.attr['min_count'].to_i || 1
@@ -304,11 +304,11 @@ module AssetTags
   *Usage*:
     <pre><code>
       <ul>
-        <r:asset:each extensions="doc|pdf">
+        <r:assets:each>
           <li class="<r:extension/>">
             <r:link/>
           </li>
-        </r:asset:each>
+        </r:assets:each>
       </ul>
     </code></pre>
   }
@@ -333,6 +333,7 @@ private
     attr = tag.attr.symbolize_keys
     extensions = attr[:extensions] && attr[:extensions].split('|') || []
     conditions = unless extensions.blank?
+      # this is soon to be removed in favour of asset types
       [ extensions.map { |ext| "assets.asset_file_name LIKE ?"}.join(' OR '), 
         *extensions.map { |ext| "%.#{ext}" } ]
     else

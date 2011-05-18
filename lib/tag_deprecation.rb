@@ -21,7 +21,7 @@ module TagDeprecation
     # If no substitute is given then a warning will be issued but nothing rendered. 
     # If a deadline version is provided then it will be mentioned in the deprecation warnings.
     #
-    # In more complex situations you can use deprecate_tag in exactly the 
+    # In more complex situations you can use deprecated_tag in exactly the 
     # same way as tags are normally defined:
     #
     # desc %{

@@ -1,5 +1,7 @@
 ---
 en:
+  'yes': 'yes'
+  'no': 'no'
   assets: 'Assets'
   asset_types:
     all: 'All'
@@ -94,6 +96,9 @@ en:
       max_asset_size: 'Max Asset Size'
       path: 'Path'
       skip_filetype_validation: 'Skip Filetype Validation'
+      create_image_thumbnails?: 'Image thumbnails'
+      create_pdf_thumbnails?: 'PDF thumbnails'
+      create_video_thumbnails?: 'Video thumbnails'
       storage: 'Storage'
       url: 'Url'
       s3:

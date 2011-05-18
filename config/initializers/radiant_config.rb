@@ -24,6 +24,10 @@ Radiant.config do |config|
     # these too. I'd like to add a selection definition but it causes all sorts of load-order trouble with the declaration of asset types
     assets.define 'display_size', :default => 'normal', :allow_change => true, :allow_blank => true
     assets.define 'insertion_size', :default => 'normal', :allow_change => true, :allow_blank => true
+
+    assets.define 'create_image_thumbnails?', :default => 'true', :allow_change => true
+    assets.define 'create_video_thumbnails?', :default => 'true', :allow_change => true
+    assets.define 'create_pdf_thumbnails?', :default => 'true', :allow_change => true
   end
   
 end

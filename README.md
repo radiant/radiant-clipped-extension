@@ -5,60 +5,137 @@ Warning: work in progress!
 
 This is a new core extension intended for use with Radiant version 1.0 or higher. 
 It is based on Keith Bingman's excellent Paperclipped extension, for which it is a drop-in replacement. 
-It should also migrate directly from `page_attachments`, but I haven't tested that yet.
+It should also be an easy upgrade from `page_attachments`, but I haven't tested that yet.
 
 ## Changes
 
-* video files thumbnailed
+* video files frame-grabbed
 * pdfs thumbnailed
 * new asset-retrieval and page-attachment interface (by John Long)
-* new inline upload mechanism that works in all situations and allows several concurrent uploads.
+* new inline upload mechanism that allows several concurrent uploads and attachment to new pages
 * easily extended with new asset types and processors
-* 
+* helpful insert buttons that do the right thing.
 
 ## Still to do
 
 * progress bars on uploading assets
 * warning if you try and save a page while assets are still uploading
+* html5 video and audio tags in radius (with sensible flash fallbacks)
 
+Video transcoding support will be in an optional extension with `delayed_job` support.
+
+# Known bugs
+
+At the moment I think uploads probably don't work in IE7. See github for more issues.
+
+## Requirements
+
+The `paperclip`, `uuidtools` and `acts_as_list` gems are required. For S3 storage you need the `aws-s3` gem.
+
+Paperclip's post-processors require ImageMagick. PDF-thumbnailing also requires ghostscript, which is usually 
+installed with ImageMagick anyway, and if you want to generate thumbnails from video clips then you also need FFmpeg. 
+
+On unixy systems there should be packages available to satisfy all these requirements. You don't need to 
+install development libraries, but you will get a lot of little file-type utilities if you don't have them already.
+
+On OS X, with macports:
+
+    port install ghostscript imagemagick ffmpeg
+
+On debian-like systems:
+
+    apt-get install ghostscript imagemagick ffmpeg
+
+And I expect it's very similar with yum.
+
+On Windows, you can get binary installers of all the required pieces and apparently these days they're simple 
+to install and connect:
+
+* ImageMagick: http://www.imagemagick.org/script/binary-releases.php
+* Ghostscript: http://sourceforge.net/projects/ghostscript/
+* FFMpeg: http://ffmpeg.zeranoe.com/builds/
+
+If your paths are strange, or you're running under passenger, you may need to set `Paperclip.options[:command_path]` 
+to the location of these binaries for each of your environments. On OS X that's usually `/opt/local/bin`.
 
 ## Installation
 
-To install the Radiant Assets extension, just run:
- 
-    rake production db:migrate:extensions
-    rake production radiant:extensions:assets:update
+This extension is not currently compatible with versions of radiant earlier than 1.0rc. The incompatibilities 
+are fairly minor and it may be backported, but for now if you're running a version of radiant which with the assets 
+extension will work, you will find it is already installed. If you don't have it in your radiant distribution, it 
+probably wouldn't work anyway.
 
-This runs the database migrations and installs the javascripts, images, and
-CSS.
+## Upgrading from paperclipped
 
+No special steps are required. Paperclipped migrations are respected. The /images/assets directory is no longer needed. 
+and can be deleted. See below for some radius tag changes that won't affect you yet but should be borne in mind.
+
+## Upgrading from page_attachments
+
+This is supposed to be straightforward too. In theory once the assets extension has been migrated all you need is:
+
+    rake radiant:extensions:assets:migrate_from_page_attachments
+
+But I haven't tested that theory recently.
+
+## Radius tag changes
+
+The full radius tag set of paperclipped is still supported, so your pages should just work. If they worked before. 
+
+The preferred syntax is slightly different, though. Where paperlipped used the `r:assets` namespace for everything, the 
+assets extension has adopted a readable system of singular and plural tags that will be familiar from other bits of radiant:
+
+    <r:assets:each>
+      <a href="<r:asset:url size="download" />">
+        <r:asset:image size="thumbnail" />
+      </a>
+      <span class="caption"><r:asset:caption /></span>
+    </r:assets:each>
+
+Anything to do with the collection of assets is plural. Anything to do with a particular asset is singular. The old plural 
+forms still work but they are deprecated and (as the log messages will keep telling you) likely to removed in version 2.
 
 ## Configuration
 
-TODO: Remove references to Settings extension
+The assets extension is configured in the usual way, but only its minor settings are exposed in the admin interface. The
+more architectural settings shouldn't be changed at runtime and some of them will require a lot of sorting out if they're 
+changed at all, so those are only accessible through the console or by editing the database. Eventually they will be made 
+part of the initial radiant installation process.
 
-If you install the Settings Extension (highly recommended), you can also
-easily adjust both the sizes of any additional thumbnails and which thumbnails
-are displayed in the image edit view. The default is the original file, but
-any image size can be used by giving in the name of that size.
+### Structural settings
 
-If you do install the Settings Extension you should be sure to add a
-config.extensions line to your environment.rb file:
+* `assets.url` sets the url scheme for attached files. Paperclip interpolations are applied. You probably don't want to change this.
+* `assets.path` sets the path scheme for attached files. Paperclip interpolations are applied. You might conceivably want to change this.
+* `assets.additional_thumbnails` is a string of comma-separate style definitions that is passed to paperclip for any asset type that has a post-processor (that is, currently, images, pdfs and video clips). The definitions are in the format name=geometry and when assembled the string will look something like `preview=640x640>,square=#260x260`. Thumbnail and icon styles are already defined and don't need to be configured this way.
+* `assets.storage` can be 'filesystem' (the default) or 's3' for amazon's cloud service.
+* `assets.skip_filetype_validation` is true by default and allows uploads of any mime type.
 
-    config.extensions = [ :settings, :all ]
-    
-Also the Settings Extension migration should be run before Paperclipped's
-migration.
+If the storage option is set to 's3' then these settings are also required:
 
-The configuration settings also enable a list of the allowed file types,
-maximum file size and should you need it, the path to your installation of
-Image Magick (this should not be needed, but I sometimes had a problem when
-using mod_rails).
+* `assets.s3.bucket`
+* `assets.s3.key`
+* `assets.s3.secret`
 
-Paperclipped will integrate with the Styles'n'Scripts extension. For that to
-work, you'll need to load that extension before the assets extension:
+And optionally:
 
-    config.extensions = [ :sns, :all ]
+* `assets.s3.host_alias`
+
+### Configurable settings
+
+If you want to disable a whole category of post-processing, set one of these options to false:
+
+* `assets.create_image_thumbnails`
+* `assets.create_video_thumbnails`
+* `assets.create_pdf_thumbnails`
+
+To set a threshold for the size of uploads permitted:
+
+* `assets.max_asset_size` which should be an integer number of MB
+
+And you can set some defaults:
+
+* `assets.insertion_size` is the name of the style that's used when you click on 'insert' to add a radius asset tag to your text. You can edit it in the text, of course.
+* `assets.display_size` is the name of the style that's shows when you edit a single asset in the admin interface.
 
 ## Usage
 
@@ -67,11 +144,11 @@ You can also easily attach assets to any page and directly upload them to a
 page.
 
 
-## Tags
+## Radius Tags
 
-The Radiant assets extension adds a variety of new tags. The basic tag is the
-<code><r:asset /></code> tag, which can be used either alone or as a double
-tag. This tag requires the "name" attribute, which references the asset.
+The asset manager adds a variety of new tags. The basic tag is
+<code><r:asset /></code>, which can be used either alone or as a double
+tag. This tag requires a `name` or `id` attribute, which references the asset.
 The <code><r:asset /></code> tag can be combined with other tags for a
 variety of uses:
 
@@ -89,7 +166,7 @@ Another important tag is the <code><r:assets:each>...</r:assets:each></code>.
 assets:each tag will cycle through each asset. You can then use an image,
 link or url tag to display and connect your assets. Usage:
 
-    <r:assets:each [limit=0] [offset=0] [order="asc|desc"] [by="position|title|..."] [extensions="png|pdf|doc"]>
+    <r:assets:each [limit=0] [offset=0] [order="asc|desc"] [by="position|title|..."]>
       ...
     </r:assets:each>
 
@@ -97,7 +174,6 @@ This tag uses the following parameters:
 
 * `limit` and `offset` let you specify a range of assets
 * `order` and `by` lets you control sorting
-* `extensions` allows you to filter assets by file extensions; you can specify multiple extensions separated by `|`
 
 The conditional tags <code><r:if_assets [min_count="0"]></code> and
 <code><r:unless_assets [min_count="0"]></code> allow you to optionally render
@@ -106,12 +182,11 @@ content based on the existence of tags. They accept the same options as
 
 Thumbnails are automatically generated for images when the images are
 uploaded. By default, two sizes are made for use within the extension itself.
-These are "icon" 42px by 42px and "thumbnail" which is fit into 100px,
-maintaining its aspect ratio.
+These are "icon" 42px by 42px and "thumbnail" which is 100px square.
 
-You can access sizes of image assets for various versions with the tags
-`<r:asset:width [size="original"]/>` and `<r:asset:height
-[size="original"]/>`.
+You can access sizes of image assets for various versions with tags like
+`<r:asset:width [size="original"]/>` and <code><r:asset:height
+[size="original"]/></code>.
 
 Also, for vertical centering of images, you have the handy
 `<r:asset:top_padding container="<container height>" [size="icon"]/>` tag.
@@ -126,64 +201,6 @@ Working example:
       </r:assets:each>
     </ul>
 
-
-## Using Amazon S3
-
-First, be sure you have the aws\-s3 gem installed. 
-
-    gem install aws-s3
-
-Everything works as before, but now if you want to add S3 support, you simply
-set the storage setting to "s3". 
-
-    Radiant::Config[assets.storage] = "s3"
- 
-Then add 3 new settings with your Amazon credentials, either in the console or
-with the [Settings](http://github.com/Squeegy/radiant-settings/tree/master)
-extension:
-
-<pre><code>Radiant::Config[assets.s3.bucket] = "my_supercool_bucket"
-Radiant::Config[assets.s3.key] = "123456"
-Radiant::Config[assets.s3.secret] = "123456789ABCDEF"
-</code></pre>
-
-The path setting, along with a new <code>url</code> setting can be used with
-the file system to customize both the path and url of your assets.
-
-
-## Migrating from Paperclipped
-
-TODO: Add instructions for migrating from Paperclipped
-
-This extension is based on Keith Bingman's original Paperclipped extension so
-the upgrade path is very simple. You just need to run the appropriate Rake
-task...
-
-
-## Migrating from Page Attachments
-
-If you're moving from Page Attachments to this extension, here's how to
-migrate smoothly:
-
-TODO: Tweak instructions for migrating from Page Attachments. Remove references to the Ray extension
-
-First, remove or disable the page_attachments extension, and install the
-new assets extension:
-
-<pre><code>rake ray:dis name=page_attachments
-rake ray:assets
-</code></pre>
-
-The migration has now copied your original `page_attachments` table to `old_page_attachments`.
-
-<pre><code>rake radiant:extensions:assets:migrate_from_page_attachments
-</code></pre>
-
-This rake task will create new attachments for all `OldPageAttachments`. It
-will also ask you if you want to clean up the old table and thumbnails in
-`/public/page_attachments`.
-
-
 ## Contributions
 
 This extension is a work in progress. If you would like to
@@ -193,7 +210,6 @@ contribute, please fork the project and submit a pull request:
 
 Pull requests with working tests are preferred and have a greater chance of
 being merged.
-
 
 ## Support
 
@@ -206,3 +222,11 @@ If you would like to file a bug report or feature request, please create a
 GitHub issue here:
 
 <https://github.com/radiant/radiant-assets-extension/issues>
+
+## Authors
+
+* Keith Bingman
+* John Long
+* William Ross
+
+Copyright 2011 the radiant team. Released under the same terms as radiant.

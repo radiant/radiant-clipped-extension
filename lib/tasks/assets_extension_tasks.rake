@@ -98,11 +98,9 @@ If you would like to use this mode type \"yes\", type \"no\" or just hit enter t
           end
         end
         # regenerate thumbnails
-        @assets = Asset.find(:all)
-        @assets.each do |asset|
-          asset.asset.reprocess!
-          asset.save
-        end
+        puts "Regenerating asset thumbnails"
+        ENV['CLASS'] = 'Asset'
+        Rake::Task['paperclip:refresh'].invoke
         puts "Done."
       end
       

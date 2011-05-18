@@ -84,7 +84,7 @@ class AssetType
   end
 
   def paperclip_processors
-    Radiant.config["assets.skip_#{name}_processing?"] ? [] : processors
+    Radiant.config["assets.create_#{name}_thumbnails?"] ? processors : []
   end
   
   def paperclip_styles
