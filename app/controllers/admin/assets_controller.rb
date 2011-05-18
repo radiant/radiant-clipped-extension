@@ -1,5 +1,5 @@
 class Admin::AssetsController < Admin::ResourceController
-  paginate_models(:per_page => 20)
+  paginate_models(:per_page => 50)
   
   def index
     assets = Asset.scoped({:order => "created_at DESC"})

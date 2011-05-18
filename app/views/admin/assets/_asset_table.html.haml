@@ -27,4 +27,4 @@
               %li= link_to t("assets_extension.remove"), remove_admin_asset_path(asset), :class => "delete"
             
   - if with_pagination && assets.respond_to?(:next_page) && assets.next_page
-    = pagination_for(assets, pagination_parameters.merge(:depaginate => false, :params => {:controller => 'admin/assets', :action => 'index', :id => nil, :format => 'js', :page_id => page.id}))
+    = pagination_for(assets, pagination_parameters.merge(:depaginate => false, :param_name => 'p', :params => {:controller => 'admin/assets', :action => 'index', :id => nil, :format => 'js', :page_id => page.id, :pp => assets.per_page }))

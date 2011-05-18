@@ -33,7 +33,7 @@
         = render :partial => 'admin/assets/search'
       
       #assets_table.assets.viewport{:style=>"height: 320px; width: 610px"}
-        - assets = Asset.all.paginate(:per_page => Admin::AssetsController.default_per_page)
+        - assets = Asset.all.paginate(:per_page => 20)
         = render :partial => 'admin/assets/asset_table', :locals => {:assets => assets, :with_pagination => true}
     
       .busy{:style => "display: none"}= image('spinner.gif', :alt => "")
