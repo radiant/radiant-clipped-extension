@@ -1,7 +1,7 @@
 module Paperclip
   class FrameGrab < Processor
 
-    # taken from http://thewebfellas.com/blog/2009/2/22/video-thumbnails-with-ffmpeg-and-paperclip
+    # derived from http://thewebfellas.com/blog/2009/2/22/video-thumbnails-with-ffmpeg-and-paperclip
 
     attr_accessor :time_offset, :geometry, :whiny, :format
 
@@ -25,7 +25,7 @@ module Paperclip
 
       cmd = %Q[-itsoffset #{time_offset} -i "#{File.expand_path(file.path)}" -y -vcodec mjpeg -vframes 1 -an -f rawvideo  ]
       cmd << "-s #{geometry.to_s} " unless geometry.nil?
-      cmd << %{pipe: | composite -dissolve 80 -gravity center #{AssetType.find(:video).icon_path} - #{File.expand_path(dst.path)} }
+      cmd << %{pipe: | composite -gravity center #{AssetType.find(:video).icon_path} - #{File.expand_path(dst.path)} }
 
       begin
         Paperclip.run('ffmpeg', cmd)
