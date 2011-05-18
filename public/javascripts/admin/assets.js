@@ -80,18 +80,11 @@ Asset.DeselectFileTypes = Behavior.create({
   onclick: function(e){
     e.stop();
     var element = this.element;
-    var search_form = $('filesearchform');
     if(!element.hasClassName('pressed')) {
       $$('a.selective').each(function(el) { el.removeClassName('pressed'); });
       $$('input.selective').each(function(el) { el.removeAttribute('checked'); });
       element.addClassName('pressed');
-      Asset.AllWaiting();
-      new Ajax.Updater('assets_table', search_form.action, {
-        asynchronous: true, 
-        evalScripts:  false, 
-        parameters:   Form.serialize(search_form),
-        method: 'get'
-      });
+      Asset.UpdateTable(true);
     }
   }
 });
@@ -102,7 +95,6 @@ Asset.SelectFileType = Behavior.create({
     var element = this.element;
     var type_id = element.readAttribute("rel");
     var type_check = $(type_id + '-check');
-    var search_form = $('filesearchform');
     if(element.hasClassName('pressed')) {
       element.removeClassName('pressed');
       type_check.removeAttribute('checked');
@@ -112,26 +104,28 @@ Asset.SelectFileType = Behavior.create({
       $$('a.deselective').each(function(el) { el.removeClassName('pressed'); });
       type_check.setAttribute('checked', 'checked');
     }
-    Asset.AllWaiting();
-    new Ajax.Updater('assets_table', search_form.action, {
-      asynchronous: true, 
-      evalScripts:  false, 
-      parameters:   Form.serialize(search_form),
-      method: 'get'
-    });
+    Asset.UpdateTable(true);
   }
 });
 
-Asset.PageTable = Behavior.create({
+Asset.SearchForm = Behavior.create({
+  initialize: function () {
+    this.observer = new Form.Element.Observer(this.element.down('input.search'), 2, Asset.UpdateTable);
+  },
+  onsubmit: function (e) {
+    if (e) e.stop();
+    Asset.UpdateTable(true);
+  }
+});
+
+Asset.Pagination = Behavior.create({
   onclick: function (e) {
     if (e) e.stop();
     var url = this.element.readAttribute('href');
-    Asset.AllWaiting();
-    new Ajax.Updater('assets_table', url, {
-      asynchronous: true, 
-      evalScripts:  false, 
-      method: 'get'
-    });
+    var pagination = url.toQueryParams();
+    var search_form = $('filesearchform');
+    search_form.down('#p').value = pagination['p'];
+    Asset.UpdateTable(false);
   }
 });
 
@@ -161,6 +155,18 @@ Asset.GenerateUUID = function () {
   s[16] = hexDigits.substr((s[16] & 0x3) | 0x8, 1);  // bits 6-7 of the clock_seq_hi_and_reserved to 01
   return s.join('');
 };
+
+Asset.UpdateTable = function (depaginate) {
+  var search_form = $('filesearchform');
+  if (depaginate && search_form.down('#p')) search_form.down('#p').value = 1;
+  Asset.AllWaiting();
+  new Ajax.Updater('assets_table', search_form.action, {
+    asynchronous: true, 
+    evalScripts: false, 
+    parameters: Form.serialize(search_form),
+    method: 'get'
+  });
+}
 
 Asset.AddToList = function (html) {
   var list = $('attachment_fields');
@@ -227,5 +233,6 @@ Event.addBehavior({
   'a.copy_asset': Asset.Copy,
   'a.deselective': Asset.DeselectFileTypes,
   'a.selective': Asset.SelectFileType,
-  '#assets_table .pagination a': Asset.PageTable
+  'form.search': Asset.SearchForm,
+  '#assets_table .pagination a': Asset.Pagination
 });
