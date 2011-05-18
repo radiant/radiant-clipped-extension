@@ -1,4 +1,5 @@
 class Admin::PageAttachmentsController < Admin::ResourceController
+  helper 'admin/assets'
   
   def new
     if params[:asset_ids] && params[:asset_ids].any?            

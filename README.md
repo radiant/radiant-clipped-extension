@@ -1,11 +1,25 @@
 Radiant Assets Extension
 ------------------------
 
-Based on Keith Bingman's excellent Paperclipped extension for Radiant.
+Warning: work in progress!
 
-This extension is an experimental extension designed for Radiant version 1.0
-or higher. The goal is that it will be a drop-in replacement for both
-Paperclipped and Page Attachments.
+This is a new core extension intended for use with Radiant version 1.0 or higher. 
+It is based on Keith Bingman's excellent Paperclipped extension, for which it is a drop-in replacement. 
+It should also migrate directly from `page_attachments`, but I haven't tested that yet.
+
+## Changes
+
+* video files thumbnailed
+* pdfs thumbnailed
+* new asset-retrieval and page-attachment interface (by John Long)
+* new inline upload mechanism that works in all situations and allows several concurrent uploads.
+* easily extended with new asset types and processors
+* 
+
+## Still to do
+
+* progress bars on uploading assets
+* warning if you try and save a page while assets are still uploading
 
 
 ## Installation
@@ -45,7 +59,6 @@ Paperclipped will integrate with the Styles'n'Scripts extension. For that to
 work, you'll need to load that extension before the assets extension:
 
     config.extensions = [ :sns, :all ]
-
 
 ## Usage
 
