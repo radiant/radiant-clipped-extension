@@ -1,7 +1,5 @@
 ---
 en:
-  'yes': 'yes'
-  'no': 'no'
   assets: 'Assets'
   asset_types:
     all: 'All'
@@ -91,17 +89,17 @@ en:
     assets:
       additional_thumbnails: 'Additional Thumbnails'
       content_types: 'Content Types'
+      create_image_thumbnails?: 'Image thumbnails'
+      create_pdf_thumbnails?: 'PDF thumbnails'
+      create_video_thumbnails?: 'Video thumbnails'
       display_size: 'Display Size'
       insertion_size: 'Insertion Size'
       max_asset_size: 'Max Asset Size'
       path: 'Path'
-      skip_filetype_validation: 'Skip Filetype Validation'
-      create_image_thumbnails?: 'Image thumbnails'
-      create_pdf_thumbnails?: 'PDF thumbnails'
-      create_video_thumbnails?: 'Video thumbnails'
-      storage: 'Storage'
-      url: 'Url'
       s3:
         bucket: 'Bucket'
         key: 'Key'
         secret: 'Secret'
+      skip_filetype_validation: 'Skip Filetype Validation'
+      storage: 'Storage'
+      url: 'Url'
