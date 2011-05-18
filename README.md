@@ -106,7 +106,7 @@ part of the initial radiant installation process.
 
 * `assets.url` sets the url scheme for attached files. Paperclip interpolations are applied. You probably don't want to change this.
 * `assets.path` sets the path scheme for attached files. Paperclip interpolations are applied. You might conceivably want to change this.
-* `assets.additional_thumbnails` is a string of comma-separate style definitions that is passed to paperclip for any asset type that has a post-processor (that is, currently, images, pdfs and video clips). The definitions are in the format name=geometry and when assembled the string will look something like `preview=640x640>,square=#260x260`. Thumbnail and icon styles are already defined and don't need to be configured this way.
+* `assets.additional_thumbnails` is a string of comma-separated style definitions that is passed to paperclip for any asset type that has a post-processor (that is, currently, images, pdfs and video clips). The definitions are in the format name=geometry and when assembled the string will look something like `preview=640x640>,square=#260x260`. Thumbnail and icon styles are already defined and don't need to be configured this way.
 * `assets.storage` can be 'filesystem' (the default) or 's3' for amazon's cloud service.
 * `assets.skip_filetype_validation` is true by default and allows uploads of any mime type.
 
@@ -124,9 +124,9 @@ And optionally:
 
 If you want to disable a whole category of post-processing, set one of these options to false:
 
-* `assets.create_image_thumbnails`
-* `assets.create_video_thumbnails`
-* `assets.create_pdf_thumbnails`
+* `assets.create_image_thumbnails?`
+* `assets.create_video_thumbnails?`
+* `assets.create_pdf_thumbnails?`
 
 To set a threshold for the size of uploads permitted:
 
@@ -134,22 +134,20 @@ To set a threshold for the size of uploads permitted:
 
 And you can set some defaults:
 
-* `assets.insertion_size` is the name of the style that's used when you click on 'insert' to add a radius asset tag to your text. You can edit it in the text, of course.
+* `assets.insertion_size` is the name of the style that's used when you click on 'insert' to add a radius asset tag to your text. You can edit it after insertion, of course.
 * `assets.display_size` is the name of the style that's shows when you edit a single asset in the admin interface.
 
 ## Usage
 
-Once installed, you get a new Tab with the entire assets library and a search.
-You can also easily attach assets to any page and directly upload them to a
-page.
+For most purposes you will probably work with assets while you're working on pages. Click on one of the 'assets' links and a panel will pop up allowing you to find, insert and attach existing assets or upload new ones. 
 
+For tidying up, replacing files and other admin, click on the 'assets' tab to get a larger version of the same list. Here again you can search for assets and filter the results by type, but the options are 'edit' and 'remove' and on editing you can change name, file and caption while keeping page associations intact.
 
 ## Radius Tags
 
-The asset manager adds a variety of new tags. The basic tag is
-<code><r:asset /></code>, which can be used either alone or as a double
-tag. This tag requires a `name` or `id` attribute, which references the asset.
-The <code><r:asset /></code> tag can be combined with other tags for a
+The asset manager has its own family of radius tags. The basic tag is <code><r:asset /></code>, 
+which can be used either alone or as a double tag. This tag requires a `name` or `id` attribute, 
+which references the asset. The <code><r:asset /></code> tag can be combined with other tags for a
 variety of uses:
 
     <r:asset:image name="image.png" />  #=>  <img src="/path/to/image.png" />

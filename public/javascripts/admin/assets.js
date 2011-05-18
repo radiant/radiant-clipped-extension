@@ -67,7 +67,7 @@ Asset.Insert = Behavior.create({
     var tag_name = tag_parts[0];
     var asset_size = tag_parts[1];
     var asset_id = tag_parts[2];
-    var radius_tag = '<r:assets:' + tag_name;
+    var radius_tag = '<r:asset:' + tag_name;
     if (asset_size != '') radius_tag = radius_tag + ' size="' + asset_size + '"';
     radius_tag =  radius_tag +' id="' + asset_id + '" />';
     Asset.InsertAtCursor(textbox, radius_tag);

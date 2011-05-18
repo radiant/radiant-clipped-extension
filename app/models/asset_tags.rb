@@ -20,7 +20,7 @@ module AssetTags
     <pre><code><r:asset [title="asset_title"]>...</r:asset></code></pre>
   }    
   tag 'asset' do |tag|
-    tag.locals.asset = Asset.find_by_title(tag.attr['title']) || Asset.find(tag.attr['id']) unless tag.attr.empty?
+    tag.locals.asset = find_asset unless tag.attr.empty?
     tag.expand
   end
 
@@ -220,17 +220,17 @@ module AssetTags
     <pre><code><r:asset:image [title="asset_title"] [size="icon|thumbnail"]></code></pre>
   }    
   tag 'asset:image' do |tag|
-    asset, options = asset_and_options(tag)
-    raise TagError, 'Asset is not an image' unless asset.image?
+    tag.locals.asset, options = asset_and_options(tag)
+    raise TagError, 'Asset is not an image' unless tag.locals.asset.image?
     size = options['size'] ? options.delete('size') : 'original'
-    geometry = options['geometry'] ? options.delete('geometry') : nil
-    #This is very experimental and will generate new sizes on the fly
-    asset.generate_style(size, { :size => geometry }) if geometry
+    # geometry = options['geometry'] ? options.delete('geometry') : nil
+    # #This is very experimental and will generate new sizes on the fly
+    # asset.generate_style(size, { :size => geometry }) if geometry
     
     alt = " alt='#{asset.title}'" unless tag.attr['alt'] rescue nil
     attributes = options.inject('') { |s, (k, v)| s << %{#{k.downcase}="#{v}" } }.strip
     attributes << alt unless alt.nil?
-    url = asset.thumbnail(size)
+    url = tag.locals.asset.thumbnail(size)
     %{<img src="#{url}" #{attributes unless attributes.empty?} />} rescue nil
   end
   
@@ -325,8 +325,16 @@ private
   end
   
   def find_asset(tag, options)
-    raise TagError, "'title' attribute required" unless title = options.delete('title') or id = options.delete('id') or tag.locals.asset
-    tag.locals.asset || Asset.find_by_title(title) || Asset.find(id)
+    return tag.locals.asset if tag.locals.asset
+    if title = options.delete('name') || options.delete('title')
+      Rails.logger.warn "<<< finding asset by title #{title}"
+      Asset.find_by_title(title)
+    elsif id = options.delete('id')
+      Rails.logger.warn "<<< finding asset by id #{id}"
+      Asset.find_by_id(id)
+    else
+      raise TagError, "'name' or 'id' attribute required for unenclosed r:asset tag" unless tag.locals.asset
+    end
   end
   
   def assets_find_options(tag)
