@@ -14,7 +14,7 @@ class AssetType
   @@type_lookup = {}
   @@mime_lookup = {}
   @@default_type = nil
-  attr_reader :name, :processors, :styles, :icon_name, :catchall
+  attr_reader :name, :processors, :styles, :icon_name, :catchall, :default_radius_tag
   
   def initialize(name, options = {})
     options = options.symbolize_keys
@@ -23,6 +23,7 @@ class AssetType
     @processors = options[:processors] || []
     @styles = options[:styles] || {}
     @mimes = options[:mime_types] || []
+    @default_radius_tag = options[:default_radius_tag] || 'link'
     if @mimes.any?
       @mimes.each { |mimetype| @@mime_lookup[mimetype] ||= self }
     end
@@ -53,7 +54,7 @@ class AssetType
   def icon_path(style_name='icon')
     "#{RAILS_ROOT}/public#{icon(style_name)}"
   end
-
+  
   def condition
     if @mimes.any?
       ["asset_content_type IN (#{@mimes.map{'?'}.join(',')})", *@mimes]

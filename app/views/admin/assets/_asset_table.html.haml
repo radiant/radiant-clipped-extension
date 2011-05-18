@@ -20,7 +20,7 @@
             = asset.title
           %ul.actions
             - if @page
-              %li= link_to t('assets_extension.insert'), '#', :class => 'insert_asset', :rel => "#{Radiant.config['assets.insertion_size']}_#{asset.id}"
+              %li= asset_insertion_link(asset)
               %li= link_to t("assets_extension.attach"), new_admin_page_page_attachment_path(page, :asset_id => asset.id), :class => 'attach_asset'
             - else
               %li= link_to t('assets_extension.edit'), admin_asset_path(asset), :class => 'edit'

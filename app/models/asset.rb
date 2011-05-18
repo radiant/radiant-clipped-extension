@@ -89,6 +89,14 @@ class Asset < ActiveRecord::Base
   # geometry methods will return here
   # if they can be made more S3-friendly
 
+  # this is used to pass insertion guidance to javascript
+  def insertion_rel
+    radius_tag = asset_type.default_radius_tag || 'link';
+    size = Radiant.config['assets.insertion_size']
+    "#{radius_tag}_#{size}_#{id}"
+  end
+
+
 private
 
   def assign_title
@@ -149,5 +157,5 @@ private
     asset_sizes.unshift ['Original (as uploaded)', 'original']
     asset_sizes
   end
-
+  
 end

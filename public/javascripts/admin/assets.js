@@ -63,30 +63,14 @@ Asset.Insert = Behavior.create({
     if (e) e.stop();
     var part_name = TabControlBehavior.instances[0].controller.selected.caption;
     var textbox = $('part_' + part_name + '_content');
-    var id_and_style = this.element.getAttribute('rel').split('_');
-    Asset.InsertAtCursor(textbox, '<r:assets:image id="' + id_and_style[1] + '" size="' + id_and_style[0] + '" />');
-  }
-});
-
-Asset.Copy = Behavior.create({
-  initialize: function(){
-    var clip = new ZeroClipboard.Client();
-    var asset_id = this.element.id.replace('copy_', '');
-    clip.setText('<r:assets:image size="" id="' + asset_id + '" />');
-    clip.setHandCursor( true );
-    
-    // #TODO this doesn't position the clip correctly if the buttons aren't visible at the time
-    clip.glue(this.element);
-    
-    clip.addEventListener( 'onComplete', function (client, text) {
-      var element = client.domElement;
-      var contents = element.innerHTML;
-      element.update(contents.replace('Copy', 'Copied'));
-      element.update().delay(2000, contents);
-    });
-  },
-  onClick: function (e) {
-    e.stop();
+    var tag_parts = this.element.getAttribute('rel').split('_');
+    var tag_name = tag_parts[0];
+    var asset_size = tag_parts[1];
+    var asset_id = tag_parts[2];
+    var radius_tag = '<r:assets:' + tag_name;
+    if (asset_size != '') radius_tag = radius_tag + ' size="' + asset_size + '"';
+    radius_tag =  radius_tag +' id="' + asset_id + '" />';
+    Asset.InsertAtCursor(textbox, radius_tag);
   }
 });
 
