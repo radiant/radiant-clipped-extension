@@ -63,7 +63,7 @@ describe Asset do
     
     it 'should return icon for non-image with a given size' do
       image = new_asset :asset_content_type => 'application/msword'
-      image.thumbnail('thumbnail').should == "/images/admin/assets/document_icon.png"
+      image.thumbnail('thumbnail').should == "/images/admin/assets/document_thumbnail.png"
     end
   end
 
