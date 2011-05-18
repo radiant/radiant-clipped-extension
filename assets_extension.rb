@@ -12,37 +12,39 @@ class AssetsExtension < Radiant::Extension
   end
   
   def activate
-    Page.send :include, PageAssetAssociations                                          # defines page-asset associations. likely to be generalised soon.
-    Radiant::AdminUI.send :include, AssetsAdminUI unless defined? admin.asset          # defines shards for extension of the asset-admin interface
-    Admin::PagesController.send :helper, Admin::AssetsHelper                           # currently only provides a description of asset sizes
-    Page.send :include, AssetTags                                                      # radius tags for selecting sets of assets and presenting each one
-    UserActionObserver.instance.send :add_observer!, Asset                             # the usual creator- and updater-stamping
+    if Asset.table_exists?
+      Page.send :include, PageAssetAssociations                                          # defines page-asset associations. likely to be generalised soon.
+      Radiant::AdminUI.send :include, AssetsAdminUI unless defined? admin.asset          # defines shards for extension of the asset-admin interface
+      Admin::PagesController.send :helper, Admin::AssetsHelper                           # currently only provides a description of asset sizes
+      Page.send :include, AssetTags                                                      # radius tags for selecting sets of assets and presenting each one
+      UserActionObserver.instance.send :add_observer!, Asset                             # the usual creator- and updater-stamping
     
-    AssetType.new :image, :icon => 'image', :processors => [:thumbnail], :styles => {:icon => ['42x42#', :png], :thumbnail => ['100x100#', :png]}, :mime_types => %w[image/png image/x-png image/jpeg image/pjpeg image/jpg image/gif]
-    AssetType.new :video, :icon => 'video', :processors => [:frame_grab], :styles => {:thumbnail => ['100x100#', :png]}, :mime_types => %w[application/x-mp4 video/mpeg video/quicktime video/x-la-asf video/x-ms-asf video/x-msvideo video/x-sgi-movie video/x-flv flv-application/octet-stream video/3gpp video/3gpp2 video/3gpp-tt video/BMPEG video/BT656 video/CelB video/DV video/H261 video/H263 video/H263-1998 video/H263-2000 video/H264 video/JPEG video/MJ2 video/MP1S video/MP2P video/MP2T video/mp4 video/MP4V-ES video/MPV video/mpeg4 video/mpeg4-generic video/nv video/parityfec video/pointer video/raw video/rtx]
-    AssetType.new :audio, :icon => 'audio', :mime_types => %w[audio/mpeg audio/mpg audio/ogg application/ogg audio/x-ms-wma audio/vnd.rn-realaudio audio/x-wav]
-    AssetType.new :pdf, :icon => 'document', :processors => [:thumbnail], :mime_types => %w[application/pdf], :styles => {:thumbnail => ['100x100#', :png]}
-    AssetType.new :document, :icon => 'document', :mime_types => %w[application/msword application/rtf application/vnd.ms-excel application/vnd.ms-powerpoint application/vnd.ms-project application/vnd.ms-works text/plain text/html]
-    AssetType.new :other, :icon => 'unknown'
+      AssetType.new :image, :icon => 'image', :processors => [:thumbnail], :styles => {:icon => ['42x42#', :png], :thumbnail => ['100x100#', :png]}, :mime_types => %w[image/png image/x-png image/jpeg image/pjpeg image/jpg image/gif]
+      AssetType.new :video, :icon => 'video', :processors => [:frame_grab], :styles => {:thumbnail => ['100x100#', :png]}, :mime_types => %w[application/x-mp4 video/mpeg video/quicktime video/x-la-asf video/x-ms-asf video/x-msvideo video/x-sgi-movie video/x-flv flv-application/octet-stream video/3gpp video/3gpp2 video/3gpp-tt video/BMPEG video/BT656 video/CelB video/DV video/H261 video/H263 video/H263-1998 video/H263-2000 video/H264 video/JPEG video/MJ2 video/MP1S video/MP2P video/MP2T video/mp4 video/MP4V-ES video/MPV video/mpeg4 video/mpeg4-generic video/nv video/parityfec video/pointer video/raw video/rtx]
+      AssetType.new :audio, :icon => 'audio', :mime_types => %w[audio/mpeg audio/mpg audio/ogg application/ogg audio/x-ms-wma audio/vnd.rn-realaudio audio/x-wav]
+      AssetType.new :pdf, :icon => 'document', :processors => [:thumbnail], :mime_types => %w[application/pdf], :styles => {:thumbnail => ['100x100#', :png]}
+      AssetType.new :document, :icon => 'document', :mime_types => %w[application/msword application/rtf application/vnd.ms-excel application/vnd.ms-powerpoint application/vnd.ms-project application/vnd.ms-works text/plain text/html]
+      AssetType.new :other, :icon => 'unknown'
     
-    admin.asset ||= Radiant::AdminUI.load_default_asset_regions                        # loads the shards defined in AssetsAdminUI
-    admin.page.edit.add :form, 'assets', :after => :edit_page_parts                    # adds the asset-attachment picker to the page edit view
-    admin.page.edit.add :main, 'asset_popups', :after => :edit_popups                  # adds the asset-attachment picker to the page edit view
-    admin.page.edit.asset_popups.concat %w{upload_asset attach_asset}
-    admin.configuration.show.add :config, 'admin/configuration/show', :after => 'defaults'
-    admin.configuration.edit.add :form,   'admin/configuration/edit', :after => 'edit_defaults'
+      admin.asset ||= Radiant::AdminUI.load_default_asset_regions                        # loads the shards defined in AssetsAdminUI
+      admin.page.edit.add :form, 'assets', :after => :edit_page_parts                    # adds the asset-attachment picker to the page edit view
+      admin.page.edit.add :main, 'asset_popups', :after => :edit_popups                  # adds the asset-attachment picker to the page edit view
+      admin.page.edit.asset_popups.concat %w{upload_asset attach_asset}
+      admin.configuration.show.add :config, 'admin/configuration/show', :after => 'defaults'
+      admin.configuration.edit.add :form,   'admin/configuration/edit', :after => 'edit_defaults'
     
-    if Radiant::Config.table_exists? && Radiant::Config["assets.image_magick_path"]    # This is needed for testing if you are using mod_rails
-      Paperclip.options[:image_magick_path] = Radiant::Config["assets.image_magick_path"]
-    end
+      if Radiant::Config.table_exists? && Radiant::Config["assets.image_magick_path"]    # This is needed for testing if you are using mod_rails
+        Paperclip.options[:image_magick_path] = Radiant::Config["assets.image_magick_path"]
+      end
     
-    tab "Assets", :after => "Content" do
-      add_item "All", "/admin/assets/"
-    end
+      tab "Assets", :after => "Content" do
+        add_item "All", "/admin/assets/"
+      end
     
-    if RAILS_ENV == 'development'
-      update_sass_each_request
-      update_javascript_each_request
+      if RAILS_ENV == 'development'
+        update_sass_each_request
+        update_javascript_each_request
+      end
     end
   end
   
