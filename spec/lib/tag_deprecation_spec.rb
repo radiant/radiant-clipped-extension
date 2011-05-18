@@ -35,13 +35,13 @@ describe Page do
       }.should_not raise_error
     end
     
+    it "should log a warning"
+    
     context "in development" do
-      it "should log a warning"
       it "should render a visible warning"
     end
     
     context "in production" do
-      it "should log a warning"
       it "should not render a visible warning"
     end
   
