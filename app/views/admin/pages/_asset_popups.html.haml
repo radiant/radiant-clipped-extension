@@ -14,7 +14,7 @@
           = f.file_field :asset, :class => 'file'
         
         %p
-          = f.label :title, 'Alt-Text or Title <span class="hint">(optional)</span>'
+          = f.label :title, t("assets_extension.alt_text_or_title")
           = f.text_field :title, :class => "textbox big"
         
         .buttons
@@ -27,21 +27,17 @@
   - popups.attach_asset do
     #attach_asset.popup.textured{:style=>"display: none;"}
       
-      .popup_title= t('assets_extension.attach_existing')
+      .popup_title= t('assets_extension.find_assets')
       
       .toolbar
         = render :partial => 'admin/assets/search'
       
-      %form{:action => new_admin_page_page_attachment_path(@page), :class => 'attach_assets'}
-      
-        #assets_table.assets.viewport{:style=>"height: 320px; width: 610px"}
-          - assets = Asset.all.paginate(:per_page => Admin::AssetsController.default_per_page)
-          = render :partial => 'admin/assets/asset_table', :locals => {:assets => assets, :for_attachment => true, :with_pagination => true}
-      
-        .busy{:style => "display: none"}= image('spinner.gif', :alt => "")
-        .buttons
-          = submit_tag t("assets_extension.attach"), :class => "button commit"
-          = t('or')
-          %a.cancel.close_popup{:href=>"javascript:void(0)"}= t('cancel')
-          %a.popup{:href=>"#upload_asset", :style => 'color: #666; float: left'}= t('assets_extension.upload_asset')
+      #assets_table.assets.viewport{:style=>"height: 320px; width: 610px"}
+        - assets = Asset.all.paginate(:per_page => 20)
+        = render :partial => 'admin/assets/asset_table', :locals => {:assets => assets, :with_pagination => true}
+    
+      .busy{:style => "display: none"}= image('spinner.gif', :alt => "")
+      .buttons
+        %a.cancel.close_popup{:href=>"javascript:void(0)"}= t('close')
+        %a.popup{:href=>"#upload_asset", :style => 'color: #666; float: left'}= t('assets_extension.upload_asset')
 

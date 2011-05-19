@@ -10,13 +10,12 @@
 
 %li{:class => "#{asset_type} asset", :id => "asset_#{asset.id}"}
   .front
-    .thumbnail= image_tag asset.thumbnail(:sample)
+    .thumbnail= image_tag asset.thumbnail(:thumbnail)
   .back
     .title= asset.title
     - if asset.attached_to?(page)
       %ul.actions
-        - asset_size = Radiant.config['assets.insertion_size'] || 'normal'
-        %li= link_to t('assets_extension.insert'), '#', :class => 'insert_asset', :rel => "#{asset_size}_#{asset.id}"
+        %li= asset_insertion_link(asset)
         - if attachment_form
           %li
             = attachment_form.hidden_field :_destroy, :class => 'destroyer'

@@ -14,17 +14,17 @@
       - asset_type = asset.image? ? "image" : "link"
       %li{:class => "#{asset_type} asset", :id => "asset_#{asset.id}"}
         .front
-          .thumbnail= image_tag asset.thumbnail(:sample)
+          .thumbnail= image_tag asset.thumbnail(:thumbnail)
         .back
-          - if @page
-            = link_to asset.title, '#', :class => 'select_asset title'
-            = check_box_tag :'asset_ids[]', asset.id, false, :class => 'selector'
-          - else
-            .title
-              = asset.title
-            %ul.actions
+          .title
+            = asset.title
+          %ul.actions
+            - if @page
+              %li= asset_insertion_link(asset)
+              %li= link_to t("assets_extension.attach"), new_admin_page_page_attachment_path(page, :asset_id => asset.id), :class => 'attach_asset'
+            - else
               %li= link_to t('assets_extension.edit'), admin_asset_path(asset), :class => 'edit'
               %li= link_to t("assets_extension.remove"), remove_admin_asset_path(asset), :class => "delete"
-
+            
   - if with_pagination && assets.respond_to?(:next_page) && assets.next_page
-    = pagination_for(assets, pagination_parameters.merge(:depaginate => false, :params => {:controller => 'admin/assets', :action => 'index', :id => nil, :format => 'js', :page_id => page.id}))
+    = pagination_for(assets, pagination_parameters.merge(:depaginate => false, :param_name => 'p', :params => {:controller => 'admin/assets', :action => 'index', :id => nil, :format => 'js', :page_id => (page && page.id), :pp => assets.per_page }))

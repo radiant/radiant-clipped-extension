@@ -1,6 +1,6 @@
 var Asset = {};
 
-Asset.Uploader = Behavior.create({
+Asset.Upload = Behavior.create({
   onsubmit: function (e) {
     if (e) e.stop();
     var uuid = Asset.GenerateUUID();
@@ -10,14 +10,9 @@ Asset.Uploader = Behavior.create({
 
     var form = this.element;
     var title = form.down('input.textbox').value || form.down('input.file').value;
+    var placeholder = Asset.AddPlaceholder(title);
+
     form.setAttribute('target', uuid);
-    
-    var placeholder = document.createElement('li').addClassName('asset').addClassName('uploading');
-    placeholder.insert(document.createElement('div').addClassName('front'));
-    placeholder.insert(document.createElement('div').addClassName('back').insert(document.createElement('div').addClassName('title').update(title)));
-    $('attachment_fields').insert(placeholder);
-    Asset.ShowListIfHidden();
-    
     ulframe.observe('load', function (e) {
       if (e) e.stop();
       var response = ulframe.contentDocument.body.innerHTML;
@@ -30,52 +25,28 @@ Asset.Uploader = Behavior.create({
     
     form.submit();
     $('upload_asset').closePopup();
-    // these need a bit of delay while safari assembles the payload
     // form.down('input.textbox').clear();
     // form.down('input.file').clear();
   }
 });
 
-Asset.Attacher = Behavior.create({
-  onsubmit: function (e) {
-    if (e) e.stop();
-    var form = this.element;
-    form.down('input.commit').disable();
-    form.down('.busy').show();
-    new Ajax.Request(form.action, {
-      asynchronous: true, 
-      evalScripts: true, 
-      method: 'get',
-      parameters: form.serialize(),
-      onSuccess: function(transport) { 
-        Asset.AddToList(transport.responseText);
-        $('attach_asset').closePopup();
-        Asset.ResetAttachmentForm();
-        form.down('.busy').hide();
-        form.down('.commit').enable();
-      }
-    });
-  }
-});
-
-Asset.Select = Behavior.create({
+Asset.Attach = Behavior.create({
   onclick: function (e) {
     if (e) e.stop();
     var container = this.element.up('li.asset');
-    container.toggleClassName('selected');
-    container.down('input.selector').checked = container.hasClassName('selected');
-  }
-});
-
-Asset.Pager = Behavior.create({
-  onclick: function (e) {
-    if (e) e.stop();
-    var url = this.element.readAttribute('href');
-    new Ajax.Updater('assets_table', url, {
+    var title = container.down('div.title').innerHTML;
+    var image = container.down('img');
+    var placeholder = Asset.AddPlaceholder(title, image);
+    container.addClassName('waiting');
+    new Ajax.Request(this.element.href, {
       asynchronous: true, 
-      evalScripts:  true, 
+      evalScripts: false, 
       method: 'get',
-      onComplete: 'assets_table'
+      onSuccess: function(transport) { 
+        container.removeClassName('waiting');
+        placeholder.remove();
+        Asset.AddToList(transport.responseText); 
+      }
     });
   }
 });
@@ -84,7 +55,6 @@ Asset.Detach = Behavior.create({
   onclick: function (e) {
     if (e) e.stop();
     Asset.RemoveFromList(this.element.up('li.asset'));
-    Asset.ResetAttachmentForm();
   }
 });
 
@@ -93,12 +63,73 @@ Asset.Insert = Behavior.create({
     if (e) e.stop();
     var part_name = TabControlBehavior.instances[0].controller.selected.caption;
     var textbox = $('part_' + part_name + '_content');
-    var id_and_style = this.element.getAttribute('rel').split('_');
-    Asset.InsertAtCursor(textbox, '<r:assets:image id="' + id_and_style[1] + '" size="' + id_and_style[0] + '" />');
+    var tag_parts = this.element.getAttribute('rel').split('_');
+    var tag_name = tag_parts[0];
+    var asset_size = tag_parts[1];
+    var asset_id = tag_parts[2];
+    var radius_tag = '<r:asset:' + tag_name;
+    if (asset_size != '') radius_tag = radius_tag + ' size="' + asset_size + '"';
+    radius_tag =  radius_tag +' id="' + asset_id + '" />';
+    Asset.InsertAtCursor(textbox, radius_tag);
   }
 });
 
-// originally lifted from phpMyAdmin
+// Asset-filter and search functions are available wherever the asset_table partial is displayed
+
+Asset.DeselectFileTypes = Behavior.create({
+  onclick: function(e){
+    e.stop();
+    var element = this.element;
+    if(!element.hasClassName('pressed')) {
+      $$('a.selective').each(function(el) { el.removeClassName('pressed'); });
+      $$('input.selective').each(function(el) { el.removeAttribute('checked'); });
+      element.addClassName('pressed');
+      Asset.UpdateTable(true);
+    }
+  }
+});
+
+Asset.SelectFileType = Behavior.create({
+  onclick: function(e){
+    e.stop();
+    var element = this.element;
+    var type_id = element.readAttribute("rel");
+    var type_check = $(type_id + '-check');
+    if(element.hasClassName('pressed')) {
+      element.removeClassName('pressed');
+      type_check.removeAttribute('checked');
+      if ($$('a.selective.pressed').length == 0) $('select_all').addClassName('pressed');
+    } else {
+      element.addClassName('pressed');
+      $$('a.deselective').each(function(el) { el.removeClassName('pressed'); });
+      type_check.setAttribute('checked', 'checked');
+    }
+    Asset.UpdateTable(true);
+  }
+});
+
+Asset.SearchForm = Behavior.create({
+  initialize: function () {
+    this.observer = new Form.Element.Observer(this.element.down('input.search'), 2, Asset.UpdateTable);
+  },
+  onsubmit: function (e) {
+    if (e) e.stop();
+    Asset.UpdateTable(true);
+  }
+});
+
+Asset.Pagination = Behavior.create({
+  onclick: function (e) {
+    if (e) e.stop();
+    var url = this.element.readAttribute('href');
+    var pagination = url.toQueryParams();
+    var search_form = $('filesearchform');
+    search_form.down('#p').value = pagination['p'];
+    Asset.UpdateTable(false);
+  }
+});
+
+// originally taken from phpMyAdmin
 Asset.InsertAtCursor = function(field, insertion) {
   if (document.selection) {  // ie
     field.focus();
@@ -109,6 +140,7 @@ Asset.InsertAtCursor = function(field, insertion) {
     var startPos = field.selectionStart;
     var endPos = field.selectionEnd;
     field.value = field.value.substring(0, startPos) + insertion + field.value.substring(endPos, field.value.length);
+    field.selectionStart = field.selectionEnd = startPos + insertion.length;
   } else {
     field.value += value;
   }
@@ -124,6 +156,18 @@ Asset.GenerateUUID = function () {
   return s.join('');
 };
 
+Asset.UpdateTable = function (depaginate) {
+  var search_form = $('filesearchform');
+  if (depaginate && search_form.down('#p')) search_form.down('#p').value = 1;
+  Asset.AllWaiting();
+  new Ajax.Updater('assets_table', search_form.action, {
+    asynchronous: true, 
+    evalScripts: false, 
+    parameters: Form.serialize(search_form),
+    method: 'get'
+  });
+}
+
 Asset.AddToList = function (html) {
   var list = $('attachment_fields');
   list.insert(html);
@@ -138,6 +182,24 @@ Asset.RemoveFromList = function (container) {
   if (!!(el = container.down('input.destroyer'))) el.value = 1;
   container.dropOut({afterFinish: Asset.HideListIfEmpty});
   container.addClassName('detached');
+}
+
+Asset.AddPlaceholder = function (title, image) {
+  var placeholder = document.createElement('li').addClassName('asset').addClassName('waiting');
+  var front = document.createElement('div').addClassName('front');
+  if (image) front.insert(image.clone());
+  placeholder.insert(front);
+  var back = document.createElement('div').addClassName('back').insert(document.createElement('div').addClassName('title').update('please wait'));
+  if (title) back.update(title);
+  placeholder.insert(back);
+  $('attachment_fields').insert(placeholder);
+  Asset.ShowListIfHidden();
+  return placeholder;
+}
+
+Asset.AllWaiting = function (container) {
+  if (!container) container = $('assets_table');
+  container.select('li.asset').each(function (el) { el.addClassName('waiting'); });
 }
 
 Asset.Notify = function (message) {
@@ -163,93 +225,15 @@ Asset.HideListIfEmpty = function () {
   }
 }
 
-Asset.ResetAttachmentForm = function () {
-  $$('#assets_table li.asset').each(function (element) {
-    $(element).removeClassName('selected');
-    $(element).down('input.selector').checked = false;
-  });
-}
-
-// Asset-filter and search functions are available wherever the asset_table partial is displayed
-
-Asset.NoFileTypes = Behavior.create({
-  onclick: function(e){
-    e.stop();
-    var element = this.element;
-    var search_form = $('filesearchform');
-    if(!element.hasClassName('pressed')) {
-      $$('a.selective').each(function(el) { el.removeClassName('pressed'); });
-      $$('input.selective').each(function(el) { el.removeAttribute('checked'); });
-      element.addClassName('pressed');
-      new Ajax.Updater('assets_table', search_form.action, {
-        asynchronous: true, 
-        evalScripts:  true, 
-        parameters:   Form.serialize(search_form),
-        method: 'get',
-        onComplete: 'assets_table'
-      });
-    }
-  }
-});
-
-Asset.FileTypes = Behavior.create({
-  onclick: function(e){
-    e.stop();
-    var element = this.element;
-    var type_id = element.readAttribute("rel");
-    var type_check = $(type_id + '-check');
-    var search_form = $('filesearchform');
-    if(element.hasClassName('pressed')) {
-      element.removeClassName('pressed');
-      type_check.removeAttribute('checked');
-      if ($$('a.selective.pressed').length == 0) $('select_all').addClassName('pressed');
-    } else {
-      element.addClassName('pressed');
-      $$('a.deselective').each(function(el) { el.removeClassName('pressed'); });
-      type_check.setAttribute('checked', 'checked');
-    }
-    new Ajax.Updater('assets_table', search_form.action, {
-      asynchronous: true, 
-      evalScripts:  true, 
-      parameters:   Form.serialize(search_form),
-      method: 'get',
-      onComplete: 'assets_table'
-    });
-  }
-});
-
-Asset.CopyButton = Behavior.create({
-  initialize: function(){
-    var clip = new ZeroClipboard.Client();
-    var asset_id = this.element.id.replace('copy_', '');
-    clip.setText('<r:assets:image size="" id="' + asset_id + '" />');
-    clip.setHandCursor( true );
-    
-    // #TODO this doesn't position the clip correctly if the buttons aren't visible at the time
-    clip.glue(this.element);
-    
-    clip.addEventListener( 'onComplete', function (client, text) {
-      var element = client.domElement;
-      var contents = element.innerHTML;
-      element.update(contents.replace('Copy', 'Copied'));
-      element.update().delay(2000, contents);
-    });
-  },
-  onClick: function (e) {
-    e.stop();
-  }
-});
-
 Event.addBehavior({
-  'form.upload_asset': Asset.Uploader,
-  'a.select_asset': Asset.Select,
+  'form.upload_asset': Asset.Upload,
   'a.attach_asset': Asset.Attach,
   'a.detach_asset': Asset.Detach,
   'a.insert_asset': Asset.Insert,
-  'form.attach_assets': Asset.Attacher,
-  '#assets_table .pagination a': Asset.Pager,
-  'a.deselective': Asset.NoFileTypes,
-  'a.selective': Asset.FileTypes,
-  'a.copy': Asset.CopyButton
+  'a.copy_asset': Asset.Copy,
+  'a.deselective': Asset.DeselectFileTypes,
+  'a.selective': Asset.SelectFileType,
+  'form.search': Asset.SearchForm,
+  '#assets_table .pagination a': Asset.Pagination
 });
 

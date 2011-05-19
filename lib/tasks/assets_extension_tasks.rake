@@ -19,10 +19,10 @@ namespace :radiant do
       desc "Copies public assets of the Assets to the instance public/ directory."
       task :update => :environment do
         is_svn_or_dir = proc {|path| path =~ /\.svn/ || File.directory?(path) }
+        puts "Copying assets from AssetsExtension"
         Dir[AssetsExtension.root + "/public/**/*"].reject(&is_svn_or_dir).each do |file|
           path = file.sub(AssetsExtension.root, '')
           directory = File.dirname(path)
-          puts "Copying #{path}..."
           mkdir_p RAILS_ROOT + directory, :verbose => false
           cp_r file, RAILS_ROOT + path, :verbose => false
         end
@@ -98,11 +98,9 @@ If you would like to use this mode type \"yes\", type \"no\" or just hit enter t
           end
         end
         # regenerate thumbnails
-        @assets = Asset.find(:all)
-        @assets.each do |asset|
-          asset.asset.reprocess!
-          asset.save
-        end
+        puts "Regenerating asset thumbnails"
+        ENV['CLASS'] = 'Asset'
+        Rake::Task['paperclip:refresh'].invoke
         puts "Done."
       end
       

@@ -54,8 +54,10 @@ class Asset < ActiveRecord::Base
   before_save :assign_uuid
                                  
   validates_attachment_presence :asset, :message => "You must choose a file to upload!"
-  validates_attachment_content_type :asset, :content_type => Radiant.config["assets.content_types"].gsub(' ','').split(',') unless Radiant.config["assets.skip_filetype_validation"] == "true"
-  validates_attachment_size :asset, :less_than => Radiant.config["assets.max_asset_size"].to_i.megabytes
+  if Radiant.config["assets.skip_filetype_validation"] != "true" && Radiant.config['assets.content_types']
+    validates_attachment_content_type :asset, :content_type => Radiant.config["assets.content_types"].gsub(' ','').split(',')
+  end
+  validates_attachment_size :asset, :less_than => ( Radiant.config["assets.max_asset_size"] || 5 ).to_i.megabytes
 
   def asset_type
     AssetType.from(asset.content_type)
@@ -65,8 +67,7 @@ class Asset < ActiveRecord::Base
   def thumbnail(style_name='original')
     return asset.url if style_name.to_sym == :original
     return asset.url(style_name.to_sym) if has_style?(style_name)
-    return asset_type.icon(style_name) if asset_type.icon(style_name)
-    return "/images/assets/#{asset_type.name}_#{style_name.to_s}.png"
+    return asset_type.icon(style_name)
   end
 
   def has_style?(style_name)
@@ -87,6 +88,14 @@ class Asset < ActiveRecord::Base
   
   # geometry methods will return here
   # if they can be made more S3-friendly
+
+  # this is used to pass insertion guidance to javascript
+  def insertion_rel
+    radius_tag = asset_type.default_radius_tag || 'link';
+    size = Radiant.config['assets.insertion_size']
+    "#{radius_tag}_#{size}_#{id}"
+  end
+
 
 private
 
@@ -148,6 +157,6 @@ private
     asset_sizes.unshift ['Original (as uploaded)', 'original']
     asset_sizes
   end
-
+  
 end
 

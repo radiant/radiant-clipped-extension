@@ -27,52 +27,7 @@ p.asset
         color: white
         text-shadow: 0 1px 0 #333
 
-table.index#assets
-  td.icon
-    text-align: right
-    width: 40px
-    padding-top: 6px
-    padding-bottom: 8px
-    padding-right: 0
-    img
-      background-color: #f5f5f5
-      +background-clip(border-box)
-      +border-radius(3px)
-      +box-shadow(rgba(0,0,0,0.3), 1px, 1px, 2px)
-      display: block
-      overflow: hidden
-  th.content_type, td.content_type
-    width: 120px
-  td.content_type
-    font-size: 10px
-    font-weight: normal
-  th.actions, td.actions
-    width: 180px
-    a.action
-      color: black
-      text-decoration: none
-      &:hover, &.hover
-        background: #d8d8d8
-        +linear-gradient(color-stops(#fff, #ccc))
-        border: 1px solid #a5c9df
-        margin: 0 24px 0 0
-        +border-radius
-      &:active, &.active
-        background: #d8d8d8
-        +linear-gradient(color-stops(#ccc, #fff))
-      &.selected
-        background: #c5e0f5
-        +linear-gradient(color_stops(#e5f5ff, #c5e0ff))
-        border: 1px solid #a5c9df
-        margin: 0 24px 0 0
-        +border-top-radius
-        +border-bottom-radius(0)
-      &.confirmed
-        color: #666
-  &.waiting
-    opacity: 0.5
-
-.popup
+.popup 
   div.toolbar
     background: white
     +linear-gradient(color-stops(white, #ddd))
@@ -86,7 +41,7 @@ table.index#assets
     .right
       float: right
     form.search
-      padding: 2px 2px 0
+      padding: 4px 2px 0
       input[type=search]
         font-size: 12px
         +border-radius(100px)
@@ -120,6 +75,8 @@ table.index#assets
     text-shadow: 1px 1px 0 #888
 
 .assets
+  padding-left: 5px
+  padding-right: 5px
   ul
     li.asset
       display: block
@@ -128,6 +85,7 @@ table.index#assets
       width: 110px
       height: 110px
       position: relative
+      line-height: 1.2em
       .front, .back
         display: block
         background: #e6eaed
@@ -182,12 +140,14 @@ table.index#assets
       &.image:hover
         .back
           background: rgba(white, 0.6)
-      &.uploading
+      &.waiting
         background-color: #E6EAED
-        form
+        .back
           display: none
         .front
           background: transparent url(/images/admin/spinner.gif) no-repeat center center
+          img
+            opacity: 0.2
     
 #attachment_list.assets
   background: #7e7e7e
@@ -203,6 +163,7 @@ table.index#assets
     padding: 8px
     clear: left
     span.message
+      float: right
       color: #aaa
       &.important
         color: #d99
@@ -210,20 +171,16 @@ table.index#assets
 #assets_table.assets
   position: relative
   background: #7e7e7e
+  p
+    padding: 40px
+    color: #d99
+    text-align: center
+    font-size: 80%
   ul
     clear: both
     li.asset
       input
         display: none
-      &.selected
-        .front, .back
-          border-color: #c00
-      a.title
-        display: block
-        width: 100px
-        height: 100px
-        margin: 0
-        padding-top: 20px
   div.pagination
     position: relative
     clear: left

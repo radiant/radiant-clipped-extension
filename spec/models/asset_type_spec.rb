@@ -14,9 +14,9 @@ end
 
 AssetType.new :simple, :mime_types => %w[test/this test/that]
 AssetType.new :complex, :mime_types => %w[test/complex], :processors => [:dummy], :styles => {:something => "uh oh"}
-
+    
 describe AssetType do
-
+  
   context 'a simple asset type' do
     subject{ AssetType.find(:simple) }
     its(:plural) { should == "simples" }
@@ -28,6 +28,7 @@ describe AssetType do
   end
   
   context 'a more complex asset type' do
+    before { Radiant.config["assets.create_complex_thumbnails?"] = true }
     subject{ AssetType.find(:complex) }
     its(:paperclip_processors) { should_not be_empty }
     its(:paperclip_styles) { should_not be_empty }

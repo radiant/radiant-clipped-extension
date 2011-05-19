@@ -1,5 +1,4 @@
 - include_stylesheet 'admin/assets'
-- include_javascript 'ZeroClipboard'
 - include_javascript 'admin/assets'
 
 - content_for :toolbar do
@@ -8,7 +7,8 @@
 .outset
   #assets_table.assets
     = render :partial => 'asset_table', :locals => { :assets => @assets }
-    
+  %p{:style => 'clear: both; height: 2em'} &nbsp;
+  
 - render_region :bottom do |bottom|
   #actions
     = pagination_for @assets, :depaginate => false

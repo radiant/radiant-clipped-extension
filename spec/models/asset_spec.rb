@@ -56,6 +56,7 @@ describe Asset do
     it 'should return resized image for images when given size' do
       image = new_asset :asset_content_type => 'image/jpeg'
       image.stub! :asset => mock('asset')
+      image.stub! :has_style? => true
       image.asset.stub!(:content_type).and_return('image/jpeg')
       image.asset.stub!(:url).with(:thumbnail).and_return('/re/sized/image_thumbnail.jpg')
       image.thumbnail('thumbnail').should == '/re/sized/image_thumbnail.jpg'
@@ -63,7 +64,7 @@ describe Asset do
     
     it 'should return icon for non-image with a given size' do
       image = new_asset :asset_content_type => 'application/msword'
-      image.thumbnail('thumbnail').should == "/images/assets/other_thumbnail.png"
+      image.thumbnail('thumbnail').should == "/images/admin/assets/document_thumbnail.png"
     end
   end
 

@@ -1,5 +1,5 @@
 class Admin::AssetsController < Admin::ResourceController
-  paginate_models(:per_page => 20)
+  paginate_models(:per_page => 50)
   
   def index
     assets = Asset.scoped({:order => "created_at DESC"})
@@ -19,7 +19,7 @@ class Admin::AssetsController < Admin::ResourceController
       format.html { render }
       format.js { 
         @page = Page.find_by_id(params[:page_id])
-        render :partial => 'asset_table', :locals => {:with_pagination => true}
+        render :partial => 'asset_table', :locals => {:with_pagination => !!@page}
       }
     end
   end
@@ -41,12 +41,12 @@ class Admin::AssetsController < Admin::ResourceController
       @assets.each do |asset|
         asset.asset.reprocess!
       end
-      flash[:notice] = "Thumbnails successfully refreshed."
+      flash[:notice] = t('assets_extension.thumbnails_refreshed')
       redirect_to admin_assets_path
     else
       @asset = Asset.find(params[:id])
       @asset.asset.reprocess!
-      flash[:notice] = "Thumbnail successfully refreshed."
+      flash[:notice] = t('assets_extension.thumbnails_refreshed')
       redirect_to edit_admin_asset_path(@asset)
     end
   end

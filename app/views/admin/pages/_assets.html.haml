@@ -1,5 +1,4 @@
 - include_stylesheet 'admin/assets'
-- include_javascript 'ZeroClipboard'
 - include_javascript 'admin/assets'
 
 #attachment_list.assets
@@ -8,7 +7,7 @@
       - f.fields_for :page_attachments do |paf|
         = render :partial => 'admin/page_attachments/attachment', :locals => {:attachment_form => paf}
   %p.note
-    = link_to t('assets_extension.attach_assets'), '#attach_asset', :class => 'popup'
+    = link_to t('assets_extension.assets'), '#attach_asset', :class => 'popup'
     %span.message
       - if @page.page_attachments.empty?
         = t('assets_extension.no_attached_assets')

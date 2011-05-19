@@ -20,7 +20,7 @@ module AssetTags
     <pre><code><r:asset [title="asset_title"]>...</r:asset></code></pre>
   }    
   tag 'asset' do |tag|
-    tag.locals.asset = Asset.find_by_title(tag.attr['title']) || Asset.find(tag.attr['id']) unless tag.attr.empty?
+    tag.locals.asset = find_asset unless tag.attr.empty?
     tag.expand
   end
 
@@ -82,7 +82,7 @@ module AssetTags
     assets. You can also filter by extensions with the @extensions@ attribute.
   
     *Usage:*
-    <pre><code><r:if_assets [min_count="n"] [extensions="pdf|jpg"]>...</r:if_assets></code></pre>
+    <pre><code><r:if_assets [min_count="n"]>...</r:if_assets></code></pre>
   }
   tag 'if_assets' do |tag|
     count = tag.attr['min_count'] && tag.attr['min_count'].to_i || 1
@@ -212,7 +212,7 @@ module AssetTags
     Renders an image tag for the asset.
     
     Using the optional @size@ attribute, different sizes can be display.
-    “thumbnail” and “icon” sizes are built in, but custom ones can be set
+    "thumbnail" and "icon" sizes are built in, but custom ones can be set
     using by changing assets.addition_thumbnails in the Radiant::Config
     settings.
     
@@ -220,17 +220,17 @@ module AssetTags
     <pre><code><r:asset:image [title="asset_title"] [size="icon|thumbnail"]></code></pre>
   }    
   tag 'asset:image' do |tag|
-    asset, options = asset_and_options(tag)
-    raise TagError, 'Asset is not an image' unless asset.image?
+    tag.locals.asset, options = asset_and_options(tag)
+    raise TagError, 'Asset is not an image' unless tag.locals.asset.image?
     size = options['size'] ? options.delete('size') : 'original'
-    geometry = options['geometry'] ? options.delete('geometry') : nil
-    #This is very experimental and will generate new sizes on the fly
-    asset.generate_style(size, { :size => geometry }) if geometry
+    # geometry = options['geometry'] ? options.delete('geometry') : nil
+    # #This is very experimental and will generate new sizes on the fly
+    # asset.generate_style(size, { :size => geometry }) if geometry
     
     alt = " alt='#{asset.title}'" unless tag.attr['alt'] rescue nil
     attributes = options.inject('') { |s, (k, v)| s << %{#{k.downcase}="#{v}" } }.strip
     attributes << alt unless alt.nil?
-    url = asset.thumbnail(size)
+    url = tag.locals.asset.thumbnail(size)
     %{<img src="#{url}" #{attributes unless attributes.empty?} />} rescue nil
   end
   
@@ -304,11 +304,11 @@ module AssetTags
   *Usage*:
     <pre><code>
       <ul>
-        <r:asset:each extensions="doc|pdf">
+        <r:assets:each>
           <li class="<r:extension/>">
             <r:link/>
           </li>
-        </r:asset:each>
+        </r:assets:each>
       </ul>
     </code></pre>
   }
@@ -325,14 +325,23 @@ private
   end
   
   def find_asset(tag, options)
-    raise TagError, "'title' attribute required" unless title = options.delete('title') or id = options.delete('id') or tag.locals.asset
-    tag.locals.asset || Asset.find_by_title(title) || Asset.find(id)
+    return tag.locals.asset if tag.locals.asset
+    if title = options.delete('name') || options.delete('title')
+      Rails.logger.warn "<<< finding asset by title #{title}"
+      Asset.find_by_title(title)
+    elsif id = options.delete('id')
+      Rails.logger.warn "<<< finding asset by id #{id}"
+      Asset.find_by_id(id)
+    else
+      raise TagError, "'name' or 'id' attribute required for unenclosed r:asset tag" unless tag.locals.asset
+    end
   end
   
   def assets_find_options(tag)
     attr = tag.attr.symbolize_keys
     extensions = attr[:extensions] && attr[:extensions].split('|') || []
     conditions = unless extensions.blank?
+      # this is soon to be removed in favour of asset types
       [ extensions.map { |ext| "assets.asset_file_name LIKE ?"}.join(' OR '), 
         *extensions.map { |ext| "%.#{ext}" } ]
     else

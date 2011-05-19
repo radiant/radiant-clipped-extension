@@ -2,15 +2,15 @@
 en:
   assets: 'Assets'
   asset_types:
-    all:    'All'
+    all: 'All'
+    documents: 'Documents'
     images: 'Images'
     others: 'Others'
-    audios:  'Audio'
-    movies: 'Movies'
+    audios: 'Audio'
+    flashes: 'Flash'
     videos: 'Video'
     pdfs: 'PDFs'
     swfs: 'Flash'
-    others: 'Documents'
   
   activerecord:
     errors:
@@ -23,6 +23,7 @@ en:
   assets_extension:
     actions: Actions
     all: 'All'
+    alt_text_or_title: 'Alt-Text or Title <span class="hint">(optional)</span>'
     asset: 'Asset'
     asset_edit_title: 'Edit Asset'
     asset_errors: 'Sorry. {{errors}}'
@@ -40,6 +41,7 @@ en:
     attach_existing: 'Attach Existing Assets'
     attach_to_page: 'Attach to page'
     audio: 'Audio'
+    cancel_attachment: 'Unattach'
     copy: 'Copy'
     copy_alt: 'copy radius tag to clipboard'
     choose_file: 'Choose File'
@@ -52,10 +54,10 @@ en:
     edit: 'Edit'
     edit_asset: 'Edit {{asset}}'
     filename: 'Filename'
+    find_assets: 'Find Assets'
     images: 'Images'
     images_automatically_created: 'images are automatically created'
     insert: 'Insert'
-    less: 'Less'
     modify: 'Modify'
     movies: 'Movies'
     need_to_upload: 'Need to upload?'
@@ -76,6 +78,7 @@ en:
     search_assets: 'Search for assets'
     search: 'Search'
     select: 'Select'
+    thumbnails_refreshed: "Thumbnail successfully refreshed."
     title: 'Title'
     type: 'Type'
     types_to_find: 'Types to find'
@@ -86,14 +89,17 @@ en:
     assets:
       additional_thumbnails: 'Additional Thumbnails'
       content_types: 'Content Types'
+      create_image_thumbnails?: 'Image thumbnails'
+      create_pdf_thumbnails?: 'PDF thumbnails'
+      create_video_thumbnails?: 'Video thumbnails'
       display_size: 'Display Size'
       insertion_size: 'Insertion Size'
       max_asset_size: 'Max Asset Size'
       path: 'Path'
-      skip_filetype_validation: 'Skip Filetype Validation'
-      storage: 'Storage'
-      url: 'Url'
       s3:
         bucket: 'Bucket'
         key: 'Key'
         secret: 'Secret'
+      skip_filetype_validation: 'Skip Filetype Validation'
+      storage: 'Storage'
+      url: 'Url'

@@ -6,3 +6,7 @@
   = show_config 'assets.display_size'
 %p.ruled
   = show_config 'assets.insertion_size'
+- %w{image video pdf}.each do |type|
+  %p.ruled
+    = show_config "assets.create_#{type}_thumbnails?"
+    
