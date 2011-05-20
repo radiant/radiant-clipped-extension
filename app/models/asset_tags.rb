@@ -51,15 +51,15 @@ module AssetTags
     raise TagError, "r:asset_list: no assets to list" unless tag.locals.assets
     options = tag.attr.symbolize_keys
     result = []
-    pagination = pagination_control(tag)
-    assets = pagination ? tag.locals.assets.paginate(pagination) : tag.locals.assets.all
+    paging = pagination_find_options(tag)
+    assets = paging ? tag.locals.assets.paginate(paging) : tag.locals.assets.all
     assets.each do |asset|
       tag.locals.asset = asset
       result << tag.expand
     end
-    if pagination && assets.total_pages > 1
+    if paging && assets.total_pages > 1
       tag.locals.paginated_list = assets
-      result << tag.render('pagination')
+      result << tag.render('pagination', tag.attr.dup)
     end
     result
   end
@@ -221,17 +221,18 @@ module AssetTags
   }    
   tag 'asset:image' do |tag|
     tag.locals.asset, options = asset_and_options(tag)
-    raise TagError, 'Asset is not an image' unless tag.locals.asset.image?
-    size = options['size'] ? options.delete('size') : 'original'
-    # geometry = options['geometry'] ? options.delete('geometry') : nil
-    # #This is very experimental and will generate new sizes on the fly
-    # asset.generate_style(size, { :size => geometry }) if geometry
+    if tag.locals.asset.image?
+      size = options['size'] ? options.delete('size') : 'original'
+      # geometry = options['geometry'] ? options.delete('geometry') : nil
+      # #This is very experimental and will generate new sizes on the fly
+      # asset.generate_style(size, { :size => geometry }) if geometry
     
-    alt = " alt='#{asset.title}'" unless tag.attr['alt'] rescue nil
-    attributes = options.inject('') { |s, (k, v)| s << %{#{k.downcase}="#{v}" } }.strip
-    attributes << alt unless alt.nil?
-    url = tag.locals.asset.thumbnail(size)
-    %{<img src="#{url}" #{attributes unless attributes.empty?} />} rescue nil
+      alt = " alt='#{asset.title}'" unless tag.attr['alt'] rescue nil
+      attributes = options.inject('') { |s, (k, v)| s << %{#{k.downcase}="#{v}" } }.strip
+      attributes << alt unless alt.nil?
+      url = tag.locals.asset.thumbnail(size)
+      %{<img src="#{url}" #{attributes unless attributes.empty?} />} rescue nil
+    end
   end
   
   desc %{
@@ -254,10 +255,11 @@ module AssetTags
   }
   tag 'asset:flash' do |tag|
     asset, options = asset_and_options(tag)
-    raise TagError, 'Must be flash' unless asset.swf?
-    url = asset.thumbnail('original')
-    dimensions = [(tag.attr['width'] || asset.width),(tag.attr['height'] || asset.height)]
-    swf_embed_markup url, dimensions, tag.expand
+    if tag.locals.asset.swf?
+      url = asset.thumbnail('original')
+      dimensions = [(tag.attr['width'] || asset.width),(tag.attr['height'] || asset.height)]
+      swf_embed_markup url, dimensions, tag.expand
+    end
   end
   
   tag 'asset:thumbnail' do |tag|
