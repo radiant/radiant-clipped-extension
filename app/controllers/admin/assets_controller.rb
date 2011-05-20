@@ -34,21 +34,26 @@ class Admin::AssetsController < Admin::ResourceController
     end
   end
   
-  # Refreshes the paperclip thumbnails
   def refresh
-    unless params[:id]
-      @assets = Asset.find(:all)
-      @assets.each do |asset|
-        asset.asset.reprocess!
-      end
-      flash[:notice] = t('assets_extension.thumbnails_refreshed')
-      redirect_to admin_assets_path
-    else
+    if params[:id]
       @asset = Asset.find(params[:id])
       @asset.asset.reprocess!
       flash[:notice] = t('assets_extension.thumbnails_refreshed')
       redirect_to edit_admin_asset_path(@asset)
+    else
+      render
     end
+  end
+  
+  only_allow_access_to :regenerate,
+    :when => [:admin],
+    :denied_url => { :controller => 'admin/assets', :action => 'index' },
+    :denied_message => 'You must have admin privileges to refresh the whole asset set.'
+
+  def regenerate
+    Asset.all.each { |asset| asset.asset.reprocess! }
+    flash[:notice] = t('assets_extension.all_thumbnails_refreshed')
+    redirect_to admin_assets_path
   end
   
 end

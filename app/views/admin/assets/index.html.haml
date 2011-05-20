@@ -15,4 +15,5 @@
     %ul
       %li= link_to((image('upload') + ' ' + t('assets_extension.upload_asset')), new_admin_asset_path)
       - if current_user.admin?
-        %li= link_to t('assets_extension.regenerate_thumbnails'), refresh_admin_assets_path, :confirm => 'Beware that this will take a while and consume considerable resources on your server. Are you sure you want to continue?'
+        %li
+          = link_to t('assets_extension.regenerate_thumbnails'), refresh_admin_assets_path

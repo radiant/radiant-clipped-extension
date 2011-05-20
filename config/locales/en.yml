@@ -23,6 +23,7 @@ en:
   assets_extension:
     actions: Actions
     all: 'All'
+    all_thumbnails_refreshed: 'All asset thumbnails refreshed.'
     alt_text_or_title: 'Alt-Text or Title <span class="hint">(optional)</span>'
     asset: 'Asset'
     asset_edit_title: 'Edit Asset'
@@ -47,6 +48,7 @@ en:
     choose_file: 'Choose File'
     documents: 'Documents'
     caption: 'Caption'
+    confirm_refresh_assets: 'Are you sure you want to regenerate every asset thumbnail? This is likely to take a long time and use a lot of server resources: <strong class="warning">the performance of your site is very likely to be affected</strong> and your browser may time out before the operation is complete. This is only recommended if your asset collection is small!'
     confirm_remove_asset: 'Are you sure you want to <strong class="warning">permanently remove</strong> the following asset?'
     confirm_remove_from_page: 'Are you sure you want to remove this assets from the page?'
     delete_asset: 'Delete Asset'
@@ -66,19 +68,20 @@ en:
     no_assets: 'No Assets'
     no_attached_assets: 'No assets attached.'
     others: 'Others'
-    regenerate_all_thumbnails: 'You can regenerate all thumbnails here. Beware that this will take a while and consume considerable resources on your server.'
+    refresh_assets: 'Regenerate all thumbnails'
     regenerate: 'Regenerate'
     regenerate_thumbnails: 'Regenerate Thumbnails'
     remove_asset: 'Remove Asset'
     remove_from_page: 'Remove from page'
     reorder: 'Reorder'
     remove: 'Remove'
+    refresh_assets_rake_task: 'For better results please log into your server and run <code>rake paperclip:refresh class=Asset</code>.'
     replace_file: 'Replace File'
     save_and_upload: 'Save and Upload'
     search_assets: 'Search for assets'
     search: 'Search'
     select: 'Select'
-    thumbnails_refreshed: "Thumbnail successfully refreshed."
+    thumbnails_refreshed: "Thumbnails refreshed."
     title: 'Title'
     type: 'Type'
     types_to_find: 'Types to find'
