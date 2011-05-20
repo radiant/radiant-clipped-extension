@@ -25,6 +25,8 @@ Asset.Upload = Behavior.create({
     
     form.submit();
     $('upload_asset').closePopup();
+
+    // Small delay is required here to let safari assemble the payload
     // form.down('input.textbox').clear();
     // form.down('input.file').clear();
   }
@@ -71,6 +73,12 @@ Asset.Insert = Behavior.create({
     if (asset_size != '') radius_tag = radius_tag + ' size="' + asset_size + '"';
     radius_tag =  radius_tag +' id="' + asset_id + '" />';
     Asset.InsertAtCursor(textbox, radius_tag);
+  }
+});
+
+Asset.Sortable = Behavior.create({
+  initialize: function (e) {
+    this.sorter = Asset.MakeSortable(this.element);
   }
 });
 
@@ -129,6 +137,27 @@ Asset.Pagination = Behavior.create({
   }
 });
 
+Asset.MakeSortable = function (element) {
+  var sorter = Sortable.create(element, {
+    overlap: 'horizontal',
+    constraint: false,
+    handle: 'title',
+    onChange: function (e) { 
+      Asset.SetPositions();
+      Asset.Notify('Assets reordered. Save page to commit changes.'); 
+    }
+  });
+  element.addClassName('sortable');
+  Asset.SetPositions();
+  return sorter;
+}
+
+Asset.SetPositions = function () {
+  $('attachment_fields').select('input.pos').each(function (input, index) {
+    input.value = index;
+  });
+}
+
 // originally taken from phpMyAdmin
 Asset.InsertAtCursor = function(field, insertion) {
   if (document.selection) {  // ie
@@ -173,7 +202,8 @@ Asset.AddToList = function (html) {
   list.insert(html);
   Asset.ShowListIfHidden();
   Asset.Notify('Save page to commit changes');
-  Event.addBehavior.reload();
+  Event.addBehavior.reload();   // #TODO something a bit more specific would be nice here
+  Asset.MakeSortable(list);
 }
 
 Asset.RemoveFromList = function (container) {
@@ -226,11 +256,11 @@ Asset.HideListIfEmpty = function () {
 }
 
 Event.addBehavior({
+  'ul#attachment_fields': Asset.Sortable,
   'form.upload_asset': Asset.Upload,
   'a.attach_asset': Asset.Attach,
   'a.detach_asset': Asset.Detach,
   'a.insert_asset': Asset.Insert,
-  'a.copy_asset': Asset.Copy,
   'a.deselective': Asset.DeselectFileTypes,
   'a.selective': Asset.SelectFileType,
   'form.search': Asset.SearchForm,
