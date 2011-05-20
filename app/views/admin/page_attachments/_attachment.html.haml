@@ -1,22 +1,25 @@
-- attachment_form ||= false
-- if attachment_form
-  - attachment ||= attachment_form.object
-- else 
-  - attachment ||= @attachment
+- attachment ||= @page_attachment
 
 - page = attachment.page
 - asset = attachment.asset
 - asset_type = asset.image? ? "image" : "link"
+- css_class = "#{asset_type} asset"
+- css_class += ' unsaved' if attachment.new_record?
 
-%li{:class => "#{asset_type} asset", :id => "asset_#{asset.id}"}
+%li{:class => css_class, :id => "attachment_#{asset.uuid}"}
+  - fields_for @page do |f|
+    - f.fields_for :page_attachments, attachment, :child_index => asset.uuid do |paf|
+      - if attachment.new_record?
+        = paf.hidden_field :asset_id, :class => 'attacher'
+      - else
+        = paf.hidden_field :_destroy, :class => 'destroyer'
+      = paf.hidden_field :position, :class => 'pos'
   .front
     .thumbnail= image_tag asset.thumbnail(:thumbnail)
   .back
     .title= asset.title
-    - if asset.attached_to?(page)
-      %ul.actions
-        %li= asset_insertion_link(asset)
-        - if attachment_form
-          %li
-            = attachment_form.hidden_field :_destroy, :class => 'destroyer'
-            = link_to t('assets_extension.detach'), '#', :class => 'detach_asset'
+    %ul.actions
+      %li
+        = asset_insertion_link(asset)
+      %li
+        = link_to t('assets_extension.detach'), '#', :class => 'detach_asset'

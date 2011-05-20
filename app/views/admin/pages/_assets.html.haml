@@ -3,9 +3,7 @@
 
 #attachment_list.assets
   %ul#attachment_fields{:class => @page.page_attachments.empty? ? 'empty' : ''}
-    - fields_for @page do |f|
-      - f.fields_for :page_attachments do |paf|
-        = render :partial => 'admin/page_attachments/attachment', :locals => {:attachment_form => paf}
+    = render :partial => 'admin/page_attachments/attachment', :collection => @page.page_attachments
   %p.note
     = link_to t('assets_extension.assets'), '#attach_asset', :class => 'popup'
     %span.message
