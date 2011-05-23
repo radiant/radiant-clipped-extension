@@ -27,11 +27,37 @@ Asset.Upload = Behavior.create({
     $('upload_asset').closePopup();
 
     // Small delay is required here to let safari assemble the payload
-    // form.down('input.textbox').clear();
-    // form.down('input.file').clear();
+    form.down('input.textbox').clear().defer();
+    form.down('input.file').clear().defer();
   }
 });
 
+
+// this local attachment method works and is much quicker, but it's fragile and doesn't notice radiant configuration changes
+// better to bounce off the server, provided it can be made responsive enough.
+
+// Asset.Attach = Behavior.create({
+//   onclick: function (e) {
+//     if (e) e.stop();
+//     var container = this.element.up('li.asset');
+//     container.addClassName('waiting');
+//     var title = container.down('div.title').innerHTML;
+//     var image = container.down('img');
+//     var uuid = Asset.GenerateUUID();
+//     var asset_id = this.element.getAttribute('rel').split('_').last();
+//     var attachment_field = document.createElement('input');
+//     attachment_field.setAttribute('type', 'hidden');
+//     attachment_field.setAttribute('id', 'page_page_attachments_attributes_' + uuid + '_asset_id');
+//     attachment_field.setAttribute('name', 'page[page_attachments_attributes][' + uuid + '][asset_id]');
+//     attachment_field.value = asset_id;
+//     var placeholder = Asset.AddPlaceholder(title, image, attachment_field);
+//     container.removeClassName('waiting');
+//     placeholder.removeClassName('waiting');
+//   }
+// });
+
+// ajax-based page attachment is a slightly slower but probably more robust option
+//
 Asset.Attach = Behavior.create({
   onclick: function (e) {
     if (e) e.stop();
@@ -209,18 +235,20 @@ Asset.AddToList = function (html) {
 Asset.RemoveFromList = function (container) {
   var el = null;
   if (!!(el = container.down('input.attacher'))) el.remove();
+  if (!!(el = container.down('input.pos'))) el.remove();
   if (!!(el = container.down('input.destroyer'))) el.value = 1;
   container.dropOut({afterFinish: Asset.HideListIfEmpty});
   container.addClassName('detached');
 }
 
-Asset.AddPlaceholder = function (title, image) {
+Asset.AddPlaceholder = function (title, image, contents) {
   var placeholder = document.createElement('li').addClassName('asset').addClassName('waiting');
+  if (contents) placeholder.insert(contents);
   var front = document.createElement('div').addClassName('front');
-  if (image) front.insert(image.clone());
+  if (image) front.insert(document.createElement('div').addClassName('thumbnail').insert(image.clone()));
   placeholder.insert(front);
-  var back = document.createElement('div').addClassName('back').insert(document.createElement('div').addClassName('title').update('please wait'));
-  if (title) back.update(title);
+  if (!title) title = 'please wait';
+  var back = document.createElement('div').addClassName('back').insert(document.createElement('div').addClassName('title').update(title));
   placeholder.insert(back);
   $('attachment_fields').insert(placeholder);
   Asset.ShowListIfHidden();
