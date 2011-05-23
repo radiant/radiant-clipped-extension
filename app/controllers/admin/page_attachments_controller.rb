@@ -7,7 +7,7 @@ class Admin::PageAttachmentsController < Admin::ResourceController
   
   def load_model
     @asset = Asset.find(params[:asset_id])
-    @page = Page.find(params[:page_id]) if params[:page_id]
+    @page = Page.find_by_id(params[:page_id]) || Page.new
     self.model = PageAttachment.new(:asset => @asset, :page => @page)
   end
   
