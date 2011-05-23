@@ -78,8 +78,18 @@ class Asset < ActiveRecord::Base
     File.basename(asset_file_name, ".*") if asset_file_name
   end
 
-  def extension
-    asset_file_name.split('.').last.downcase if asset_file_name
+  def extension(style_name='original')
+     if style_name == 'original'
+       return original_extension 
+     elsif style = asset.styles[style_name.to_sym]
+       return style.format 
+     else
+       return original_extension
+     end
+  end
+  
+  def original_extension
+    return asset_file_name.split('.').last.downcase if asset_file_name
   end
 
   def attached_to?(page)
@@ -88,13 +98,6 @@ class Asset < ActiveRecord::Base
   
   # geometry methods will return here
   # if they can be made more S3-friendly
-
-  # this is used to pass insertion guidance to javascript
-  def insertion_rel
-    radius_tag = asset_type.default_radius_tag || 'link';
-    size = Radiant.config['assets.insertion_size']
-    "#{radius_tag}_#{size}_#{id}"
-  end
 
 
 private

@@ -101,12 +101,6 @@ class AssetType
     end
   end
   
-  def style_format(style_name)
-    if style = paperclip_styles[style_name.to_sym]
-      style.last if style.is_a?(Array)
-    end
-  end
-
   # class methods
   
   def self.from(mimetype)

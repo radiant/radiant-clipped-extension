@@ -17,7 +17,7 @@ module AssetTags
     The namespace for referencing images and assets.
     
     *Usage:* 
-    <pre><code><r:asset [title="asset_title"]>...</r:asset></code></pre>
+    <pre><code><r:asset [name="asset name"]>...</r:asset></code></pre>
   }    
   tag 'asset' do |tag|
     tag.locals.asset = find_asset unless tag.attr.empty?
@@ -26,7 +26,7 @@ module AssetTags
 
   desc %{
     Cycles through all assets attached to the current page.  
-    This tag does not require the title atttribute, nor do any of its children.
+    This tag does not require the name atttribute, nor do any of its children.
     Use the @limit@ and @offset@ attribute to render a specific number of assets.
     Use @by@ and @order@ attributes to control the order of assets.
     Use @extensions@ attribute to specify which assets to be rendered.
@@ -162,7 +162,7 @@ module AssetTags
     @ignore_case@ attribute is set to false, the match is case sensitive. By
     default, @ignore_case@ is set to true.
       
-    The @title@ attribute is required on the parent tag unless this tag is used in @asset:each@.
+    The @name@ or @id@ attribute is required on the parent tag unless this tag is used in @asset:each@.
 
     *Usage:* 
     <pre><code><r:asset:each><r:if_content_type matches="regexp" [ignore_case=true|false"]>...</r:if_content_type></r:asset:each></code></pre>
@@ -193,7 +193,7 @@ module AssetTags
     end
   end
   
-  [:title, :caption, :asset_file_name, :asset_content_type, :asset_file_size, :id].each do |method|
+  [:title, :caption, :asset_file_name, :extension, :asset_content_type, :asset_file_size, :id].each do |method|
     desc %{
       Renders the @#{method.to_s}@ attribute of the asset
     }
@@ -202,6 +202,10 @@ module AssetTags
       asset.send(method) rescue nil
     end
   end
+  
+  tag 'asset:name' do |tag|
+    tag.render('asset:title', tag.attr.dup)
+  end  
   
   tag 'asset:filename' do |tag|
     asset, options = asset_and_options(tag)
@@ -217,7 +221,7 @@ module AssetTags
     settings.
     
     *Usage:* 
-    <pre><code><r:asset:image [title="asset_title"] [size="icon|thumbnail"]></code></pre>
+    <pre><code><r:asset:image [name="asset name" or id="asset id"] [size="icon|thumbnail"]></code></pre>
   }    
   tag 'asset:image' do |tag|
     tag.locals.asset, options = asset_and_options(tag)
@@ -241,16 +245,16 @@ module AssetTags
     dimensions of the swf file
     
     *Usage:*
-    <pre><code><r:asset:flash [title="asset_title"] [width="100"] [height="100"]>Fallback content</flash></code></pre>
+    <pre><code><r:asset:flash [name="asset name" or id="asset id"] [width="100"] [height="100"]>Fallback content</flash></code></pre>
     
     *Example with text fallback:*
-    <pre><code><r:asset:flash title="flash_movie">
+    <pre><code><r:asset:flash name="flash_movie">
         Sorry, you need to have flash installed, <a href="http://adobe.com/flash">get it here</a>
     </flash></code></pre>
     
     *Example with image fallback and explicit dimensions:*
-    <pre><code><r:asset:flash title="flash_movie" width="300" height="200">
-        <r:asset:image title="flash_screenshot" />
+    <pre><code><r:asset:flash name="flash_movie" width="300" height="200">
+        <r:asset:image name="flash_screenshot" />
       </flash></code></pre>
   }
   tag 'asset:flash' do |tag|
@@ -273,7 +277,7 @@ module AssetTags
     generate the url for that size. 
     
     *Usage:* 
-    <pre><code><r:url [title="asset_title"] [size="icon|thumbnail"]></code></pre>
+    <pre><code><r:url [name="asset name" or id="asset id"] [size="icon|thumbnail"]></code></pre>
   }    
   tag 'asset:url' do |tag|
     asset, options = asset_and_options(tag)
@@ -286,7 +290,7 @@ module AssetTags
     generate a link to that size. 
     
     *Usage:* 
-    <pre><code><r:asset:link [title="asset_title"] [size="icon|thumbnail"] /></code></pre>
+    <pre><code><r:asset:link [name="asset name" or id="asset id"] [size="icon|thumbnail"] /></code></pre>
   }
   tag 'asset:link' do |tag|
     asset, options = asset_and_options(tag)
@@ -299,27 +303,7 @@ module AssetTags
     url = asset.thumbnail(size)
     %{<a href="#{url  }#{anchor}"#{attributes}>#{text}</a>} rescue nil
   end
-  
-  desc %{
-  Renders the extension of the asset, as extracted from its filename.
-  
-  *Usage*:
-    <pre><code>
-      <ul>
-        <r:assets:each>
-          <li class="<r:extension/>">
-            <r:link/>
-          </li>
-        </r:assets:each>
-      </ul>
-    </code></pre>
-  }
-  tag 'asset:extension' do |tag|
-    raise TagError, 'must be nested inside an assets or assets:each tag' unless tag.locals.asset
-    asset = tag.locals.asset
-    asset.asset_file_name[/\.(\w+)$/, 1]
-  end
-  
+    
 private
   def asset_and_options(tag)
     options = tag.attr.dup
@@ -329,10 +313,8 @@ private
   def find_asset(tag, options)
     return tag.locals.asset if tag.locals.asset
     if title = options.delete('name') || options.delete('title')
-      Rails.logger.warn "<<< finding asset by title #{title}"
       Asset.find_by_title(title)
     elsif id = options.delete('id')
-      Rails.logger.warn "<<< finding asset by id #{id}"
       Asset.find_by_id(id)
     else
       raise TagError, "'name' or 'id' attribute required for unenclosed r:asset tag" unless tag.locals.asset
