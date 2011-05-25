@@ -1,6 +1,5 @@
 module AssetTags
   include Radiant::Taggable
-  include TagDeprecation
   
   class TagError < StandardError; end
   

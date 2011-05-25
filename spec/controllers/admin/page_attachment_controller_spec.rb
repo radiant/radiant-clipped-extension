@@ -2,11 +2,6 @@ require File.dirname(__FILE__) + '/../../spec_helper'
 
 describe Admin::PageAttachmentsController do
   dataset :users, :assets
-
-  before :each do
-    ActionController::Routing::Routes.reload
-    login_as :designer
-  end
   
   it "should be a ResourceController" do
     controller.should be_kind_of(Admin::ResourceController)
@@ -17,34 +12,38 @@ describe Admin::PageAttachmentsController do
     controller.send(:model_symbol).should == :page_attachment
   end
 
-  describe "create" do
-    before do
-      pending
-      post :create, :format => :js, :page_id => page_id(:pictured), :page_attachment => {:asset_id => asset_id(:document)}
+  describe "on call to new" do
+    before :each do
+      login_as :existing
     end
 
-    it "should attach the asset to the page" do
-      assets(:document).attached_to?(pages(:pictured)).should be_true
+    describe "with valid asset id" do
+      it "should return a nested form for asset-attachment" do
+        get :new, :asset_id => asset_id(:video), :format => :js
+        response.should be_success
+        response.should render_template('admin/page_attachments/_attachment')
+
+        # why does response.body == "1"? It's a mystery.
+        response.should have_text("attachment_#{assets(:video).uuid}")
+        response.should have_text("page_page_attachments_attributes_#{assets(:video).uuid}")
+        response.should have_text('<input class="attacher"')
+      end
     end
 
-    it "should render the attached-asset list" do
-      response.should be_success
-      response.should render_template('admin/page_attachments/_attachment_list')
+    describe "without asset id" do
+      it "should respond blankly" do
+        get :new, :format => :js
+        response.should be_success
+        response.body.should be_blank
+      end
     end
-  end
-
-  describe "destroy" do
-    before do
-      delete :destroy, :format => :js, :page_id => page_id(:pictured), :id => page_attachment_id(:tester_attachment)
-    end
-
-    it "should render the attached-asset list" do
-      response.should be_success
-      response.should render_template('admin/page_attachments/_attachment_list')
-    end
-
-    it "should detach the asset from the page" do
-      assets(:tester).attached_to?(pages(:pictured)).should be_false
+    
+    describe "with invalid asset id" do
+      it "should respond blankly" do
+        get :new, :asset_id => 'foo', :format => :js
+        response.should be_success
+        response.body.should be_blank
+      end
     end
   end
 

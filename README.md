@@ -9,7 +9,7 @@ It should also be an easy upgrade from `page_attachments`, but I haven't tested 
 
 ## Changes
 
-* video files frame-grabbed
+* video files frame-grabbed (automatically disabled if FFmpeg is not found)
 * pdfs thumbnailed
 * new asset-retrieval and page-attachment interface (by John Long)
 * new inline upload mechanism that allows several concurrent uploads and attachment to new pages

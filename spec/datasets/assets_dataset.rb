@@ -17,7 +17,8 @@ class AssetsDataset < Dataset::Base
         :title => name,
         :asset_file_name =>  'asset.jpg',
         :asset_content_type =>  'image/jpeg',
-        :asset_file_size => '46248'
+        :asset_file_size => '46248',
+        :uuid => UUIDTools::UUID.timestamp_create.to_s
       }.merge(attributes)
       if @current_page_id
         create_record :page_attachment, "#{name}_attachment".symbolize, {

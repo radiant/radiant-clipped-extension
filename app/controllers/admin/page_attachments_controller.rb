@@ -6,8 +6,12 @@ class Admin::PageAttachmentsController < Admin::ResourceController
   end
   
   def load_model
-    @asset = Asset.find(params[:asset_id])
-    @page = Page.find_by_id(params[:page_id]) || Page.new
+    begin
+      @asset = Asset.find(params[:asset_id])
+      @page = params[:page_id].blank? ? Page.new : Page.find_by_id(params[:page_id])
+    rescue ActiveRecord::RecordNotFound
+      render :nothing => true, :layout => false
+    end
     self.model = PageAttachment.new(:asset => @asset, :page => @page)
   end
   
