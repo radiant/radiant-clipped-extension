@@ -5,7 +5,7 @@ Radiant.config do |config|
 
     assets.define 'additional_thumbnails',    :default => 'normal=640x640>'
     assets.define 'url',                      :default => '/:class/:id/:basename:no_original_style.:extension'
-    assets.define 'path',                     :default => ':rails_root/public/:class/:id/:basename:no_original_style.:extension'
+    assets.define 'path',                     :default => ':rails_root/public/:class/:id/:basename:no_original_style.:extension', :allow_change => true
     assets.define 'skip_filetype_validation', :default => true, :type => :boolean
     assets.define 'storage', :default      => 'filesystem',
                              :select_from  => {'File System' => 'filesystem', 'Amazon S3' => 's3'},
