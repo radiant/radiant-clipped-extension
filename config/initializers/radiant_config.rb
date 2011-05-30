@@ -7,9 +7,10 @@ Radiant.config do |config|
     assets.define 'url',                      :default => '/:class/:id/:basename:no_original_style.:extension'
     assets.define 'path',                     :default => ':rails_root/public/:class/:id/:basename:no_original_style.:extension'
     assets.define 'skip_filetype_validation', :default => true, :type => :boolean
-    assets.define 'storage', :default     => 'filesystem',
-                             :select_from => {'File System' => 'filesystem', 'Amazon S3' => 's3'},
-                             :allow_blank => false
+    assets.define 'storage', :default      => 'filesystem',
+                             :select_from  => {'File System' => 'filesystem', 'Amazon S3' => 's3'},
+                             :allow_blank  => false,
+                             :allow_change => true
 
     assets.namespace 's3' do |s3|
       s3.define 'bucket'
