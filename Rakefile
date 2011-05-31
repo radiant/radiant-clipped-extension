@@ -12,7 +12,7 @@ begin
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
 rescue LoadError
-  puts "Jeweler (or a dependency) not available. This is only required if you plan to package copy_move as a gem."
+  puts "Jeweler (or a dependency) not available. This is only required if you plan to package assets as a gem."
 end
 # I think this is the one that should be moved to the extension Rakefile template
 
