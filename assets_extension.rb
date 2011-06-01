@@ -1,7 +1,7 @@
 require_dependency 'application_controller'
-
+require 'radiant-assets-extension/version'
 class AssetsExtension < Radiant::Extension
-  version "1.0.0.rc1"
+  version RadiantAssetsExtension::VERSION
   description "Assets extension based Keith Bingman's original Paperclipped extension."
   url "http://github.com/radiant/radiant-assets-extension"
 

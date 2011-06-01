@@ -1,36 +1,32 @@
-begin
-  require 'jeweler'
-  Jeweler::Tasks.new do |gem|
-    gem.name = "radiant-assets-extension"
-    gem.summary = %Q{Assets extension for Radiant CMS}
-    gem.description = %Q{Assets extension based Keith Bingman's excellent Paperclipped extension.}
-    gem.email = "me@johnwlong.com"
-    gem.homepage = "https://github.com/radiant/radiant-assets-extension"
-    gem.authors = ["Keith Bingman", "Benny Degezelle", "William Ross", "John W. Long"]
-    gem.add_dependency 'radiant', ">= 0.9.1"
-    gem.add_dependency 'paperclip', "~> 2.3.3"
-    # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
+# Determine where the RSpec plugin is by loading the boot
+unless defined? RADIANT_ROOT
+  ENV["RAILS_ENV"] = "test"
+  case
+  when ENV["RADIANT_ENV_FILE"]
+    require File.dirname(ENV["RADIANT_ENV_FILE"]) + "/boot"
+  when File.dirname(__FILE__) =~ %r{vendor/radiant/vendor/extensions}
+    require "#{File.expand_path(File.dirname(__FILE__) + "/../../../../../")}/config/boot"
+  else
+    require "#{File.expand_path(File.dirname(__FILE__) + "/../../../")}/config/boot"
   end
-rescue LoadError
-  puts "Jeweler (or a dependency) not available. This is only required if you plan to package assets as a gem."
 end
-# I think this is the one that should be moved to the extension Rakefile template
 
-# In rails 1.2, plugins aren't available in the path until they're loaded.
-# Check to see if the rspec plugin is installed first and require
-# it if it is.  If not, use the gem version.
-require File.join(File.dirname(__FILE__), '..', '..', '..', 'config', 'boot')
 require 'rake'
 require 'rake/rdoctask'
+require 'rake/testtask'
 
-rspec_base = File.expand_path(File.dirname(__FILE__) + '/../../radiant/vendor/plugins/rspec/lib')
+rspec_base = File.expand_path(RADIANT_ROOT + '/vendor/plugins/rspec/lib')
 $LOAD_PATH.unshift(rspec_base) if File.exist?(rspec_base)
 require 'spec/rake/spectask'
-# require 'spec/translator'
+require 'cucumber'
+require 'cucumber/rake/task'
+
+# Cleanup the RADIANT_ROOT constant so specs will load the environment
+Object.send(:remove_const, :RADIANT_ROOT)
 
 extension_root = File.expand_path(File.dirname(__FILE__))
 
-task :default => :spec
+task :default => [:spec, :features]
 task :stats => "spec:statsetup"
 
 desc "Run all specs in spec directory"
@@ -38,6 +34,8 @@ Spec::Rake::SpecTask.new(:spec) do |t|
   t.spec_opts = ['--options', "\"#{extension_root}/spec/spec.opts\""]
   t.spec_files = FileList['spec/**/*_spec.rb']
 end
+
+task :features => 'spec:integration'
 
 namespace :spec do
   desc "Run all specs in spec directory with RCov"
@@ -62,13 +60,13 @@ namespace :spec do
     end
   end
   
-  # Hopefully no one has written their extensions in pre-0.9 style
-  # desc "Translate specs from pre-0.9 to 0.9 style"
-  # task :translate do
-  #   translator = ::Spec::Translator.new
-  #   dir = RAILS_ROOT + '/spec'
-  #   translator.translate(dir, dir)
-  # end
+  desc "Run the Cucumber features"
+  Cucumber::Rake::Task.new(:integration) do |t|
+    t.fork = true
+    t.cucumber_opts = ['--format', (ENV['CUCUMBER_FORMAT'] || 'pretty')]
+    # t.feature_pattern = "#{extension_root}/features/**/*.feature"
+    t.profile = "default"
+  end
 
   # Setup specs for stats
   task :statsetup do
@@ -101,7 +99,7 @@ end
 desc 'Generate documentation for the assets extension.'
 Rake::RDocTask.new(:rdoc) do |rdoc|
   rdoc.rdoc_dir = 'rdoc'
-  rdoc.title    = 'PaperclippedExtension'
+  rdoc.title    = 'AssetsExtension'
   rdoc.options << '--line-numbers' << '--inline-source'
   rdoc.rdoc_files.include('README')
   rdoc.rdoc_files.include('lib/**/*.rb')
