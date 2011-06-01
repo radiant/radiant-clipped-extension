@@ -2,11 +2,12 @@ require File.dirname(__FILE__) + '/../../spec_helper'
 
 describe Admin::PageAttachmentsController do
   dataset :users, :home_page, :assets
+  integrate_views
   
   it "should be a ResourceController" do
     controller.should be_kind_of(Admin::ResourceController)
   end
-
+  
   it "should handle PageAttachments" do
     controller.class.model_class.should == PageAttachment
     controller.send(:model_symbol).should == :page_attachment
@@ -15,18 +16,17 @@ describe Admin::PageAttachmentsController do
   describe "on call to new" do
     before :each do
       login_as :existing
+      @asset = assets(:video)
     end
 
     describe "with valid asset id" do
       it "should return a nested form for asset-attachment" do
-        get :new, :page_id => page_id(:home), :asset_id => asset_id(:video), :format => :js
+        xhr :get, :new, :page_id => page_id(:home), :asset_id => @asset.id
         response.should be_success
         response.should render_template('admin/page_attachments/_attachment')
-        
-        # why does response.body == "1"? It's a mystery.
-        response.should have_text("attachment_#{assets(:video).uuid}")
-        response.should have_text("page_page_attachments_attributes_#{assets(:video).uuid}")
-        response.should have_text('<input class="attacher"')
+        response.body.should =~ /attachment_#{@asset.uuid}/
+        response.body.should =~ /page_page_attachments_attributes_#{@asset.uuid}/
+        response.body.should =~ /<input class="attacher"/
       end
     end
 

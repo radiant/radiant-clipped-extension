@@ -1,8 +1,8 @@
 class Admin::PageAttachmentsController < Admin::ResourceController
   helper 'admin/assets'
-  
+    
   def new
-    render :partial => 'admin/page_attachments/attachment', :object => @page_attachment
+    render :partial => 'attachment', :object => model
   end
   
   def load_model
