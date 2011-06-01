@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
 
 describe Admin::PageAttachmentsController do
-  dataset :users, :assets
+  dataset :users, :home_page, :assets
   
   it "should be a ResourceController" do
     controller.should be_kind_of(Admin::ResourceController)
@@ -19,10 +19,10 @@ describe Admin::PageAttachmentsController do
 
     describe "with valid asset id" do
       it "should return a nested form for asset-attachment" do
-        get :new, :asset_id => asset_id(:video), :format => :js
+        get :new, :page_id => page_id(:home), :asset_id => asset_id(:video), :format => :js
         response.should be_success
         response.should render_template('admin/page_attachments/_attachment')
-
+        
         # why does response.body == "1"? It's a mystery.
         response.should have_text("attachment_#{assets(:video).uuid}")
         response.should have_text("page_page_attachments_attributes_#{assets(:video).uuid}")
