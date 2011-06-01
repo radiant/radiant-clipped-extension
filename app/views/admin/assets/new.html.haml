@@ -3,7 +3,7 @@
 
 - render_region :main do |main|
   - main.edit_header do
-    %h1= t("assets_extension.new_asset")
+    %h1= t("clipped_extension.new_asset")
   
   - main.edit_form do  
     - form_for :asset, :url => admin_assets_path, :html => { :method => "post", :multipart => true } do |f|
@@ -11,7 +11,7 @@
       = render :partial => "form", :locals => { :f => f }
       
       %p
-        %label= t("assets_extension.choose_file")
+        %label= t("clipped_extension.choose_file")
         = f.file_field :asset, :style => "width: 100%"
       
       .buttons

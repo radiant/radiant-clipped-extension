@@ -3,31 +3,31 @@
     #upload_asset.popup.textured{:style => "display: none; width: 28em"}
       #upload_asset_busy.busy{:style => "display: none"}= image('spinner.gif', :alt => "")
       
-      .popup_title= t('assets_extension.upload_asset')
+      .popup_title= t('clipped_extension.upload_asset')
       
       - form_for([:admin, Asset.new], :html => {:method => 'post', :multipart => true, :class => 'upload_asset'}) do |f|
         = hidden_field_tag "for_attachment", 1
         = hidden_field_tag "page_id", @page.id
         
         %p
-          = f.label :asset, t("assets_extension.choose_file")
+          = f.label :asset, t("clipped_extension.choose_file")
           = f.file_field :asset, :class => 'file'
         
         %p
-          = f.label :title, t("assets_extension.alt_text_or_title")
+          = f.label :title, t("clipped_extension.alt_text_or_title")
           = f.text_field :title, :class => "textbox big"
         
         .buttons
-          = f.submit t("assets_extension.upload"), :class => "button"
+          = f.submit t("clipped_extension.upload"), :class => "button"
           = t('or')
           %a.cancel.close_popup{:href=>"javascript:void(0)"}= t('cancel')
-          %a.popup{:href=>"#attach_asset", :style => 'color: #666; float: left'}= t('assets_extension.attach_existing')
+          %a.popup{:href=>"#attach_asset", :style => 'color: #666; float: left'}= t('clipped_extension.attach_existing')
     #upload_holders
     
   - popups.attach_asset do
     #attach_asset.popup.textured{:style=>"display: none;"}
       
-      .popup_title= t('assets_extension.find_assets')
+      .popup_title= t('clipped_extension.find_assets')
       
       .toolbar
         = render :partial => 'admin/assets/search'
@@ -39,4 +39,4 @@
       .busy{:style => "display: none"}= image('spinner.gif', :alt => "")
       .buttons
         %a.cancel.close_popup{:href=>"javascript:void(0)"}= t('close')
-        %a.popup{:href=>"#upload_asset", :style => 'color: #666; float: left'}= t('assets_extension.upload_asset')
+        %a.popup{:href=>"#upload_asset", :style => 'color: #666; float: left'}= t('clipped_extension.upload_asset')

@@ -1,16 +1,16 @@
 # -*- encoding: utf-8 -*-
 $:.push File.expand_path("../lib", __FILE__)
-require "radiant-assets-extension/version"
+require "radiant-clipped-extension/version"
 
 Gem::Specification.new do |s|
-  s.name        = "radiant-assets-extension"
-  s.version     = RadiantAssetsExtension::VERSION
+  s.name        = "radiant-clipped-extension"
+  s.version     = RadiantClippedExtension::VERSION
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Keith Bingman", "Benny Degezelle", "William Ross", "John W. Long"]
   s.email       = ["radiant@radiantcms.org"]
   s.homepage    = "http://radiantcms.org"
   s.summary     = %q{Assets for Radiant CMS}
-  s.description = %q{Assets extension based Keith Bingman's excellent Paperclipped extension.}
+  s.description = %q{Assets extension on based Keith Bingman's excellent Paperclipped extension.}
 
   ignores = if File.exist?('.gitignore')
     File.read('.gitignore').split("\n").inject([]) {|a,p| a + Dir[p] }
@@ -24,7 +24,7 @@ Gem::Specification.new do |s|
 
   s.post_install_message = %{
   Add this to your radiant project with:
-    config.gem 'radiant-assets-extension', :version => '~>#{RadiantAssetsExtension::VERSION}'
+    config.gem 'radiant-clipped-extension', :version => '~>#{RadiantClippedExtension::VERSION}'
   }
 
   gem.add_dependency 'acts_as_list'

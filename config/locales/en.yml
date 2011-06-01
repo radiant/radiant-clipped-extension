@@ -20,7 +20,7 @@ en:
             asset:
               blank: 'You must choose a file to upload!'
 
-  assets_extension:
+  clipped_extension:
     actions: Actions
     all: 'All'
     all_thumbnails_refreshed: 'All asset thumbnails refreshed.'

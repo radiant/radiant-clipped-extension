@@ -3,7 +3,7 @@
 
 - render_region :main do |main|
   - main.edit_header do
-    %h1= t("assets_extension.asset_edit_title")
+    %h1= t("clipped_extension.asset_edit_title")
   
   - main.edit_form do
     - form_for :asset, :url => admin_asset_path(@asset), :html => { :method => "put", :multipart => true } do |f|
@@ -13,16 +13,16 @@
         %div.content
           %p
             %label.filename
-              = "#{t("assets_extension.filename")}: #{@asset.asset_file_name unless @asset.new_record?}"
+              = "#{t("clipped_extension.filename")}: #{@asset.asset_file_name unless @asset.new_record?}"
           %p.asset
-            - display_size = Radiant::Config['assets_extension.display_size'] || 'normal'
+            - display_size = Radiant::config['assets.display_size'] || 'normal'
             = image_tag @asset.thumbnail(display_size.to_sym), :class => 'preview'
 
           = updated_stamp @asset
         
         %p.upload
           %label.upload
-            = t("assets_extension.replace_file")
+            = t("clipped_extension.replace_file")
           = f.file_field :asset, :class => "", :style => "width: 100%"
         
         .buttons
@@ -33,8 +33,8 @@
   
   - main.edit_regenerate do
     - if current_user.admin? or current_user.designer?
-      %p= t("assets_extension.regenerate_thumbnails")
+      %p= t("clipped_extension.regenerate_thumbnails")
       
       - form_tag refresh_admin_asset_path(@asset), :method => :put do
         %p.asset_buttons
-          %input.button{ :type => "submit", :value => t("assets_extension.regenerate") }
+          %input.button{ :type => "submit", :value => t("clipped_extension.regenerate") }

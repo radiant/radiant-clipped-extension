@@ -92,7 +92,7 @@ class AssetType
   end
   
   def configured_styles
-    Radiant::Config["assets.additional_thumbnails"].to_s.gsub(' ','').split(',').collect{|s| s.split('=')}.inject({}) {|ha, (k, v)| ha[k.to_sym] = [v, :jpg]; ha}
+    Radiant::config["assets.additional_thumbnails"].to_s.gsub(' ','').split(',').collect{|s| s.split('=')}.inject({}) {|ha, (k, v)| ha[k.to_sym] = [v, :jpg]; ha}
   end
   
   def style_dimensions(style_name)

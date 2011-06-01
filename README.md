@@ -1,7 +1,5 @@
-Radiant Assets Extension
+Radiant Clipped Extension
 ------------------------
-
-Warning: work in progress!
 
 This is a new core extension intended for use with Radiant version 1.0 or higher. 
 It is based on Keith Bingman's excellent Paperclipped extension, for which it is a drop-in replacement. 
@@ -72,9 +70,9 @@ and can be deleted. See below for some radius tag changes that won't affect you 
 
 ## Upgrading from page_attachments
 
-This is supposed to be straightforward too. In theory once the assets extension has been migrated all you need is:
+This is supposed to be straightforward too. In theory once the clipped extension has been migrated all you need is:
 
-    rake radiant:extensions:assets:migrate_from_page_attachments
+    rake radiant:extensions:clipped:migrate_from_page_attachments
 
 But I haven't tested that theory recently.
 
@@ -97,36 +95,38 @@ forms still work but they are deprecated and (as the log messages will keep tell
 
 ## Configuration
 
-The assets extension is configured in the usual way, but only its minor settings are exposed in the admin interface. The
+The clipped extension is configured in the usual way, but only its minor settings are exposed in the admin interface. The
 more architectural settings shouldn't be changed at runtime and some of them will require a lot of sorting out if they're 
 changed at all, so those are only accessible through the console or by editing the database. Eventually they will be made 
 part of the initial radiant installation process.
 
 ### Structural settings
 
-* `assets.url` sets the url scheme for attached files. Paperclip interpolations are applied. You probably don't want to change this.
-* `assets.path` sets the path scheme for attached files. Paperclip interpolations are applied. You might conceivably want to change this.
-* `assets.additional_thumbnails` is a string of comma-separated style definitions that is passed to paperclip for any asset type that has a post-processor (that is, currently, images, pdfs and video clips). The definitions are in the format name=geometry and when assembled the string will look something like `preview=640x640>,square=#260x260`. Thumbnail and icon styles are already defined and don't need to be configured this way.
-* `assets.storage` can be 'filesystem' (the default) or 's3' for amazon's cloud service.
-* `assets.skip_filetype_validation` is true by default and allows uploads of any mime type.
+* `clipped.url` sets the url scheme for attached files. Paperclip interpolations are applied. You probably don't want to change this.
+* `clipped.path` sets the path scheme for attached files. Paperclip interpolations are applied. You might conceivably want to change this.
+* `clipped.additional_thumbnails` is a string of comma-separated style definitions that is passed to paperclip for any asset type that has a post-processor (that is, currently, images, pdfs and video clips). The definitions are in the format name=geometry and when assembled the string will look something like `preview=640x640>,square=#260x260`. Thumbnail and icon styles are already defined and don't need to be configured this way.
+* `clipped.storage` can be 'filesystem' (the default) or 's3' for amazon's cloud service.
+* `clipped.skip_filetype_validation` is true by default and allows uploads of any mime type.
 
 If the storage option is set to 's3' then these settings are also required:
 
-* `assets.s3.bucket`
-* `assets.s3.key`
-* `assets.s3.secret`
+* `clipped.s3.bucket`
+* `clipped.s3.key`
+* `clipped.s3.secret`
 
 And optionally:
 
-* `assets.s3.host_alias`
+* `clipped.s3.host_alias`
 
 ### Configurable settings
 
 If you want to disable a whole category of post-processing, set one of these options to false:
 
-* `assets.create_image_thumbnails?`
-* `assets.create_video_thumbnails?`
-* `assets.create_pdf_thumbnails?`
+* `clipped.create_image_thumbnails?`
+* `clipped.create_video_thumbnails?`
+* `clipped.create_pdf_thumbnails?`
+
+If we can't find ffmpeg on initialization, video thumbnailing will be disabled automatically by setting `clipped.create_video_thumbnails?` to false.
 
 To set a threshold for the size of uploads permitted:
 
@@ -204,7 +204,7 @@ Working example:
 This extension is a work in progress. If you would like to
 contribute, please fork the project and submit a pull request:
 
-<https://github.com/radiant/radiant-assets-extension>
+<https://github.com/radiant/radiant-clipped-extension>
 
 Pull requests with working tests are preferred and have a greater chance of
 being merged.
@@ -219,7 +219,7 @@ Radiant-Dev mailing list:
 If you would like to file a bug report or feature request, please create a
 GitHub issue here:
 
-<https://github.com/radiant/radiant-assets-extension/issues>
+<https://github.com/radiant/radiant-clipped-extension/issues>
 
 ## Authors
 

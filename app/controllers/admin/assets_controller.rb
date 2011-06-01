@@ -38,7 +38,7 @@ class Admin::AssetsController < Admin::ResourceController
     if params[:id]
       @asset = Asset.find(params[:id])
       @asset.asset.reprocess!
-      flash[:notice] = t('assets_extension.thumbnails_refreshed')
+      flash[:notice] = t('clipped_extension.thumbnails_refreshed')
       redirect_to edit_admin_asset_path(@asset)
     else
       render
@@ -52,7 +52,7 @@ class Admin::AssetsController < Admin::ResourceController
 
   def regenerate
     Asset.all.each { |asset| asset.asset.reprocess! }
-    flash[:notice] = t('assets_extension.all_thumbnails_refreshed')
+    flash[:notice] = t('clipped_extension.all_thumbnails_refreshed')
     redirect_to admin_assets_path
   end
   

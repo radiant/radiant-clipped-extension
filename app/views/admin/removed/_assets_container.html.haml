@@ -9,20 +9,20 @@
       - if @page && !@page.new_record? 
         - asset_tabs.attachment_tab do
           %a.asset-tab{ :href => "#page-attachments", :id => "tab_page-attachments" }
-            = t("assets_extension.attached_assets")
+            = t("clipped_extension.attached_assets")
         - asset_tabs.upload_tab do
           %a.asset-tab{ :href => "#upload_assets", :id => "tab_upload_assets" }
-            = t("assets_extension.upload")
+            = t("clipped_extension.upload")
         - asset_tabs.bucket_tab do
           %a.asset-tab{ :href => "#bucket", :id => "tab_bucket" }
-            = t("assets_extension.bucket")
+            = t("clipped_extension.bucket")
         - asset_tabs.search_tab do  
           %a.asset-tab{ :href => "#search-assets" }
-            = t("assets_extension.search")
+            = t("clipped_extension.search")
       - else
         - asset_tabs.bucket_tab do
           %a.asset-tab.here{ :href => "#" }
-            = t("assets_extension.bucket")
+            = t("clipped_extension.bucket")
       
     - if @page && !@page.new_record? 
       - render_region :asset_panes do |asset_panes|
@@ -31,7 +31,7 @@
           #page-attachments.pane
             %p
               %span.note 
-                != t("assets_extension.asset_note")
+                != t("clipped_extension.asset_note")
             %ul#attachments
               = render :partial => "admin/assets/page_assets" 
             .clear
@@ -40,7 +40,7 @@
           #upload_assets.pane
             %p
               %span.note
-                != t("assets_extension.asset_page_upload_note")
+                != t("clipped_extension.asset_page_upload_note")
             = render :partial => "admin/assets/upload_to_page"
             .clear
           
@@ -49,10 +49,10 @@
             - form_tag do
               %p
                 %label.note{ :for => 'search' }
-                  = t("assets_extension.search_assets")
+                  = t("clipped_extension.search_assets")
                 %input{ :type => "hidden", :name => "search", :value => @page.id }
                 %input{ :type => "search", :id => "search", :name => "search" }
-                = submit_tag t("assets_extension.search")
+                = submit_tag t("clipped_extension.search")
             #search-results
             .clear
             = observe_field 'search',  :frequency => 1, :update => 'search-results', :url =>  admin_assets_path(:asset_page => @page), :method => 'get', :with => "'search=' + escape(value)"

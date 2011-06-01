@@ -32,17 +32,6 @@ describe AssetTags do
         page.should render("<r:assets:first><r:assets:id /></r:assets:first>").as( asset_id(:tester).to_s )
       }.should_not raise_error
     end
-    
-    it "should log a warning"
-    
-    context "in development" do
-      it "should render a visible warning"
-    end
-    
-    context "in production" do
-      it "should not render a visible warning"
-    end
-  
   end
   
 end

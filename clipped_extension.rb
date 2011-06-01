@@ -1,9 +1,9 @@
 require_dependency 'application_controller'
-require 'radiant-assets-extension/version'
-class AssetsExtension < Radiant::Extension
-  version RadiantAssetsExtension::VERSION
+require 'radiant-clipped-extension/version'
+class ClippedExtension < Radiant::Extension
+  version RadiantClippedExtension::VERSION
   description "Assets extension based Keith Bingman's original Paperclipped extension."
-  url "http://github.com/radiant/radiant-assets-extension"
+  url "http://github.com/radiant/radiant-clipped-extension"
 
   extension_config do |config|
     config.gem "uuidtools"
@@ -14,7 +14,7 @@ class AssetsExtension < Radiant::Extension
   def activate
     if Asset.table_exists?
       Page.send :include, PageAssetAssociations                                          # defines page-asset associations. likely to be generalised soon.
-      Radiant::AdminUI.send :include, AssetsAdminUI unless defined? admin.asset          # defines shards for extension of the asset-admin interface
+      Radiant::AdminUI.send :include, ClippedAdminUI unless defined? admin.asset         # defines shards for extension of the asset-admin interface
       Admin::PagesController.send :helper, Admin::AssetsHelper                           # currently only provides a description of asset sizes
       Page.send :include, AssetTags                                                      # radius tags for selecting sets of assets and presenting each one
       UserActionObserver.instance.send :add_observer!, Asset                             # the usual creator- and updater-stamping
@@ -34,8 +34,8 @@ class AssetsExtension < Radiant::Extension
       admin.configuration.show.add :config, 'admin/configuration/show', :after => 'defaults'
       admin.configuration.edit.add :form,   'admin/configuration/edit', :after => 'edit_defaults'
     
-      if Radiant::Config.table_exists? && Radiant::Config["assets.command_path"]    # This is needed for testing if you are using mod_rails
-        Paperclip.options[:command_path] = Radiant::Config["assets.command_path"]
+      if Radiant::Config.table_exists? && Radiant::config["paperclip.command_path"]    # This is needed for testing if you are using mod_rails
+        Paperclip.options[:command_path] = Radiant::config["paperclip.command_path"]
       end
     
       tab "Assets", :after => "Content" do
@@ -60,7 +60,7 @@ class AssetsExtension < Radiant::Extension
         prepend_before_filter :update_assets_sass
         def update_assets_sass
           radiant_assets_sass = "#{RAILS_ROOT}/public/stylesheets/sass/admin/assets.sass"
-          extension_assets_sass = "#{AssetsExtension.root}/public/stylesheets/sass/admin/assets.sass"
+          extension_assets_sass = "#{ClippedExtension.root}/public/stylesheets/sass/admin/assets.sass"
           FileUtils.mkpath File.dirname(radiant_assets_sass)
           if (not File.exists?(radiant_assets_sass)) or (File.mtime(extension_assets_sass) > File.mtime(radiant_assets_sass))
             FileUtils.cp extension_assets_sass, radiant_assets_sass
@@ -74,7 +74,7 @@ class AssetsExtension < Radiant::Extension
         prepend_before_filter :update_assets_javascript
         def update_assets_javascript
           radiant_assets_javascript = "#{RAILS_ROOT}/public/javascripts/admin/assets.js"
-          extension_assets_javascript = "#{AssetsExtension.root}/public/javascripts/admin/assets.js"
+          extension_assets_javascript = "#{ClippedExtension.root}/public/javascripts/admin/assets.js"
           FileUtils.mkpath File.dirname(radiant_assets_javascript)
           if (not File.exists?(radiant_assets_javascript)) or (File.mtime(extension_assets_javascript) > File.mtime(radiant_assets_javascript))
             FileUtils.cp extension_assets_javascript, radiant_assets_javascript

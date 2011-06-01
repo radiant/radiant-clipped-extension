@@ -96,10 +96,10 @@ namespace :spec do
   end
 end
 
-desc 'Generate documentation for the assets extension.'
+desc 'Generate documentation for the clipped extension.'
 Rake::RDocTask.new(:rdoc) do |rdoc|
   rdoc.rdoc_dir = 'rdoc'
-  rdoc.title    = 'AssetsExtension'
+  rdoc.title    = 'ClippedExtension'
   rdoc.options << '--line-numbers' << '--inline-source'
   rdoc.rdoc_files.include('README')
   rdoc.rdoc_files.include('lib/**/*.rb')

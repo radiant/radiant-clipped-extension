@@ -3,7 +3,7 @@
   - form.edit_title do
     %p.title
       %label{ :for => "asset_title" }
-        = t("assets_extension.title")
+        = t("clipped_extension.title")
       = f.text_field :title, :class => 'textbox', :maxlength => 100 
   - form.edit_metadata do
     .drawer
@@ -12,7 +12,7 @@
           %tr
             %th.label
               %label{ :for => "asset_caption" }
-                = t("assets_extension.caption")
+                = t("clipped_extension.caption")
             %td.field
               = f.text_field :caption, :class => 'textbox', :maxlength => 255 
           = render_region :extended_metadata, :locals => {:f => f}

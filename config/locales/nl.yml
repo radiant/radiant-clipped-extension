@@ -20,7 +20,7 @@ nl:
             asset:
               blank: 'Er werd geen bestand geselecteerd om te uploaden!'
 
-  assets_extension:
+  clipped_extension:
     actions: Acties
     all: 'Alle'
     alt_text_or_title: 'Alt-Tekst of Titel <span class="hint">(optioneel)</span>'

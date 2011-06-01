@@ -1,37 +1,37 @@
 namespace :radiant do
   namespace :extensions do
-    namespace :assets do
+    namespace :clipped do
       
-      desc "Runs the migration of the Assets extension"
+      desc "Runs the migration of the Clipped extension"
       task :migrate => :environment do
         require 'radiant/extension_migrator'
         last_pc_migration = ActiveRecord::Base.connection.select_values("SELECT version FROM #{ActiveRecord::Migrator.schema_migrations_table_name} WHERE version LIKE 'Paperclipped-%'").map{|v| v.sub(/^Paperclipped\-/, '').to_i}.max
-        AssetsExtension.migrator.new(:up, AssetsExtension.migrations_path).send(:assume_migrated_upto_version, last_pc_migration) if last_pc_migration
+        ClippedExtension.migrator.new(:up, ClippedExtension.migrations_path).send(:assume_migrated_upto_version, last_pc_migration) if last_pc_migration
         if ENV["VERSION"]
-          AssetsExtension.migrator.migrate(ENV["VERSION"].to_i)
+          ClippedExtension.migrator.migrate(ENV["VERSION"].to_i)
           Rake::Task['db:schema:dump'].invoke
         else
-          AssetsExtension.migrator.migrate
+          ClippedExtension.migrator.migrate
           Rake::Task['db:schema:dump'].invoke
         end
       end
       
-      desc "Copies public assets of the Assets to the instance public/ directory."
+      desc "Copies public assets of the Clipped extension to the instance public/ directory."
       task :update => :environment do
         is_svn_or_dir = proc {|path| path =~ /\.svn/ || File.directory?(path) }
-        puts "Copying assets from AssetsExtension"
-        Dir[AssetsExtension.root + "/public/**/*"].reject(&is_svn_or_dir).each do |file|
-          path = file.sub(AssetsExtension.root, '')
+        puts "Copying assets from ClippedExtension"
+        Dir[ClippedExtension.root + "/public/**/*"].reject(&is_svn_or_dir).each do |file|
+          path = file.sub(ClippedExtension.root, '')
           directory = File.dirname(path)
           mkdir_p RAILS_ROOT + directory, :verbose => false
           cp_r file, RAILS_ROOT + path, :verbose => false
         end
         
-        # unless AssetsExtension.starts_with? RAILS_ROOT # don't need to copy vendored tasks
-        #   puts "Copying rake tasks from AssetsExtension"
+        # unless ClippedExtension.starts_with? RAILS_ROOT # don't need to copy vendored tasks
+        #   puts "Copying rake tasks from ClippedExtension"
         #   local_tasks_path = File.join(RAILS_ROOT, %w(lib tasks))
         #   mkdir_p local_tasks_path, :verbose => false
-        #   Dir[File.join AssetsExtension.root, %w(lib tasks *.rake)].each do |file|
+        #   Dir[File.join ClippedExtension.root, %w(lib tasks *.rake)].each do |file|
         #     cp file, local_tasks_path, :verbose => false
         #   end
         # end
@@ -39,7 +39,7 @@ namespace :radiant do
         desc "Syncs all available translations for this ext to the English ext master"
         task :sync => :environment do
           # The main translation root, basically where English is kept
-          language_root = AssetsExtension.get_translation_keys(language_root)
+          language_root = ClippedExtension.get_translation_keys(language_root)
 
           Dir["#{language_root}/*.yml"].each do |filename|
             next if filename.match('_available_tags')
@@ -115,8 +115,8 @@ If you would like to use this mode type \"yes\", type \"no\" or just hit enter t
           c.remove_column :assets, :thumbnail
         end
 
-        AssetsExtension.migrator.new(:up, AssetsExtension.migrations_path).send(:assume_migrated_upto_version, 3)
-        AssetsExtension.migrator.migrate
+        ClippedExtension.migrator.new(:up, ClippedExtension.migrations_path).send(:assume_migrated_upto_version, 3)
+        ClippedExtension.migrator.migrate
       end
     end
   end

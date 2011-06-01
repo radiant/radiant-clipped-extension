@@ -1,14 +1,14 @@
 - include_stylesheet 'admin/assets' 
 
 %h1
-  = t("assets_extension.refresh_assets")
+  = t("clipped_extension.refresh_assets")
 %p.confirmation
-  = t("assets_extension.confirm_refresh_assets")
+  = t("clipped_extension.confirm_refresh_assets")
 %p.confirmation
-  =t('assets_extension.refresh_assets_rake_task')
+  =t('clipped_extension.refresh_assets_rake_task')
 
 %form{:action => regenerate_admin_assets_path, :method => :post}
   .buttons
-    %input.button{:type => "submit", :value => t("assets_extension.refresh_assets")}
+    %input.button{:type => "submit", :value => t("clipped_extension.refresh_assets")}
     = t("or")
     = link_to t("cancel"), admin_assets_path
