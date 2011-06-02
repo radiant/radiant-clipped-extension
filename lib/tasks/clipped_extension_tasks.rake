@@ -8,9 +8,6 @@ namespace :radiant do
         if ActiveRecord::Base.connection.select_values("SELECT version FROM #{ActiveRecord::Migrator.schema_migrations_table_name} WHERE version = 'Assets-20110513205050'").any?
           puts "Assimilating Assets extension migration 20110513205050"
           ClippedExtension.migrator.new(:up, ClippedExtension.migrations_path).send(:assume_migrated_upto_version, '20110513205050')
-        elsif last_pc_migration = ActiveRecord::Base.connection.select_values("SELECT version FROM #{ActiveRecord::Migrator.schema_migrations_table_name} WHERE version LIKE 'Paperclipped-%'").map{|v| v.sub(/^Paperclipped\-/, '').to_i}.max
-          puts "Assimilating Paperclipped extension migrations up to #{last_pc_migration}"
-          ClippedExtension.migrator.new(:up, ClippedExtension.migrations_path).send(:assume_migrated_upto_version, last_pc_migration)
         end
         
         if ENV["VERSION"]
