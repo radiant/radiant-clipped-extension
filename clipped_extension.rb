@@ -4,13 +4,14 @@ class ClippedExtension < Radiant::Extension
   version RadiantClippedExtension::VERSION
   description "Assets extension based Keith Bingman's original Paperclipped extension."
   url "http://github.com/radiant/radiant-clipped-extension"
-  replaces "Paperclipped"
 
   extension_config do |config|
     config.gem "uuidtools"
     config.gem 'paperclip', :version => '~> 2.3'
     config.gem 'acts_as_list'
   end
+  
+  migrate_from 'Paperclip', 20100327111216
   
   def activate
     if Asset.table_exists?
