@@ -40,22 +40,22 @@ class Asset < ActiveRecord::Base
                       asset.paperclip_processors
                     },
                     :whiny => false,
-                    :storage => Radiant.config["assets.storage"] == "s3" ? :s3 : :filesystem,
+                    :storage => Radiant.config["paperclip.storage"] == "s3" ? :s3 : :filesystem,
                     :s3_credentials => {
-                      :access_key_id     => Radiant.config["assets.s3.key"],
-                      :secret_access_key => Radiant.config["assets.s3.secret"]
+                      :access_key_id     => Radiant.config["paperclip.s3.key"],
+                      :secret_access_key => Radiant.config["paperclip.s3.secret"]
                     },
-                    :s3_host_alias => Radiant.config["assets.s3.host_alias"] || Radiant.config["assets.s3.bucket"],
-                    :bucket => Radiant.config["assets.s3.bucket"],
-                    :url => Radiant.config["assets.url"],
-                    :path => Radiant.config["assets.path"]
+                    :s3_host_alias => Radiant.config["paperclip.s3.host_alias"] || Radiant.config["assets.s3.bucket"],
+                    :bucket => Radiant.config["paperclip.s3.bucket"],
+                    :url => Radiant.config["paperclip.url"],
+                    :path => Radiant.config["paperclip.path"]
 
   before_save :assign_title
   before_save :assign_uuid
                                  
   validates_attachment_presence :asset, :message => "You must choose a file to upload!"
-  if Radiant.config["assets.skip_filetype_validation"] != "true" && Radiant.config['assets.content_types']
-    validates_attachment_content_type :asset, :content_type => Radiant.config["assets.content_types"].gsub(' ','').split(',')
+  if Radiant.config["paperclip.skip_filetype_validation"] != "true" && Radiant.config['paperclip.content_types']
+    validates_attachment_content_type :asset, :content_type => Radiant.config["paperclip.content_types"].gsub(' ','').split(',')
   end
   validates_attachment_size :asset, :less_than => ( Radiant.config["assets.max_asset_size"] || 5 ).to_i.megabytes
 

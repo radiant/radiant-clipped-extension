@@ -1,38 +1,34 @@
 Radiant.config do |config|
-  config.namespace 'assets', :allow_display => false, :allow_change => false do |assets|
-    
-    # these are structural and can't be changed through the admin interface
-
-    assets.define 'additional_thumbnails',    :default => 'normal=640x640>'
-    assets.define 'url',                      :default => '/:class/:id/:basename:no_original_style.:extension'
-    assets.define 'path',                     :default => ':rails_root/public/:class/:id/:basename:no_original_style.:extension', :allow_change => true
-    assets.define 'skip_filetype_validation', :default => true, :type => :boolean
-    assets.define 'storage', :default      => 'filesystem',
-                             :select_from  => {'File System' => 'filesystem', 'Amazon S3' => 's3'},
-                             :allow_blank  => false,
-                             :allow_change => true
-
-    assets.namespace 's3' do |s3|
+  config.namespace 'paperclip' do |pc|
+    pc.define 'url',                      :default => '/:class/:id/:basename:no_original_style.:extension'
+    pc.define 'path',                     :default => ':rails_root/public/:class/:id/:basename:no_original_style.:extension', :allow_change => true
+    pc.define 'skip_filetype_validation', :default => true, :type => :boolean
+    pc.define 'storage', :default      => 'filesystem',
+                         :select_from  => {'File System' => 'filesystem', 'Amazon S3' => 's3'},
+                         :allow_blank  => false,
+                         :allow_display => false
+                         
+    pc.namespace 's3' do |s3|
       s3.define 'bucket'
       s3.define 'key'
       s3.define 'secret'
       s3.define 'host_alias'
     end
-
-    # this is reconfigurable
-    assets.define 'max_asset_size', :default => 5, :type => :integer, :units => 'MB', :allow_change => true
-    
-    # these too. I'd like to add a selection definition but it causes all sorts of load-order trouble with the declaration of asset types
-    assets.define 'display_size', :default => 'normal', :allow_change => true, :allow_blank => true
-    assets.define 'insertion_size', :default => 'normal', :allow_change => true, :allow_blank => true
-
-    assets.define 'create_image_thumbnails?', :default => 'true', :allow_change => true
-    assets.define 'create_video_thumbnails?', :default => 'true', :allow_change => true
-    assets.define 'create_pdf_thumbnails?', :default => 'true', :allow_change => true
   end
-  
+
+  config.namespace 'assets', :allow_display => false do |assets|
+    assets.define 'create_image_thumbnails?', :default => 'true'
+    assets.define 'create_video_thumbnails?', :default => 'true'
+    assets.define 'create_pdf_thumbnails?', :default => 'true'
+
+    assets.namespace 'thumbnails' do |thumbs| # NB :icon and :thumbnail are already defined as fixed formats for use in the admin interface and can't be changed
+      thumbs.define 'image', :default => 'normal:size=640x640>,format=original|small:size=320x320>,format=original'
+      thumbs.define 'video', :default => 'normal:size=640x640>,format=jpg|small:size=320x320>,format=jpg'
+      thumbs.define 'pdf', :default => 'normal:size=640x640>,format=jpg|small:size=320x320>,format=jpg'
+    end
+
+    assets.define 'max_asset_size', :default => 5, :type => :integer, :units => 'MB'
+    assets.define 'display_size', :default => 'normal', :allow_blank => true
+    assets.define 'insertion_size', :default => 'normal', :allow_blank => true
+  end
 end
-
-
-
-

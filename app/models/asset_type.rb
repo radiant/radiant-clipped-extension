@@ -88,11 +88,27 @@ class AssetType
   end
   
   def paperclip_styles
-    paperclip_processors.any? ? styles.merge(configured_styles) : {}
+    if paperclip_processors.any?
+      #TODO: define permitted options for each asset type and pass through that subset of the style-definition hash
+      @paperclip_styles ||= styles.reverse_merge(configured_styles.inject({}) {|h, (k, v)| h[k] =  v[:format].blank? ? v[:size] : [v[:size], v[:format].to_sym]; h})
+    else
+      {}
+    end
   end
   
   def configured_styles
-    Radiant::config["assets.additional_thumbnails"].to_s.gsub(' ','').split(',').collect{|s| s.split('=')}.inject({}) {|ha, (k, v)| ha[k.to_sym] = [v, :jpg]; ha}
+    styles = {}
+    if style_definitions = Radiant.config["assets.thumbnails.#{name}"]
+      style_definitions.to_s.gsub(' ','').split('|').each do |definition|
+        name, rule = definition.split(':')
+        styles[name.to_sym] = rule.split(',').collect{|option| option.split('=')}.inject({}) {|h, (k, v)| h[k.to_sym] = v; h}
+      end
+    end
+    styles
+  end
+  
+  def legacy_styles
+    Radiant::config["assets.additional_thumbnails"].to_s.gsub(' ','').split(',').collect{|s| s.split('=')}.inject({}) {|ha, (k, v)| ha[k.to_sym] = v; ha}
   end
   
   def style_dimensions(style_name)
@@ -116,7 +132,7 @@ class AssetType
   end
 
   def self.slice(*types)
-    @@type_lookup.slice(*types.map(&:to_sym)).values if types
+    @@type_lookup.slice(*types.map(&:to_sym)).values if types   # Hash#slice is provided by will_paginate
   end
 
   def self.find(type)
@@ -139,7 +155,7 @@ class AssetType
     names.collect{ |name| find(name).mime_types }.flatten
   end
 
-  def self.conditions_for(names)
+  def self.conditions_for(*names)
     names.collect{ |name| self.find(name).sanitized_condition }.join(' OR ')
   end
 
