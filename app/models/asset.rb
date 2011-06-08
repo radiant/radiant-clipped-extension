@@ -34,6 +34,7 @@ class Asset < ActiveRecord::Base
     
   has_attached_file :asset,
                     :styles => lambda { |attachment|
+                      Rails.logger.warn "!!! getting asset type from content type #{attachment.instance_read(:content_type)}"
                       AssetType.from(attachment.instance_read(:content_type)).paperclip_styles
                     },
                     :processors => lambda { |asset|

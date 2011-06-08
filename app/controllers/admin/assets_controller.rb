@@ -27,8 +27,9 @@ class Admin::AssetsController < Admin::ResourceController
   def create
     @asset.update_attributes!(params[:asset])
     if params[:for_attachment]
-      @page_attachment = @asset.page_attachments.create(:page_id => params[:page_id])
-      render :partial => 'admin/page_attachments/attachment'
+      @page = Page.find_by_id(params[:page_id]) || Page.new
+      @page_attachment = @asset.page_attachments.build(:page => @page)
+      render :partial => 'admin/page_attachments/attachment', :object => @page_attachment
     else 
       response_for :create
     end

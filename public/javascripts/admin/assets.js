@@ -27,8 +27,8 @@ Asset.Upload = Behavior.create({
     $('upload_asset').closePopup();
 
     // Small delay is required here to let safari assemble the payload
-    form.down('input.textbox').clear().defer();
-    form.down('input.file').clear().defer();
+    // form.down('input').clear().defer();
+    // form.down('input.file').clear().defer();
   }
 });
 
