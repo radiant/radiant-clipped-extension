@@ -14,6 +14,7 @@ class ClippedExtension < Radiant::Extension
   migrate_from 'Paperclip', 20100327111216
   
   def activate
+    require 'paperclip/geometry_transformation'
     if Asset.table_exists?
       Page.send :include, PageAssetAssociations                                          # defines page-asset associations. likely to be generalised soon.
       Radiant::AdminUI.send :include, ClippedAdminUI unless defined? admin.asset         # defines shards for extension of the asset-admin interface

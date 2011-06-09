@@ -34,7 +34,6 @@ class Asset < ActiveRecord::Base
     
   has_attached_file :asset,
                     :styles => lambda { |attachment|
-                      Rails.logger.warn "!!! getting asset type from content type #{attachment.instance_read(:content_type)}"
                       AssetType.from(attachment.instance_read(:content_type)).paperclip_styles
                     },
                     :processors => lambda { |asset|
@@ -53,7 +52,8 @@ class Asset < ActiveRecord::Base
 
   before_save :assign_title
   before_save :assign_uuid
-                                 
+  after_post_process :get_dimensions
+
   validates_attachment_presence :asset, :message => "You must choose a file to upload!"
   if Radiant.config["paperclip.skip_filetype_validation"] != "true" && Radiant.config['paperclip.content_types']
     validates_attachment_content_type :asset, :content_type => Radiant.config["paperclip.content_types"].gsub(' ','').split(',')
@@ -97,11 +97,70 @@ class Asset < ActiveRecord::Base
     pages.include?(page)
   end
   
-  # geometry methods will return here
-  # if they can be made more S3-friendly
+  def original_geometry
+    @original_geometry ||= Paperclip::Geometry.new(original_width, original_height)
+  end
+  
+  def geometry(style_name='original')
+    if style_name == 'original'
+      original_geometry
+    elsif style = asset.styles[style_name.to_sym]
+      original_geometry * style.geometry
+    end
+  end
 
+  def aspect(style_name='original')
+    image? && geometry(style_name).aspect
+  end
 
+  def orientation(style_name='original')
+    if image?
+      this_aspect = aspect(style_name)
+      case 
+        when this_aspect < 1.0 then 'vertical'
+        when this_aspect > 1.0 then 'horizontal'
+        else 'square'
+      end
+    end
+  end
+
+  def width(style_name='original')
+    image? ? geometry(style_name).width.to_i : 0
+  end
+
+  def height(style_name='original')
+    image? ? geometry(style_name).height.to_i : 0
+  end
+
+  def square?(style_name='original')
+    image? && geometry(style_name).square?
+  end
+
+  def vertical?(style_name='original')
+    image? && geometry(style_name).vertical?
+  end
+
+  def horizontal?(style_name='original')
+    image? && geometry(style_name).horizontal?
+  end
+  
+  def dimensions_known?
+    !original_width.blank? && !original_height.blank?
+  end
+  
 private
+
+  def read_dimensions
+    if image? && !dimensions_known?
+      geometry = Paperclip::Geometry.from_file(asset.path)
+      self.update_attributes(
+        :original_width => geometry.width,
+        :original_height => geometry.height,
+        :original_extension => extension
+      )
+      geometry
+    end
+  end
 
   def assign_title
     self.title = basename if title.blank?

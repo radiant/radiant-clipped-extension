@@ -74,6 +74,20 @@ module AssetTags
       tag.expand
     end
   end
+
+  desc %{
+    References the last asset attached to the current page.  
+    
+    *Usage:* 
+    <pre><code><r:assets:last>...</r:assets:last></code></pre>
+  }
+  tag 'assets:last' do |tag|
+    p "tag.locals.page.assets is #{tag.locals.page.assets.join(',')} and tag.locals.page.assets.last is #{tag.locals.page.assets.last}"
+    
+    if tag.locals.asset = tag.locals.page.assets.last
+      tag.expand
+    end
+  end
     
   desc %{
     Renders the contained elements only if the current contextual page has one or
@@ -156,6 +170,26 @@ module AssetTags
   end
 
   desc %{
+    Returns a string representing the orientation of the asset, which must be an image. Can be 'horizontal', 'vertical' or 'square'.
+  }
+  tag 'asset:orientation' do |tag|
+    asset, options = asset_and_options(tag)
+    raise TagError, 'Asset is not an image' unless asset.image?
+    size = options['size'] ? options.delete('size') : 'original'
+    asset.orientation(size)
+  end
+
+  desc %{
+    Returns the aspect ratio of the asset, which must be an image.
+  }
+  tag 'asset:aspect' do |tag|
+    asset, options = asset_and_options(tag)
+    raise TagError, 'Asset is not an image' unless asset.image?
+    size = options['size'] ? options.delete('size') : 'original'
+    asset.aspect(size)
+  end
+
+  desc %{
     Renders the containing elements only if the asset's content type matches
     the regular expression given in the @matches@ attribute. If the
     @ignore_case@ attribute is set to false, the match is case sensitive. By
@@ -169,7 +203,6 @@ module AssetTags
   tag 'asset:if_content_type' do |tag|
     options = tag.attr.dup
     # XXX build_regexp_for comes from StandardTags
-    # XXX its cool if I use it, right?
     regexp = build_regexp_for(tag,options)
     asset_content_type = tag.locals.asset.asset_content_type
     tag.expand unless asset_content_type.match(regexp).nil?
@@ -220,17 +253,13 @@ module AssetTags
     settings.
     
     *Usage:* 
-    <pre><code><r:asset:image [name="asset name" or id="asset id"] [size="icon|thumbnail"]></code></pre>
+    <pre><code><r:asset:image [name="asset name" or id="asset id"] [size="icon|thumbnail|whatever"]></code></pre>
   }    
   tag 'asset:image' do |tag|
     tag.locals.asset, options = asset_and_options(tag)
     if tag.locals.asset.image?
       size = options['size'] ? options.delete('size') : 'original'
-      # geometry = options['geometry'] ? options.delete('geometry') : nil
-      # #This is very experimental and will generate new sizes on the fly
-      # asset.generate_style(size, { :size => geometry }) if geometry
-    
-      alt = " alt='#{asset.title}'" unless tag.attr['alt'] rescue nil
+      alt = "alt='#{tag.locals.asset.title}'" unless tag.attr['alt']
       attributes = options.inject('') { |s, (k, v)| s << %{#{k.downcase}="#{v}" } }.strip
       attributes << alt unless alt.nil?
       url = tag.locals.asset.thumbnail(size)
@@ -258,19 +287,13 @@ module AssetTags
   }
   tag 'asset:flash' do |tag|
     asset, options = asset_and_options(tag)
-    if tag.locals.asset.swf?
+    if tag.locals.asset.flash?
       url = asset.thumbnail('original')
       dimensions = [(tag.attr['width'] || asset.width),(tag.attr['height'] || asset.height)]
       swf_embed_markup url, dimensions, tag.expand
     end
   end
-  
-  tag 'asset:thumbnail' do |tag|
-    asset, options = asset_and_options(tag)
-    asset.generate_thumbnail('test', ['24x24#',nil])
-    asset.save    
-  end
-  
+    
   desc %{
     Renders the url for the asset. If the asset is an image, the <code>size</code> attribute can be used to 
     generate the url for that size. 
