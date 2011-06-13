@@ -27,7 +27,7 @@ Gem::Specification.new do |s|
     config.gem 'radiant-clipped-extension', :version => '~>#{RadiantClippedExtension::VERSION}'
   }
 
-  s.add_dependency 'acts_as_list'
-  s.add_dependency 'paperclip', "~> 2.3.3"
-  s.add_dependency 'uuidtools'
+  s.add_dependency 'acts_as_list', "~> 0.1.2"
+  s.add_dependency 'paperclip', "~> 2.3.11"
+  s.add_dependency 'uuidtools', "~> 2.1.2"
 end

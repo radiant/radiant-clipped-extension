@@ -34,7 +34,7 @@ class Asset < ActiveRecord::Base
     
   has_attached_file :asset,
                     :styles => lambda { |attachment|
-                      AssetType.from(attachment.instance_read(:content_type)).paperclip_styles
+                      AssetType.for(attachment).paperclip_styles
                     },
                     :processors => lambda { |asset|
                       asset.paperclip_processors

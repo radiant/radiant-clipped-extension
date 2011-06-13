@@ -25,8 +25,9 @@ class ClippedExtension < Radiant::Extension
       AssetType.new :image, :icon => 'image', :default_radius_tag => 'image', :processors => [:thumbnail], :styles => {:icon => ['42x42#', :png], :thumbnail => ['100x100#', :png]}, :mime_types => %w[image/png image/x-png image/jpeg image/pjpeg image/jpg image/gif]
       AssetType.new :video, :icon => 'video', :processors => [:frame_grab], :styles => {:native => ['', :jpg], :icon => ['42x42#', :png], :thumbnail => ['100x100#', :png]}, :mime_types => %w[application/x-mp4 video/mpeg video/quicktime video/x-la-asf video/x-ms-asf video/x-msvideo video/x-sgi-movie video/x-flv flv-application/octet-stream video/3gpp video/3gpp2 video/3gpp-tt video/BMPEG video/BT656 video/CelB video/DV video/H261 video/H263 video/H263-1998 video/H263-2000 video/H264 video/JPEG video/MJ2 video/MP1S video/MP2P video/MP2T video/mp4 video/MP4V-ES video/MPV video/mpeg4 video/mpeg4-generic video/nv video/parityfec video/pointer video/raw video/rtx video/ogg video/webm]
       AssetType.new :audio, :icon => 'audio', :mime_types => %w[audio/mpeg audio/mpg audio/ogg application/ogg audio/x-ms-wma audio/vnd.rn-realaudio audio/x-wav]
-      AssetType.new :flash, :icon => 'flash', :default_radius_tag => 'flash', :mime_types => %w[application/x-shockwave-flash]
-      AssetType.new :pdf, :icon => 'pdf', :processors => [:thumbnail], :mime_types => %w[application/pdf application/x-pdf], :styles => {:icon => ['42x42#', :png], :thumbnail => ['100x100#', :png]}
+      AssetType.new :font, :icon => 'font', :extensions => %w[ttf otf eot woff]
+      AssetType.new :flash, :icon => 'flash', :default_radius_tag => 'flash', :extensions => %w{swf}, :mime_types => %w[application/x-shockwave-flash]
+      AssetType.new :pdf, :icon => 'pdf', :processors => [:thumbnail], :extensions => %w{pdf}, :mime_types => %w[application/pdf application/x-pdf], :styles => {:icon => ['42x42#', :png], :thumbnail => ['100x100#', :png]}
       AssetType.new :document, :icon => 'document', :mime_types => %w[application/msword application/rtf application/vnd.ms-excel application/vnd.ms-powerpoint application/vnd.ms-project application/vnd.ms-works text/plain text/html]
       AssetType.new :other, :icon => 'unknown'
     

@@ -12,6 +12,7 @@ class AssetType
   
   @@types = []
   @@type_lookup = {}
+  @@extension_lookup = {}
   @@mime_lookup = {}
   @@default_type = nil
   attr_reader :name, :processors, :styles, :icon_name, :catchall, :default_radius_tag
@@ -22,11 +23,12 @@ class AssetType
     @icon_name = options[:icon] || name
     @processors = options[:processors] || []
     @styles = options[:styles] || {}
-    @mimes = options[:mime_types] || []
     @default_radius_tag = options[:default_radius_tag] || 'link'
-    if @mimes.any?
-      @mimes.each { |mimetype| @@mime_lookup[mimetype] ||= self }
-    end
+    @extensions = options[:extensions] || []
+    @extensions.each { |ext| @@extension_lookup[ext] ||= self }
+    @mimes = options[:mime_types] || []
+    @mimes.each { |mimetype| @@mime_lookup[mimetype] ||= self }
+
     this = self
     Asset.send :define_method, "#{name}?".intern do this.mime_types.include?(asset_content_type) end 
     Asset.send :define_class_method, "#{name}_condition".intern do this.condition; end
@@ -119,8 +121,17 @@ class AssetType
   
   # class methods
   
-  def self.from(mimetype)
-    @@mime_lookup[mimetype] || catchall
+  def self.for(attachment)
+    extension = File.extname(attachment.original_filename).sub(/^\.+/, "")
+    from_extension(extension) || from_mimetype(attachment.instance_read(:content_type)) || catchall
+  end
+
+  def self.from_extension(extension)
+    @@extension_lookup[extension]
+  end
+
+  def self.from_mimetype(mimetype)
+    @@mime_lookup[mimetype]
   end
   
   def self.catchall

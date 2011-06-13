@@ -15,9 +15,9 @@ end
 AssetType.new :simple, :mime_types => %w[test/this test/that]
 AssetType.new :complex, :processors => [:dummy], :styles => {:something => "99x99>"}, :mime_types => %w[test/complex], :icon => 'document'
 AssetType.new :configured, :processors => [:dummy], :mime_types => %w[test/configured]
-    
+AssetType.new :unstandard, :extensions => %w[unstandard nomimetype]
+
 describe AssetType do
-  
   context 'without thumbnails' do
     subject{ AssetType.find(:simple) }
     its(:plural) { should == "simples" }
@@ -54,10 +54,13 @@ describe AssetType do
       AssetType.slice('simple', 'complex').should =~ [AssetType.find(:simple), AssetType.find(:complex)]
     end
 
-    describe '.from' do
-      AssetType.from('test/this').should == AssetType.find(:simple)
-      AssetType.from('test/complex').should == AssetType.find(:complex)
+    describe '.from_extension' do
+      AssetType.from_extension('nomimetype').should == AssetType.find(:unstandard)
+    end
+
+    describe '.from_mimetype' do
+      AssetType.from_mimetype('test/this').should == AssetType.find(:simple)
     end
   end
-  
+
 end
