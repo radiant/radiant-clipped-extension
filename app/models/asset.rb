@@ -52,7 +52,7 @@ class Asset < ActiveRecord::Base
 
   before_save :assign_title
   before_save :assign_uuid
-  after_post_process :get_dimensions
+#  after_post_process :get_dimensions
 
   validates_attachment_presence :asset, :message => "You must choose a file to upload!"
   if Radiant.config["paperclip.skip_filetype_validation"] != "true" && Radiant.config['paperclip.content_types']
@@ -61,7 +61,7 @@ class Asset < ActiveRecord::Base
   validates_attachment_size :asset, :less_than => ( Radiant.config["assets.max_asset_size"] || 5 ).to_i.megabytes
 
   def asset_type
-    AssetType.from(asset.content_type)
+    AssetType.for(asset)
   end
   delegate :paperclip_processors, :paperclip_styles, :style_dimensions, :style_format, :to => :asset_type
 
