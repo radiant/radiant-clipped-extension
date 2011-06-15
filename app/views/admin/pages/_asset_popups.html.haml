@@ -11,7 +11,7 @@
         
         %p
           = f.label :asset, t("clipped_extension.choose_file")
-          = f.file_field :asset, :class => 'file'
+          = f.file_field :asset, :class => 'file', :multiple => true
         
         %p
           = f.label :title, t("clipped_extension.alt_text_or_title")
