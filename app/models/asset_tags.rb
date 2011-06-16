@@ -76,20 +76,6 @@ module AssetTags
   end
 
   desc %{
-    References the last asset attached to the current page.  
-    
-    *Usage:* 
-    <pre><code><r:assets:last>...</r:assets:last></code></pre>
-  }
-  tag 'assets:last' do |tag|
-    p "tag.locals.page.assets is #{tag.locals.page.assets.join(',')} and tag.locals.page.assets.last is #{tag.locals.page.assets.last}"
-    
-    if tag.locals.asset = tag.locals.page.assets.last
-      tag.expand
-    end
-  end
-    
-  desc %{
     Renders the contained elements only if the current contextual page has one or
     more assets. The @min_count@ attribute specifies the minimum number of required
     assets. You can also filter by extensions with the @extensions@ attribute.
