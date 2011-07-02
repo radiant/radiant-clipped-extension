@@ -4,6 +4,7 @@ nl:
   asset_types:
     all: 'Alle'
     documents: 'Documenten'
+    fonts: 'Fonts'
     images: 'Afbeeldingen'
     others: 'Andere'
     audios: 'Audio'

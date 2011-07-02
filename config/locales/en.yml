@@ -4,6 +4,7 @@ en:
   asset_types:
     all: 'All'
     documents: 'Documents'
+    fonts: 'Fonts'
     images: 'Images'
     others: 'Others'
     audios: 'Audio'
