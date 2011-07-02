@@ -1,5 +1,6 @@
 require_dependency 'application_controller'
 require 'radiant-clipped-extension/version'
+require 'uuidtools'
 class ClippedExtension < Radiant::Extension
   version RadiantClippedExtension::VERSION
   description "Assets extension based Keith Bingman's original Paperclipped extension."
