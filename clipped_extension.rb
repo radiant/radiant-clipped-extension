@@ -12,7 +12,7 @@ class ClippedExtension < Radiant::Extension
     config.gem 'acts_as_list'
   end
   
-  migrate_from 'Paperclip', 20100327111216
+  migrate_from 'Paperclipped', 20100327111216
   
   def activate
     require 'paperclip/geometry_transformation'
