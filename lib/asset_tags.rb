@@ -319,14 +319,12 @@ private
   end
   
   def find_asset(tag, options)
-    return tag.locals.asset if tag.locals.asset
-    if title = options.delete('name') || options.delete('title')
+    tag.locals.asset ||= if title = (options.delete('name') || options.delete('title'))
       Asset.find_by_title(title)
     elsif id = options.delete('id')
       Asset.find_by_id(id)
-    else
-      raise TagError, "'name' or 'id' attribute required for unenclosed r:asset tag" unless tag.locals.asset
     end
+    tag.locals.asset || raise(TagError, "Asset not found.")
   end
   
   def assets_find_options(tag)
