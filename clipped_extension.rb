@@ -1,15 +1,16 @@
 require_dependency 'application_controller'
-require 'radiant-clipped-extension/version'
+require 'radiant-clipped-extension'
 require 'uuidtools'
+
 class ClippedExtension < Radiant::Extension
   version RadiantClippedExtension::VERSION
-  description "Assets extension based Keith Bingman's original Paperclipped extension."
-  url "http://github.com/radiant/radiant-clipped-extension"
+  description RadiantClippedExtension::DESCRIPTION
+  url RadiantClippedExtension::URL
 
   extension_config do |config|
-    config.gem "uuidtools"
-    config.gem 'paperclip', :version => '~> 2.3'
-    config.gem 'acts_as_list'
+    config.gem "uuidtools", :version => "~> 2.1.2"
+    config.gem 'paperclip', :version => "~> 2.3.11"
+    config.gem 'acts_as_list', :version => "~> 0.1.2"
   end
   
   migrate_from 'Paperclipped', 20100327111216

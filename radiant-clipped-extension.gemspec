@@ -1,16 +1,20 @@
 # -*- encoding: utf-8 -*-
 $:.push File.expand_path("../lib", __FILE__)
-require "radiant-clipped-extension/version"
+require "radiant-clipped-extension"
 
 Gem::Specification.new do |s|
   s.name        = "radiant-clipped-extension"
   s.version     = RadiantClippedExtension::VERSION
   s.platform    = Gem::Platform::RUBY
-  s.authors     = ["Keith Bingman", "Benny Degezelle", "William Ross", "John W. Long"]
-  s.email       = ["radiant@radiantcms.org"]
-  s.homepage    = "http://radiantcms.org"
-  s.summary     = %q{Assets for Radiant CMS}
-  s.description = %q{Assets extension on based Keith Bingman's excellent Paperclipped extension.}
+  s.authors     = RadiantClippedExtension::AUTHORS
+  s.email       = RadiantClippedExtension::EMAIL
+  s.homepage    = RadiantClippedExtension::URL
+  s.summary     = RadiantClippedExtension::SUMMARY
+  s.description = RadiantClippedExtension::DESCRIPTION
+
+  s.add_dependency 'acts_as_list', "~> 0.1.2"
+  s.add_dependency 'paperclip', "~> 2.3.11"
+  s.add_dependency 'uuidtools', "~> 2.1.2"
 
   ignores = if File.exist?('.gitignore')
     File.read('.gitignore').split("\n").inject([]) {|a,p| a + Dir[p] }
@@ -26,8 +30,4 @@ Gem::Specification.new do |s|
   Add this to your radiant project with:
     config.gem 'radiant-clipped-extension', :version => '~>#{RadiantClippedExtension::VERSION}'
   }
-
-  s.add_dependency 'acts_as_list', "~> 0.1.2"
-  s.add_dependency 'paperclip', "~> 2.3.11"
-  s.add_dependency 'uuidtools', "~> 2.1.2"
 end
