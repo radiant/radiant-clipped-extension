@@ -14,7 +14,6 @@ class PageAttachment < ActiveRecord::Base
   # a small change to the method in acts_as_list so that we don't override 
   # the position value if it has already been set (as it usually is for new attachments)
   def add_to_list_bottom
-    p "add_to_list_bottom: current value is #{self[position_column]}"
     self[position_column] ||= bottom_position_in_list.to_i + 1
   end
   

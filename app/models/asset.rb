@@ -45,14 +45,15 @@ class Asset < ActiveRecord::Base
                       :access_key_id     => Radiant.config["paperclip.s3.key"],
                       :secret_access_key => Radiant.config["paperclip.s3.secret"]
                     },
-                    :s3_host_alias => Radiant.config["paperclip.s3.host_alias"] || Radiant.config["assets.s3.bucket"],
+                    :s3_host_alias => Radiant.config["paperclip.s3.host_alias"] || Radiant.config["paperclip.s3.bucket"],
                     :bucket => Radiant.config["paperclip.s3.bucket"],
                     :url => Radiant.config["paperclip.url"],
                     :path => Radiant.config["paperclip.path"]
 
   before_save :assign_title
   before_save :assign_uuid
-#  after_post_process :get_dimensions
+  
+  after_post_process :read_dimensions
 
   validates_attachment_presence :asset, :message => "You must choose a file to upload!"
   if Radiant.config["paperclip.skip_filetype_validation"] != "true" && Radiant.config['paperclip.content_types']
@@ -82,7 +83,7 @@ class Asset < ActiveRecord::Base
   def extension(style_name='original')
      if style_name == 'original'
        return original_extension 
-     elsif style = asset.styles[style_name.to_sym]
+     elsif style = paperclip_styles[style_name.to_sym]
        return style.format 
      else
        return original_extension
@@ -104,8 +105,8 @@ class Asset < ActiveRecord::Base
   def geometry(style_name='original')
     if style_name == 'original'
       original_geometry
-    elsif style = asset.styles[style_name.to_sym]
-      original_geometry * style.geometry
+    elsif style = asset.styles[style_name.to_sym]   # asset.styles is normalised, but self.paperclip_styles is not
+      original_geometry.transformed_by(style.geometry)
     end
   end
 
@@ -150,16 +151,20 @@ class Asset < ActiveRecord::Base
   
 private
 
+  # at this point the file queue will not have been written
+  # but the upload should be in place. We read dimensions from the
+  # original file and calculate thumbnail dimensions later, on demand.
+  
   def read_dimensions
-    if image? && !dimensions_known?
-      geometry = Paperclip::Geometry.from_file(asset.path)
-      self.update_attributes(
-        :original_width => geometry.width,
-        :original_height => geometry.height,
-        :original_extension => extension
-      )
-      geometry
+    if image?
+      if file = asset.queued_for_write[:original]
+        geometry = Paperclip::Geometry.from_file(file)
+        self.original_width = geometry.width
+        self.original_height = geometry.height
+        self.original_extension = File.extname(file.path)
+      end
     end
+    true
   end
 
   def assign_title

@@ -33,10 +33,6 @@ describe AssetTags do
       page.should render('<r:assets:first><r:asset:id /></r:assets:first>').as( "#{asset_id(:test2)}" )
     end
 
-    it "assets:last" do
-      page.should render('<r:assets:last><r:asset:id /></r:assets:last>').as( "#{asset_id(:test1)}" )
-    end
-
     it "should retreive an asset by name" do
       page.should render('<r:asset:id name="video" />').as( "#{asset_id(:video)}" )
     end

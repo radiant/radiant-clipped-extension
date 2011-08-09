@@ -149,6 +149,9 @@ class AssetType
   def self.find(type)
     @@type_lookup[type] if type
   end
+  def self.[](type)
+    find(type)
+  end
   
   def self.all
     @@types

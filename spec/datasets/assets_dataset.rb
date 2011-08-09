@@ -13,7 +13,6 @@ class AssetsDataset < Dataset::Base
   
   helpers do
     def create_asset(name, attributes={})
-      attributes = 
       create_record :asset, name.symbolize, {
         :title => name,
         :asset_file_name =>  'asset.jpg',

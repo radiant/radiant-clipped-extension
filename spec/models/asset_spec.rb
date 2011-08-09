@@ -23,7 +23,7 @@ describe Asset do
   it 'should be valid when saved' do
     create_asset.should be_valid
   end
-  
+
   describe '#thumbnail' do
     describe 'without argument' do
       it 'should return paperclip asset url for image' do
@@ -63,7 +63,7 @@ describe Asset do
     end
     
     it 'should return icon for non-image with a given size' do
-      document = new_asset :asset_content_type => 'application/msword'
+      document = new_asset :asset_content_type => 'application/msword', :asset_file_name => "document.doc"
       document.thumbnail('icon').should == "/images/admin/assets/document_icon.png"
       document.thumbnail('anything_but_icon').should == "/images/admin/assets/document_icon.png"
     end
