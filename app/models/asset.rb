@@ -45,7 +45,7 @@ class Asset < ActiveRecord::Base
                       :access_key_id     => Radiant.config["paperclip.s3.key"],
                       :secret_access_key => Radiant.config["paperclip.s3.secret"]
                     },
-                    :s3_host_alias => Radiant.config["paperclip.s3.host_alias"] || Radiant.config["assets.s3.bucket"],
+                    :s3_host_alias => Radiant.config["paperclip.s3.host_alias"] || Radiant.config["paperclip.s3.bucket"],
                     :bucket => Radiant.config["paperclip.s3.bucket"],
                     :url => Radiant.config["paperclip.url"],
                     :path => Radiant.config["paperclip.path"]
