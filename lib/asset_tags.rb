@@ -38,7 +38,6 @@ module AssetTags
   end
   tag 'assets:each' do |tag|
     options = tag.attr.dup
-    result = []
     tag.locals.assets = tag.locals.page.assets.scoped(assets_find_options(tag))
     tag.render('asset_list', tag.attr.dup, &tag.block)
   end
