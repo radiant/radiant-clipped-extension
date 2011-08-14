@@ -6,11 +6,11 @@ if Radiant.config.table_exists?
     begin
       output = Paperclip.run('convert', '-version').to_a.first
       Rails.logger.info "Using image thumbnailer: #{output.sub(/Version: /i, '')}"
-    rescue Paperclip::CommandNotFoundError
+    rescue Cocaine::CommandNotFoundError
       Radiant.config['assets.create_image_thumbnails?'] = false
       Radiant.config['assets.create_pdf_thumbnails?'] = false
       Rails.logger.warn "ImageMagick 'convert' executable not found: image and pdf thumbnailing disabled."
-    rescue Paperclip::PaperclipCommandLineError => e
+    rescue Cocaine::ExitStatusError => e
       Rails.logger.warn "ImageMagick is present but calling 'convert -version' returns an error: #{e}"
     end
   end
@@ -20,10 +20,10 @@ if Radiant.config.table_exists?
     begin
      output = Paperclip.run('gs', '-v')
      Rails.logger.info "Using PDF thumbnailer: #{output}".to_a.first
-    rescue Paperclip::CommandNotFoundError
+    rescue Cocaine::CommandNotFoundError
       Radiant.config['assets.create_pdf_thumbnails?'] = false
       Rails.logger.warn "Ghostscript 'gs' executable not found: pdf thumbnailing disabled."
-    rescue Paperclip::PaperclipCommandLineError => e
+    rescue Cocaine::ExitStatusError => e
       Rails.logger.warn "Ghostscript is present but calling 'gs -v' returns an error: #{e}"
     end
   end
@@ -33,10 +33,10 @@ if Radiant.config.table_exists?
     begin
       output = Paperclip.run('ffmpeg', '-version').to_a.first
       Rails.logger.info "Using video frame grabber: #{output}"
-    rescue Paperclip::CommandNotFoundError
+    rescue Cocaine::CommandNotFoundError
       Radiant.config['assets.create_video_thumbnails?'] = false
       Rails.logger.warn "FFmpeg executable not found: video thumbnailing disabled."
-    rescue Paperclip::PaperclipCommandLineError => e
+    rescue Cocaine::ExitStatusError => e
       Rails.logger.warn "FFmpeg is present but calling 'ffmpeg -L' returns an error: #{e}"
     end
   end

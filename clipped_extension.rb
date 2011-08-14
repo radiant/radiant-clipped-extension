@@ -11,7 +11,7 @@ class ClippedExtension < Radiant::Extension
 
   extension_config do |config|
     config.gem "acts_as_list", :version => "~> 0.1.2"
-    config.gem "paperclip",    :version => "~> 2.3.11"
+    config.gem "paperclip",    :version => "~> 2.3.16"
     config.gem "uuidtools",    :version => "~> 2.1.2"
   end
 

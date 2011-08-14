@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
   s.description = RadiantClippedExtension::DESCRIPTION
 
   s.add_dependency 'acts_as_list', "~> 0.1.2"
-  s.add_dependency 'paperclip', "~> 2.3.11"
+  s.add_dependency 'paperclip', "~> 2.3.16"
   s.add_dependency 'uuidtools', "~> 2.1.2"
 
   ignores = if File.exist?('.gitignore')
