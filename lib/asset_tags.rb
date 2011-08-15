@@ -113,7 +113,7 @@ module AssetTags
   desc %{
     Renders the value for a top padding for the image. Put the image in a
     container with specified height and using this tag you can vertically
-    align the image within it's container.
+    align the image within its container.
   
     *Usage*:
     <pre><code><r:asset:top_padding container = "140" [size="icon"]/></code></pre>
@@ -136,8 +136,7 @@ module AssetTags
     raise TagError, "'container' attribute required" unless options['container']
     size = options['size'] ? options.delete('size') : 'icon'
     container = options.delete('container')
-    img_height = asset.height(size)
-    (container.to_i - img_height.to_i)/2
+    (container.to_i - asset.height(size).to_i)/2
   end
     
   ['height','width'].each do |dimension|

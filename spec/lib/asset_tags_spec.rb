@@ -25,6 +25,10 @@ describe AssetTags do
   end  
   
   context "rendering tag" do
+    before do
+      Radiant.config['assets.create_image_thumbnails?'] = true
+    end
+    
     it "assets:each" do
       page.should render('<r:assets:each><r:asset:id />,</r:assets:each>').as( "#{asset_id(:test2)},#{asset_id(:test1)}," )
     end
