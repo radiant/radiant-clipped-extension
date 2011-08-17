@@ -1,19 +1,14 @@
-require_dependency 'application_controller'
-
 require 'radiant-clipped-extension'
 require 'acts_as_list'
 require 'uuidtools'
+
+require 'admin/assets_controller'             # temporarily while I work out why this doesn't happen by itsel
+require 'admin/page_attachments_controller'   # when running cucumber features. It must be something about the rake context
 
 class ClippedExtension < Radiant::Extension
   version RadiantClippedExtension::VERSION
   description RadiantClippedExtension::DESCRIPTION
   url RadiantClippedExtension::URL
-
-  extension_config do |config|
-    config.gem "acts_as_list", :version => "~> 0.1.2"
-    config.gem "paperclip",    :version => "~> 2.3.16"
-    config.gem "uuidtools",    :version => "~> 2.1.2"
-  end
 
   migrate_from 'Paperclipped', 20100327111216
 
@@ -49,46 +44,11 @@ class ClippedExtension < Radiant::Extension
       tab "Assets", :after => "Content" do
         add_item "All", "/admin/assets/"
       end
-
-      if RAILS_ENV == 'development'
-        update_sass_each_request
-        update_javascript_each_request
-      end
     end
   end
 
   def deactivate
 
   end
-
-  private
-
-    def update_sass_each_request
-      ApplicationController.class_eval do
-        prepend_before_filter :update_assets_sass
-        def update_assets_sass
-          radiant_assets_sass = "#{RAILS_ROOT}/public/stylesheets/sass/admin/assets.sass"
-          extension_assets_sass = "#{ClippedExtension.root}/public/stylesheets/sass/admin/assets.sass"
-          FileUtils.mkpath File.dirname(radiant_assets_sass)
-          if (not File.exists?(radiant_assets_sass)) or (File.mtime(extension_assets_sass) > File.mtime(radiant_assets_sass))
-            FileUtils.cp extension_assets_sass, radiant_assets_sass
-          end
-        end
-      end
-    end
-
-    def update_javascript_each_request
-      ApplicationController.class_eval do
-        prepend_before_filter :update_assets_javascript
-        def update_assets_javascript
-          radiant_assets_javascript = "#{RAILS_ROOT}/public/javascripts/admin/assets.js"
-          extension_assets_javascript = "#{ClippedExtension.root}/public/javascripts/admin/assets.js"
-          FileUtils.mkpath File.dirname(radiant_assets_javascript)
-          if (not File.exists?(radiant_assets_javascript)) or (File.mtime(extension_assets_javascript) > File.mtime(radiant_assets_javascript))
-            FileUtils.cp extension_assets_javascript, radiant_assets_javascript
-          end
-        end
-      end
-    end
 
 end
