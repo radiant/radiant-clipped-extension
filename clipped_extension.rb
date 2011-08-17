@@ -2,9 +2,6 @@ require 'radiant-clipped-extension'
 require 'acts_as_list'
 require 'uuidtools'
 
-require 'admin/assets_controller'             # temporarily while I work out why this doesn't happen by itsel
-require 'admin/page_attachments_controller'   # when running cucumber features. It must be something about the rake context
-
 class ClippedExtension < Radiant::Extension
   version RadiantClippedExtension::VERSION
   description RadiantClippedExtension::DESCRIPTION
