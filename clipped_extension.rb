@@ -9,12 +9,6 @@ class ClippedExtension < Radiant::Extension
   description RadiantClippedExtension::DESCRIPTION
   url RadiantClippedExtension::URL
 
-  extension_config do |config|
-    config.gem "acts_as_list", :version => "~> 0.1.2"
-    config.gem "paperclip",    :version => "~> 2.3.16"
-    config.gem "uuidtools",    :version => "~> 2.1.2"
-  end
-
   migrate_from 'Paperclipped', 20100327111216
 
   def activate
