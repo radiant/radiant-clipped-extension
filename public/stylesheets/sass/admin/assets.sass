@@ -4,7 +4,7 @@ p.asset
   img.preview
     border: 5px solid white
     +box-shadow
-    
+
 .asset_filters
   float: left
   padding: 2px 0
@@ -27,12 +27,12 @@ p.asset
         color: white
         text-shadow: 0 1px 0 #333
 
-.popup 
+.popup
   div.toolbar
     background: white
-    +linear-gradient(color-stops(white, #ddd))
+    +background-image(linear-gradient(white,#ddd))
     border-bottom: 1px solid #ccc
-    +box-shadow(white, 0, 1px, 0)
+    +single-box-shadow(white, 0, 1px, 0)
     margin: -20px -20px 0
     padding: 6px 10px 3px 10px
     font-size: 95%
@@ -62,7 +62,7 @@ p.asset
     overflow-x: hidden
     width: 610px
     height: 310px
-    
+
 .attachment_actions
   text-align: right
   margin-bottom: -1em
@@ -146,7 +146,7 @@ p.asset
           background: transparent url(/images/admin/spinner.gif) no-repeat center center
           img
             opacity: 0.2
-    
+
 #attachment_list.assets
   background: #7e7e7e
   +border-bottom-radius
@@ -171,7 +171,7 @@ p.asset
         cursor: move
         &:hover
           font-weight: bold
-     
+
 #assets_table.assets
   position: relative
   p
