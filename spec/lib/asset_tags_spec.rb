@@ -3,7 +3,7 @@ require File.dirname(__FILE__) + '/../spec_helper'
 describe AssetTags do
   dataset :assets
   let(:page) { pages(:pictured) }
-  let(:asset) { assets(:test2) }
+  let(:asset) { assets(:test1) }
   
   context "Asset tags" do
     %w{width height caption asset_file_name asset_content_type asset_file_size id filename image flash url link extension page:title page:url}.each do |name|
@@ -31,11 +31,11 @@ describe AssetTags do
     end
     
     it "assets:each" do
-      page.should render('<r:assets:each><r:asset:id />,</r:assets:each>').as( "#{asset_id(:test2)},#{asset_id(:test1)}," )
+      page.should render('<r:assets:each><r:asset:id />,</r:assets:each>').as( "#{asset_id(:test1)},#{asset_id(:test2)}," )
     end
 
     it "assets:first" do
-      page.should render('<r:assets:first><r:asset:id /></r:assets:first>').as( "#{asset_id(:test2)}" )
+      page.should render('<r:assets:first><r:asset:id /></r:assets:first>').as( asset.id.to_s )
     end
 
     it "should retrieve an asset by name" do

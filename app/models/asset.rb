@@ -60,8 +60,6 @@ class Asset < ActiveRecord::Base
   end
   validates_attachment_size :asset, :less_than => ( Radiant.config["assets.max_asset_size"] || 5 ).to_i.megabytes
 
-  @geometry ||= {}
-
   def asset_type
     AssetType.for(asset)
   end
@@ -104,6 +102,7 @@ class Asset < ActiveRecord::Base
   end
   
   def geometry(style_name='original')
+    @geometry ||= {}
     @geometry[style_name] ||= if style_name.to_s == 'original'
       original_geometry
     elsif style = self.asset.styles[style_name.to_sym]   # self.asset.styles holds Style objects, where self.paperclip_styles is still just rule hashes
