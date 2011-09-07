@@ -9,12 +9,6 @@ class ClippedExtension < Radiant::Extension
   description RadiantClippedExtension::DESCRIPTION
   url RadiantClippedExtension::URL
 
-  extension_config do |config|
-    config.gem "acts_as_list", :version => "~> 0.1.2"
-    config.gem "paperclip",    :version => "~> 2.3.16"
-    config.gem "uuidtools",    :version => "~> 2.1.2"
-  end
-
   migrate_from 'Paperclipped', 20100327111216
 
   def activate
@@ -31,7 +25,7 @@ class ClippedExtension < Radiant::Extension
       AssetType.new :audio, :icon => 'audio', :mime_types => %w[audio/mpeg audio/mpg audio/ogg application/ogg audio/x-ms-wma audio/vnd.rn-realaudio audio/x-wav]
       AssetType.new :font, :icon => 'font', :extensions => %w[ttf otf eot woff]
       AssetType.new :flash, :icon => 'flash', :default_radius_tag => 'flash', :extensions => %w{swf}, :mime_types => %w[application/x-shockwave-flash]
-      AssetType.new :pdf, :icon => 'pdf', :processors => [:thumbnail], :extensions => %w{pdf}, :mime_types => %w[application/pdf application/x-pdf], :styles => {:icon => ['42x42#', :png], :thumbnail => ['100x100#', :png]}
+      AssetType.new :pdf, :icon => 'document', :processors => [:thumbnail], :extensions => %w{pdf}, :mime_types => %w[application/pdf application/x-pdf], :styles => {:icon => ['42x42#', :png], :thumbnail => ['100x100#', :png]}
       AssetType.new :document, :icon => 'document', :mime_types => %w[application/msword application/rtf application/vnd.ms-excel application/vnd.ms-powerpoint application/vnd.ms-project application/vnd.ms-works text/plain text/html]
       AssetType.new :other, :icon => 'unknown'
 
