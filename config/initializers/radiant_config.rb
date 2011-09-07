@@ -22,7 +22,7 @@ Radiant.config do |config|
     assets.define 'create_pdf_thumbnails?', :default => 'true'
 
     assets.namespace 'thumbnails' do |thumbs| # NB :icon and :thumbnail are already defined as fixed formats for use in the admin interface and can't be changed
-      thumbs.define 'image', :default => 'normal:size=640x640>,format=original|small:size=320x320>,format=original'
+      thumbs.define 'image', :default => 'normal:size=640x640>|small:size=320x320>'
       thumbs.define 'video', :default => 'normal:size=640x640>,format=jpg|small:size=320x320>,format=jpg'
       thumbs.define 'pdf', :default => 'normal:size=640x640>,format=jpg|small:size=320x320>,format=jpg'
     end
