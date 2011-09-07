@@ -146,7 +146,7 @@ class Asset < ActiveRecord::Base
   end
   
   def dimensions_known?
-    !original_width.blank? && !original_height.blank?
+    original_width? && original_height?
   end
   
 private
@@ -168,11 +168,11 @@ private
   end
 
   def assign_title
-    self.title = basename if title.blank?
+    self.title = basename unless title?
   end
   
   def assign_uuid
-    self.uuid = UUIDTools::UUID.timestamp_create.to_s if uuid.blank?
+    self.uuid = UUIDTools::UUID.timestamp_create.to_s unless uuid?
   end
   
   class << self

@@ -98,15 +98,21 @@ class AssetType
     end
   end
   
+  def standard_styles
+    {
+      :native => { :geometry => nil, :format => :jpg },
+      :icon => { :geometry => '42x42#', :format => :png },
+      :thumbnail => { :geometry => '100x100#', :format => :png }
+    }
+  end
+  
   def configured_styles
-    styles = {}
     if style_definitions = Radiant.config["assets.thumbnails.#{name}"]
-      style_definitions.to_s.gsub(' ','').split('|').each do |definition|
+      @configured_styles ||= style_definitions.to_s.gsub(/\s/,'').split('|').each_with_object({}) do |styles, definition|
         name, rule = definition.split(':')
         styles[name.to_sym] = rule.split(',').collect{|option| option.split('=')}.inject({}) {|h, (k, v)| h[k.to_sym] = v; h}
       end
     end
-    styles
   end
   
   def legacy_styles
