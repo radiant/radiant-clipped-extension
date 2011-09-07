@@ -15,6 +15,7 @@ describe Asset do
   describe "on assigning a file to an asset" do
     before do
       Radiant.config["assets.create_image_thumbnails?"] = true
+      Radiant.config["assets.thumbnails.configured"] = "special:size=800x800>,format=jpg|tiny:size=#10x10,format=png"
     end
   
     it "should have saved the asset" do

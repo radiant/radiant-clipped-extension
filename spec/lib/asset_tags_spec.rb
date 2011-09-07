@@ -27,6 +27,7 @@ describe AssetTags do
   context "rendering tag" do
     before do
       Radiant.config['assets.create_image_thumbnails?'] = true
+      Radiant.config['assets.thumbnails.image'] = 'normal:size=640x640>|small:size=320x320>'
     end
     
     it "assets:each" do
@@ -37,7 +38,7 @@ describe AssetTags do
       page.should render('<r:assets:first><r:asset:id /></r:assets:first>').as( "#{asset_id(:test2)}" )
     end
 
-    it "should retreive an asset by name" do
+    it "should retrieve an asset by name" do
       page.should render('<r:asset:id name="video" />').as( "#{asset_id(:video)}" )
     end
     

@@ -136,7 +136,7 @@ module AssetTags
     raise TagError, "'container' attribute required" unless options['container']
     size = options['size'] ? options.delete('size') : 'icon'
     container = options.delete('container')
-    (container.to_i - asset.height(size).to_i)/2
+    ((container.to_i - asset.height(size).to_i)/2).to_s
   end
     
   ['height','width'].each do |dimension|

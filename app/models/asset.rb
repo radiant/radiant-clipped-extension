@@ -1,14 +1,13 @@
 class Asset < ActiveRecord::Base
-
   has_many :page_attachments, :dependent => :destroy
   has_many :pages, :through => :page_attachments
   has_site if respond_to? :has_site
 
   belongs_to :created_by, :class_name => 'User'
   belongs_to :updated_by, :class_name => 'User'
-  
+
   default_scope :order => "created_at DESC"
-  
+
   named_scope :latest, lambda { |limit|
     { :order => "created_at DESC", :limit => limit }
   }
@@ -61,6 +60,8 @@ class Asset < ActiveRecord::Base
   end
   validates_attachment_size :asset, :less_than => ( Radiant.config["assets.max_asset_size"] || 5 ).to_i.megabytes
 
+  @geometry ||= {}
+
   def asset_type
     AssetType.for(asset)
   end
@@ -103,10 +104,12 @@ class Asset < ActiveRecord::Base
   end
   
   def geometry(style_name='original')
-    if style_name == 'original'
+    @geometry[style_name] ||= if style_name.to_s == 'original'
       original_geometry
-    elsif style = asset.styles[style_name.to_sym]   # asset.styles is normalised, but self.paperclip_styles is not
+    elsif style = self.asset.styles[style_name.to_sym]   # self.asset.styles holds Style objects, where self.paperclip_styles is still just rule hashes
       original_geometry.transformed_by(style.geometry)
+    else
+      raise PaperclipError, "Requested style #{style_name} is not defined."
     end
   end
 
