@@ -54,6 +54,10 @@ p.asset
         width: 180px
         padding: 2px 8px 2px 20px
 
+  #assets_table.assets
+    overflow: auto
+
+
 #upload_holders
   display: none
 
@@ -174,15 +178,13 @@ p.asset
 
 #assets_table.assets
   position: relative
-  overflow: auto
+  font-size: 75%
   p
     padding: 40px
       top: 45px
     color: silver
     text-align: center
-    font:
-      size: 75%
-      style: oblique
+    font-style: oblique
   ul
     clear: both
     li.asset
@@ -194,7 +196,7 @@ p.asset
     clear: left
     width: 100%
     height: 3em
-    padding: 0.5em
+    padding: 0.5em 0
     span, a
       display: block
       float: left
