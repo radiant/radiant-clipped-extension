@@ -43,58 +43,58 @@ describe AssetTags do
     end
     
     it "asset:name" do
-      page.should render('<r:assets:first><r:asset:name /></r:assets:first>').as( asset.title )
+      page.should render(%{<r:asset:name id="#{asset_id(:test1)}" />}).as( asset.title )
     end
     
     it "asset:filename" do
-      page.should render('<r:assets:first><r:asset:filename /></r:assets:first>').as( asset.asset_file_name )
+      page.should render(%{<r:asset:filename id="#{asset_id(:test1)}" />}).as( asset.asset_file_name )
     end
     
     it "asset:url" do
-      page.should render('<r:assets:first><r:asset:url /></r:assets:first>').as( asset.thumbnail )
-      page.should render('<r:assets:first><r:asset:url size="icon" /></r:assets:first>').as( asset.thumbnail('icon') )
+      page.should render(%{<r:asset:url id="#{asset_id(:test1)}" />}).as( asset.thumbnail )
+      page.should render(%{<r:asset:url size="icon" id="#{asset_id(:test1)}" />}).as( asset.thumbnail('icon') )
     end
     
     it "asset:link" do
-      page.should render('<r:assets:first><r:asset:link /></r:assets:first>').as( %{<a href="#{asset.thumbnail}">#{asset.title}</a>} )
-      page.should render('<r:assets:first><r:asset:link size="icon" /></r:assets:first>').as( %{<a href="#{asset.thumbnail('icon')}">#{asset.title}</a>} )
+      page.should render(%{<r:asset:link id="#{asset_id(:test1)}" />}).as( %{<a href="#{asset.thumbnail}">#{asset.title}</a>} )
+      page.should render(%{<r:asset:link size="icon" id="#{asset_id(:test1)}" />}).as( %{<a href="#{asset.thumbnail('icon')}">#{asset.title}</a>} )
     end
     
     it "asset:image" do
-      page.should render('<r:assets:first><r:asset:image /></r:assets:first>').as( %{<img src="#{asset.thumbnail}" alt='#{asset.title}' />} )
-      page.should render('<r:assets:first><r:asset:image size="icon" /></r:assets:first>').as( %{<img src="#{asset.thumbnail('icon')}" alt='#{asset.title}' />} )
+      page.should render(%{<r:asset:image id="#{asset_id(:test1)}" />}).as( %{<img src="#{asset.thumbnail}" alt='#{asset.title}' />} )
+      page.should render(%{<r:asset:image size="icon" id="#{asset_id(:test1)}" />}).as( %{<img src="#{asset.thumbnail('icon')}" alt='#{asset.title}' />} )
     end
 
     it "asset:caption" do
-      page.should render('<r:assets:first><r:asset:caption /></r:assets:first>').as( asset.caption )
+      page.should render(%{<r:asset:caption id="#{asset_id(:test1)}" />}).as( asset.caption )
     end    
     
     it "asset:top_padding" do
-      page.should render('<r:assets:first><r:asset:top_padding container="500" /></r:assets:first>').as( "229" )
+      page.should render(%{<r:asset:top_padding id="#{asset_id(:test1)}" container="500" />}).as( "229" )
     end    
 
     it "asset:top_padding for a specified style" do
-      page.should render('<r:assets:first><r:asset:top_padding container="500" size="thumbnail" /></r:assets:first>').as( "200" )
+      page.should render(%{<r:asset:top_padding id="#{asset_id(:test1)}" container="500" size="thumbnail" />}).as( "200" )
     end    
 
     it "asset:width" do
-      page.should render('<r:assets:first><r:asset:width /></r:assets:first>').as( "400" )
-      page.should render('<r:assets:first><r:asset:width size="icon" /></r:assets:first>').as( "42" )
+      page.should render(%{<r:asset:width id="#{asset_id(:test1)}" />}).as( "400" )
+      page.should render(%{<r:asset:width id="#{asset_id(:test1)}" size="icon" />}).as( "42" )
     end
 
     it "asset:height" do
-      page.should render('<r:assets:first><r:asset:height /></r:assets:first>').as( "200" )      
-      page.should render('<r:assets:first><r:asset:height size="icon" /></r:assets:first>').as( "42" )
+      page.should render(%{<r:asset:height id="#{asset_id(:test1)}" container="500" />}).as( "200" )      
+      page.should render(%{<r:asset:height id="#{asset_id(:test1)}" size="icon" />}).as( "42" )
     end
 
     it "asset:orientation" do
-      page.should render('<r:assets:first><r:asset:orientation /></r:assets:first>').as( "horizontal" )      
-      page.should render('<r:assets:first><r:asset:orientation size="icon" /></r:assets:first>').as( "square" )      
+      page.should render(%{<r:asset:orientation id="#{asset_id(:test1)}" />}).as( "horizontal" )      
+      page.should render(%{<r:asset:orientation id="#{asset_id(:test1)}" size="icon" />}).as( "square" )      
     end
     
     it "asset:aspect" do
-      page.should render('<r:assets:first><r:asset:aspect /></r:assets:first>').as( 2.to_f.to_s )
-      page.should render('<r:assets:first><r:asset:aspect size="icon" /></r:assets:first>').as( 1.to_f.to_s )
+      page.should render(%{<r:asset:aspect id="#{asset_id(:test1)}" />}).as( 2.to_f.to_s )
+      page.should render(%{<r:asset:aspect id="#{asset_id(:test1)}" size="icon" />}).as( 1.to_f.to_s )
     end
     
   end
