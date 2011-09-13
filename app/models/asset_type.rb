@@ -37,7 +37,7 @@ class AssetType
     Asset.send :named_scope, plural.to_sym, :conditions => condition
     Asset.send :named_scope, "not_#{plural}".to_sym, :conditions => non_condition
     
-    # Page.define_radius_tags_for_asset_type self     #TODO discuss interface
+    self.define_radius_tags
     @@types.push self
     @@type_lookup[@name] = self
   end
@@ -162,6 +162,18 @@ class AssetType
     if style = paperclip_styles[style_name.to_sym]
       style[:size]
     end
+  end
+  
+  def define_radius_tags
+    type = self.name
+    Page.class_eval {
+      tag "asset:if_#{type}" do |tag|
+        tag.expand if find_asset(tag, tag.attr.dup).send("#{type}?".to_sym)
+      end
+      tag "asset:unless_#{type}" do |tag|
+        tag.expand unless find_asset(tag, tag.attr.dup).send("#{type}?".to_sym)
+      end
+    }
   end
   
   # class methods

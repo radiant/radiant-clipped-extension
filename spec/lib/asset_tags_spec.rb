@@ -96,6 +96,11 @@ describe AssetTags do
       page.should render(%{<r:asset:aspect id="#{asset_id(:test1)}" />}).as( 2.to_f.to_s )
       page.should render(%{<r:asset:aspect id="#{asset_id(:test1)}" size="icon" />}).as( 1.to_f.to_s )
     end
+
+    it "asset:if_image" do
+      page.should render(%{<r:asset:if_image name="test1">foo</r:asset:if_image>}).as( "foo" )
+      page.should render(%{<r:asset:if_image name="video">foo</r:asset:if_image>}).as( "" )
+    end
     
   end
   

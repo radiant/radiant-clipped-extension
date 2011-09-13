@@ -7,11 +7,6 @@ module AssetTags
     deprecated_tag "assets:#{name}", :substitute => "asset:#{name}", :deadline => '2.0'
   end
   
-  Asset.known_types.each do |known_type|
-    deprecated_tag "assets:if_#{known_type}", :substitute => "asset:if_#{known_type}", :deadline => '2.0'
-    deprecated_tag "assets:unless_#{known_type}", :substitute => "asset:unless_#{known_type}", :deadline => '2.0'
-  end
-  
   desc %{
     The namespace for referencing images and assets.
     
@@ -200,21 +195,6 @@ module AssetTags
   end
   
   #TODO: could use better docs for Asset#other? case explaining what types it covers
-  Asset.known_types.each do |known_type|
-    desc %{
-      Renders the contents only of the asset is of the type #{known_type}
-    }
-    tag "asset:if_#{known_type}" do |tag|
-      tag.expand if find_asset(tag, tag.attr.dup).send("#{known_type}?".to_sym)
-    end
-
-    desc %{
-      Renders the contents only of the asset is not of the type #{known_type}
-    }
-    tag "asset:unless_#{known_type}" do |tag|
-      tag.expand unless find_asset(tag, tag.attr.dup).send("#{known_type}?".to_sym)
-    end
-  end
   
   [:title, :caption, :asset_file_name, :extension, :asset_content_type, :asset_file_size, :id].each do |method|
     desc %{
