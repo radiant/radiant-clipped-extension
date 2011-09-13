@@ -20,7 +20,12 @@ module AssetTags
   }    
   tag 'asset' do |tag|
     tag.locals.asset = find_asset unless tag.attr.empty?
-    tag.expand
+    begin
+      tag.expand
+    rescue Paperclip::StyleError => e
+      Rails.logger.warn "style processing error with asset ##{tag.locals.asset.id}: #{e}"
+      raise TagError, e
+    end
   end
 
   desc %{
@@ -111,7 +116,7 @@ module AssetTags
 
 
   desc %{
-    Renders the value for a top padding for the image. Put the image in a
+    Renders the value for a top padding for a thumbnail. Put the thumbnail in a
     container with specified height and using this tag you can vertically
     align the image within its container.
   
@@ -132,9 +137,9 @@ module AssetTags
   }
   tag 'asset:top_padding' do |tag|
     asset, options = asset_and_options(tag)
-    raise TagError, 'Asset is not an image' unless asset.image?
     raise TagError, "'container' attribute required" unless options['container']
     size = options['size'] ? options.delete('size') : 'icon'
+    raise TagError, "asset #{tag.locals.asset.title} has no '#{size}' thumbnail" unless tag.locals.asset.has_style?(size)
     container = options.delete('container')
     ((container.to_i - asset.height(size).to_i)/2).to_s
   end
@@ -154,12 +159,14 @@ module AssetTags
   end
 
   desc %{
-    Returns a string representing the orientation of the asset, which must be an image. Can be 'horizontal', 'vertical' or 'square'.
+    Returns a string representing the orientation of the asset, which must be imageable. 
+    (ie, it is an image or it has been processed to produce an image). 
+    Can be 'horizontal', 'vertical' or 'square'.
   }
   tag 'asset:orientation' do |tag|
     asset, options = asset_and_options(tag)
-    raise TagError, 'Asset is not an image' unless asset.image?
     size = options['size'] ? options.delete('size') : 'original'
+    raise TagError, "asset #{tag.locals.asset.title} has no '#{size}' thumbnail" unless tag.locals.asset.has_style?(size)
     asset.orientation(size)
   end
 
@@ -168,8 +175,8 @@ module AssetTags
   }
   tag 'asset:aspect' do |tag|
     asset, options = asset_and_options(tag)
-    raise TagError, 'Asset is not an image' unless asset.image?
     size = options['size'] ? options.delete('size') : 'original'
+    raise TagError, "asset #{tag.locals.asset.title} has no '#{size}' thumbnail" unless tag.locals.asset.has_style?(size)
     asset.aspect(size)
   end
 
@@ -233,22 +240,19 @@ module AssetTags
     
     Using the optional @size@ attribute, different sizes can be display.
     "thumbnail" and "icon" sizes are built in, but custom ones can be set
-    using by changing assets.addition_thumbnails in the Radiant::Config
-    settings.
+    by changing `assets.thumbnails.[type]` in the Radiant::Config settings.
     
     *Usage:* 
     <pre><code><r:asset:image [name="asset name" or id="asset id"] [size="icon|thumbnail|whatever"]></code></pre>
   }    
   tag 'asset:image' do |tag|
     tag.locals.asset, options = asset_and_options(tag)
-    if tag.locals.asset.image?
-      size = options['size'] ? options.delete('size') : 'original'
-      alt = "alt='#{tag.locals.asset.title}'" unless tag.attr['alt']
-      attributes = options.inject('') { |s, (k, v)| s << %{#{k.downcase}="#{v}" } }.strip
-      attributes << alt unless alt.nil?
-      url = tag.locals.asset.thumbnail(size)
-      %{<img src="#{url}" #{attributes unless attributes.empty?} />} rescue nil
-    end
+    size = options.delete('size') || 'original'
+    raise TagError, "asset #{tag.locals.asset.title} has no '#{size}' thumbnail" unless tag.locals.asset.has_style?(size)
+    options['alt'] ||= tag.locals.asset.title
+    attributes = options.inject('') { |s, (k, v)| s << %{#{k.downcase}="#{v}" } }.strip
+    url = tag.locals.asset.thumbnail(size)
+    %{<img src="#{url}" #{attributes} />} rescue nil
   end
   
   desc %{

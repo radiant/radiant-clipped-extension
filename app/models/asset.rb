@@ -71,8 +71,8 @@ class Asset < ActiveRecord::Base
     return asset_type.icon(style_name)
   end
 
-  def has_style?(style_name)
-    paperclip_styles.keys.include?(style_name.to_sym)
+  def has_style?(style_name='original')
+    style_name == 'original' || paperclip_styles.keys.include?(style_name.to_sym)
   end
 
   def basename
@@ -102,49 +102,57 @@ class Asset < ActiveRecord::Base
   end
   
   def geometry(style_name='original')
+    raise Paperclip::StyleError, "Requested style #{style_name} is not defined for this asset." unless has_style?(style_name)
     @geometry ||= {}
-    @geometry[style_name] ||= if style_name.to_s == 'original'
-      original_geometry
-    elsif style = self.asset.styles[style_name.to_sym]   # self.asset.styles holds Style objects, where self.paperclip_styles is still just rule hashes
-      original_geometry.transformed_by(style.geometry)
-    else
-      raise PaperclipError, "Requested style #{style_name} is not defined."
+    begin
+      @geometry[style_name] ||= if style_name.to_s == 'original'
+        original_geometry
+      else
+        style = self.asset.styles[style_name.to_sym]
+        original_geometry.transformed_by(style.geometry)    # this can return dimensions for fully specified style sizes but not for relative sizes when there are no original dimensions
+      end
+    rescue Paperclip::TransformationError => e
+      Rails.logger.warn "geometry transformation error: #{e}"
+      original_geometry                                     # returns a blank geometry if the real geometry cannot be calculated
     end
   end
 
   def aspect(style_name='original')
-    image? && geometry(style_name).aspect
+    geometry(style_name).aspect
   end
 
   def orientation(style_name='original')
-    if image?
-      this_aspect = aspect(style_name)
-      case 
-        when this_aspect < 1.0 then 'vertical'
-        when this_aspect > 1.0 then 'horizontal'
-        else 'square'
-      end
+    a = aspect(style_name)
+    case
+    when a == nil?
+      'unknown'
+    when a < 1.0 
+      'vertical'
+    when a > 1.0 
+      'horizontal'
+    else
+      'square'
     end
   end
 
   def width(style_name='original')
-    image? ? geometry(style_name).width.to_i : 0
+    geometry(style_name).width.to_i
   end
 
   def height(style_name='original')
-    image? ? geometry(style_name).height.to_i : 0
+    geometry(style_name).height.to_i
   end
 
   def square?(style_name='original')
-    image? && geometry(style_name).square?
+    geometry(style_name).square?
   end
 
   def vertical?(style_name='original')
-    image? && geometry(style_name).vertical?
+    geometry(style_name).vertical?
   end
 
   def horizontal?(style_name='original')
-    image? && geometry(style_name).horizontal?
+    geometry(style_name).horizontal?
   end
   
   def dimensions_known?

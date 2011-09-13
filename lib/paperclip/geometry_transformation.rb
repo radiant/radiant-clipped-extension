@@ -1,7 +1,7 @@
 module Paperclip
 
-  class TransformationError < PaperclipError
-  end
+  class TransformationError < PaperclipError; end
+  class StyleError < PaperclipError; end
   
   class Geometry
     
@@ -17,13 +17,14 @@ module Paperclip
     # This saves us having to go back to the file, which is expensive with S3.
     # We understand all the Imagemagick geometry arguments described at http://www.imagemagick.org/script/command-line-processing.php#geometry
     # including both '^' and paperclip's own '#' modifier.
+    #
     def transformed_by (other)
-      raise TransformationError, "geometry is not transformable without both width and height" if self.height == 0 or self.width == 0
       other = Geometry.parse(other) unless other.is_a? Geometry
-      return other.without_modifier if self =~ other
+      # if the two geometries are similar, or the destination geometry is a fixed size, the resulting dimensions are fixed
+      return other.without_modifier if self =~ other || ['#', '!', '^'].include?(other.modifier)
+      # otherwise, we apply the transformation
+      raise TransformationError, "geometry is not transformable without both width and height" if self.height == 0 or self.width == 0
       case other.modifier
-      when '#', '!', '^'
-        other.without_modifier
       when '>'
         (other.width < self.width || other.height < self.height) ? scaled_to_fit(other) : self
       when '<'

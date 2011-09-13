@@ -61,8 +61,8 @@ describe AssetTags do
     end
     
     it "asset:image" do
-      page.should render(%{<r:asset:image id="#{asset_id(:test1)}" />}).as( %{<img src="#{asset.thumbnail}" alt='#{asset.title}' />} )
-      page.should render(%{<r:asset:image size="icon" id="#{asset_id(:test1)}" />}).as( %{<img src="#{asset.thumbnail('icon')}" alt='#{asset.title}' />} )
+      page.should render(%{<r:asset:image id="#{asset_id(:test1)}" />}).as( %{<img src="#{asset.thumbnail}" alt="#{asset.title}" />} )
+      page.should render(%{<r:asset:image size="icon" id="#{asset_id(:test1)}" />}).as( %{<img src="#{asset.thumbnail('icon')}" alt="#{asset.title}" />} )
     end
 
     it "asset:caption" do
