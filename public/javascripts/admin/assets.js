@@ -89,7 +89,7 @@ Asset.Detach = Behavior.create({
 Asset.Insert = Behavior.create({
   onclick: function(e) {
     if (e) e.stop();
-    var part_name = TabControlBehavior.instances[0].controller.selected.caption;
+    var part_name = TabControlBehavior.instances[0].controller.selected.caption.toLowerCase();
     if (part_name.indexOf(' ')) part_name = part_name.replace(' ', '-'); 
     var textbox = $('part_' + part_name + '_content');
     var tag_parts = this.element.getAttribute('rel').split('_');
