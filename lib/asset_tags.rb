@@ -48,7 +48,7 @@ module AssetTags
   tag 'asset_list' do |tag|
     raise TagError, "r:asset_list: no assets to list" unless tag.locals.assets
     options = tag.attr.symbolize_keys
-    result = []
+    result = ""
     paging = pagination_find_options(tag)
     assets = paging ? tag.locals.assets.paginate(paging) : tag.locals.assets.all
     assets.each do |asset|

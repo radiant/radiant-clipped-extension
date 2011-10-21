@@ -29,15 +29,6 @@ namespace :radiant do
           mkdir_p RAILS_ROOT + directory, :verbose => false
           cp_r file, RAILS_ROOT + path, :verbose => false
         end
-        
-        # unless ClippedExtension.starts_with? RAILS_ROOT # don't need to copy vendored tasks
-        #   puts "Copying rake tasks from ClippedExtension"
-        #   local_tasks_path = File.join(RAILS_ROOT, %w(lib tasks))
-        #   mkdir_p local_tasks_path, :verbose => false
-        #   Dir[File.join ClippedExtension.root, %w(lib tasks *.rake)].each do |file|
-        #     cp file, local_tasks_path, :verbose => false
-        #   end
-        # end
 
         desc "Syncs all available translations for this ext to the English ext master"
         task :sync => :environment do
