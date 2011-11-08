@@ -14,10 +14,14 @@ Radiant.config do |config|
 
     pc.namespace 'fog' do |fog|
       fog.define 'provider'
-      fog.define 'credentials'
       fog.define 'directory'
       fog.define 'public?'
       fog.define 'host'
+    end
+
+    pc.namespace 'rackspace' do |rs|
+      rs.define 'username'
+      rs.define 'api_key'
     end
 
     pc.namespace 's3' do |s3|
@@ -25,6 +29,7 @@ Radiant.config do |config|
       s3.define 'key'
       s3.define 'secret'
       s3.define 'host_alias'
+      s3.define 'region'
     end
   end
 
