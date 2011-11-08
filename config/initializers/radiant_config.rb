@@ -3,11 +3,23 @@ Radiant.config do |config|
     pc.define 'url',                      :default => '/:class/:id/:basename:no_original_style.:extension'
     pc.define 'path',                     :default => ':rails_root/public/:class/:id/:basename:no_original_style.:extension', :allow_change => true
     pc.define 'skip_filetype_validation', :default => true, :type => :boolean
-    pc.define 'storage', :default      => 'filesystem',
-                         :select_from  => {'File System' => 'filesystem', 'Amazon S3' => 's3'},
-                         :allow_blank  => false,
+    pc.define 'storage', :default       => 'filesystem',
+                         :select_from   => {
+                           'File System'            => 'filesystem',
+                           'Amazon S3'              => 'fog',
+                           'Rackspace Cloud Files'  => 'fog'
+                         },
+                         :allow_blank   => false,
                          :allow_display => false
-                         
+
+    pc.namespace 'fog' do |fog|
+      fog.define 'provider'
+      fog.define 'credentials'
+      fog.define 'directory'
+      fog.define 'public?'
+      fog.define 'host'
+    end
+
     pc.namespace 's3' do |s3|
       s3.define 'bucket'
       s3.define 'key'
