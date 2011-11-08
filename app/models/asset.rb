@@ -48,8 +48,8 @@ class Asset < ActiveRecord::Base
                     :fog_public       => Radiant.config["paperclip.fog.public?"]   ||
                                          true,
                     :fog_host         => Radiant.config["paperclip.fog.host"]      ||
-                                         Radiant.config["paperclip.s3.host_alias"] ||
-                                         Radiant.config["paperclip.url"]
+                                         "http://#{Radiant.config['paperclip.s3.host_alias']}" ||
+                                         "http://#{Radiant.config['paperclip.url']}"
 
   before_save :assign_title
   before_save :assign_uuid
