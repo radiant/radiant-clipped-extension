@@ -1,7 +1,7 @@
 require 'radiant-clipped-extension'
 require 'acts_as_list'
 require 'uuidtools'
-require 'cloud_credentials'
+require 'cloud'
 
 class ClippedExtension < Radiant::Extension
   version RadiantClippedExtension::VERSION
