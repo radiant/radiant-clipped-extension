@@ -28,7 +28,7 @@ At the moment I think uploads probably don't work in IE7. See github for more is
 
 ## Requirements
 
-The `paperclip`, `uuidtools` and `acts_as_list` gems are required. For S3 storage you need the `aws-s3` gem.
+The `paperclip`, `uuidtools` and `acts_as_list` gems are required. For cloud storage you need the `fog` gem.
 
 Paperclip's post-processors require ImageMagick. PDF-thumbnailing also requires ghostscript, which is usually 
 installed with ImageMagick anyway, and if you want to generate thumbnails from video clips then you also need FFmpeg. 
