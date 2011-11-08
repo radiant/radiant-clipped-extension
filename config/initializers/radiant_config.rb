@@ -14,9 +14,13 @@ Radiant.config do |config|
                          :allow_display => false
 
     pc.namespace 'fog' do |fog|
-      fog.define 'provider'
+      fog.define 'provider', :select_from => {
+                               'Amazon S3'              => 'AWS',
+                               'Google Storage'         => 'Google',
+                               'Rackspace Cloud Files'  => 'Rackspace'
+                             }
       fog.define 'directory'
-      fog.define 'public?'
+      fog.define 'public?', :default => true
       fog.define 'host'
     end
 
@@ -35,7 +39,13 @@ Radiant.config do |config|
       s3.define 'key'
       s3.define 'secret'
       s3.define 'host_alias'
-      s3.define 'region'
+      s3.define 'region', :select_from => {
+                            'Asia North East' => 'ap-northeast-1',
+                            'Asia South East' => 'ap-southeast-1',
+                            'EU West' => 'eu-west-1',
+                            'US East' => 'us-east-1',
+                            'US West' => 'us-west-1'
+                          }
     end
   end
 
