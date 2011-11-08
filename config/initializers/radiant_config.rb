@@ -7,6 +7,7 @@ Radiant.config do |config|
                          :select_from   => {
                            'File System'            => 'filesystem',
                            'Amazon S3'              => 'fog',
+                           'Google Storage'         => 'fog',
                            'Rackspace Cloud Files'  => 'fog'
                          },
                          :allow_blank   => false,
@@ -17,6 +18,11 @@ Radiant.config do |config|
       fog.define 'directory'
       fog.define 'public?'
       fog.define 'host'
+    end
+
+    pc.namespace 'google_storage' do |gs|
+      gs.define 'access_key_id'
+      gs.define 'secret_access_key'
     end
 
     pc.namespace 'rackspace' do |rs|

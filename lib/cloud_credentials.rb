@@ -9,6 +9,12 @@ module RadiantClippedExtension
         :aws_secret_access_key => Radiant.config["paperclip.s3.secret"],
         :region => Radiant.config["paperclip.s3.region"],
       }
+    when "Google"
+      return {
+        :provider => "Google",
+        :rackspace_username => Radiant.config["paperclip.google_storage.access_key_id"],
+        :rackspace_api_key  => Radiant.config["paperclip.google_storage.secret_access_key"]
+      }
     when "Rackspace"
       return {
         :provider => "Rackspace",
