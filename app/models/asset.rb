@@ -42,6 +42,7 @@ class Asset < ActiveRecord::Base
                     :storage => RadiantClippedExtension::Cloud.storage ||
                                 :filesystem,
                     :path => Radiant.config["paperclip.path"],
+                    :url  => Radiant.config["paperclip.url"],
                     :fog_credentials  => RadiantClippedExtension::Cloud.credentials,
                     :fog_directory    => Radiant.config["paperclip.fog.directory"] ||
                                          Radiant.config["paperclip.s3.bucket"],
