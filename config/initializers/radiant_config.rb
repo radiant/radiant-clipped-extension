@@ -1,7 +1,7 @@
 Radiant.config do |config|
   config.namespace 'paperclip' do |pc|
-    pc.define 'url',                      :default => '/:class/:id/:basename:no_original_style.:extension'
-    pc.define 'path',                     :default => ':rails_root/public/:class/:id/:basename:no_original_style.:extension', :allow_change => true
+    pc.define 'url',                      :default => '/system/:attachment/:id/:style/:basename:no_original_style.:extension', :allow_change => true
+    pc.define 'path',                     :default => ':rails_root/public/system/:attachment/:id/:style/:basename:no_original_style.:extension', :allow_change => true
     pc.define 'skip_filetype_validation', :default => true, :type => :boolean
     pc.define 'storage', :default       => 'filesystem',
                          :select_from   => {
