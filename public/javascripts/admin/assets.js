@@ -168,7 +168,7 @@ Asset.MakeSortable = function (element) {
   var sorter = Sortable.create(element, {
     overlap: 'horizontal',
     constraint: false,
-    handle: 'title',
+    handle: 'back',
     onChange: function (e) { 
       Asset.SetPositions();
       Asset.Notify('Assets reordered. Save page to commit changes.'); 
