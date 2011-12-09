@@ -42,13 +42,14 @@ describe AssetType do
   context 'with configured thumbnail sizes' do
     before { 
       Radiant.config["assets.create_configured_thumbnails?"] = true 
-      Radiant.config["assets.thumbnails.configured"] = "special:size=800x800>,format=jpg|tiny:size=10x10#,format=png"
+      Radiant.config["assets.thumbnails.configured"] = "special:size=800x800>,format=jpg|tiny:size=10x10#,format=png|custom:size=1x1,convert_options=-quality 33 -interlace Plane"
     }
     subject{ AssetType.find(:configured) }
     its(:paperclip_processors) { should == [:dummy] }
     its(:paperclip_styles) { should == {
       :special => {:geometry => "800x800>", :format => 'jpg'},
-      :tiny => {:geometry => "10x10#", :format => 'png'}
+      :tiny => {:geometry => "10x10#", :format => 'png'},
+      :custom => {:geometry => "1x1", :convert_options='-quality 33 -interlace Plane'}
     }}
   end
 
