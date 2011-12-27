@@ -1,0 +1,109 @@
+---
+de:
+  assets: 'Assets'
+  asset_types:
+    all: 'Alle'
+    documents: 'Dokumente'
+    fonts: 'Schriftarten'
+    images: 'Bilder'
+    others: 'Andere'
+    audios: 'Audio'
+    flashes: 'Flash'
+    videos: 'Video'
+    pdfs: 'PDF'
+    swfs: 'Flash'
+  
+  activerecord:
+    errors:
+      models:
+        asset:
+          attributes:
+            asset:
+              blank: 'Sie müssen eine Datei zum hochladen auswählen!'
+
+  clipped_extension:
+    actions: Aktionen
+    all: 'Alle'
+    all_thumbnails_refreshed: 'Alle Voransichten wurden aktualisiert.'
+    alt_text_or_title: 'Bildbeschreibung oder Titel <span class="hint">(optional)</span>'
+    asset: 'Asset'
+    asset_edit_title: Asset bearbeiten
+    asset_errors: 'Ein Fehler ist aufgetreten. {{errors}}'
+    asset_page_attachment_note: 'Angehangene Assets. Diese können per drag&drop eingefügt oder mit dem <code>&lt;r:assets:each /&gt;</code> tag angezeigt werden.'
+    asset_note: 'Angehangene assets. '
+    assets: 'Assets'
+    assets_explanation: 'Assets und Bilder können hochgeladen und dann an Seiten angehangen oder eingefügt werden. Klicken sie auf den Namen, um das Asset zu bearbeiten, oder <code>Löschen</code> um es zu entfernen.'
+    assets_title: 'Assets'
+    asset_page_upload_note: 'Hier hochgeladene Assets werden automatisch mit dieser Seite verknüpft sein.'
+    asset_upload_note: 'Wählen sie ein Assets aus, um es hochzuladen. Wenn der <code>Titel</code> leer ist, wird statt dessen der Dateiname ohne Endung verwendet. Mit <code>Mehr</code> können Sie auch einen Untertitel angeben.'
+    attached_assets: 'Angehangene Assets'
+    attach: Anhängen
+    attach_asset: 'Asset anhängen'
+    attach_assets: 'Assets anhängen'
+    attach_existing: Bestehendes anhängen
+    attach_to_page: 'Mit Seite verknüpfen'
+    audio: 'Audio'
+    cancel_attachment: 'Anhang lösen'
+    copy: 'kopieren'
+    copy_alt: 'Radius Tag in die Zwischenablage'
+    choose_file: Datei auswählen
+    documents: 'Dokumente'
+    caption: Untertitel
+    confirm_refresh_assets: 'Sind sie sicher, alle Voransichten aktualisieren zu wollen? Dies wird voraussichtlich eine lange Zeit und erhebliche Serverressourcen in Anspruch nehmen. <strong class="warning">Die Leistung der Webseite wird währenddessen beeinflusst sein</strong> und ihr Browser könnte die Verbindung schließen, bevor der Vorgang abgeschlossen ist. Wir empfehlen dies nur, wenn der Umfang der Asset-Bibliothek klein ist.'
+    confirm_remove_asset: 'Sind sie sicher, dieses Asset <strong class="warning">dauerhaft entfernen</strong> zu wollen?'
+    confirm_remove_from_page: 'Sind sie sicher, dieses Assets von der Seite entfernen zu wollen?'
+    delete_asset: 'Asset löschen'
+    detach: 'Verknüpfung lösen'
+    edit: Bearbeiten
+    edit_asset: 'Bearbeite {{asset}}'
+    filename: Dateiname
+    find_assets: Assets finden
+    images: 'Bilder'
+    images_automatically_created: 'Bilder werden automatisch angelegt'
+    insert: Einsetzen
+    modify: 'Bearbeiten'
+    movies: 'Filme'
+    need_to_upload: 'Möchten Sie etwas hochladen?'
+    new_asset: Neues Asset anlegen
+    no_assets_found: 'Es wurden keine Assets gefunden.'
+    no_assets: 'Keine Assets'
+    no_attached_assets: Keine Assets angehangen
+    others: 'Andere'
+    refresh_assets: Alle Assets aktualisieren
+    regenerate: Neu anlegen
+    regenerate_thumbnails: Vorschau neu anlegen
+    remove_asset: 'Asset entfernen'
+    remove_from_page: 'Von der Seite entfernen'
+    reorder: 'Anordnen'
+    remove: Löschen
+    refresh_assets_rake_task: 'Es ist empfehlenswert, sich auf dem Server anzumelden und das Kommando <code>rake paperclip:refresh class=Asset</code> auszuführen.'
+    replace_file: Datei ersetzen
+    save_and_upload: 'Speichern und hochladen'
+    search_assets: 'Assets suchen'
+    search: 'Suchen'
+    select: 'Auswählen'
+    thumbnails_refreshed: Voransichten wurden neu angelegt
+    title: Titel
+    type: 'Typ'
+    types_to_find: 'Zu suchender Typ'
+    upload: Hochladen
+    upload_asset: Asset hochladen
+
+  config:
+    assets:
+      additional_thumbnails: 'Weitere Voransichten'
+      content_types: 'Inhaltstypen'
+      create_image_thumbnails?: 'Bilder zeigen'
+      create_pdf_thumbnails?: 'PDF zeigen'
+      create_video_thumbnails?: 'Video zeigen'
+      display_size: 'Anzeigegröße'
+      insertion_size: 'Einfügegröße'
+      max_asset_size: 'Max Assetgröße'
+      path: 'Pfad'
+      s3:
+        bucket: 'Bucket'
+        key: 'Schlüssel'
+        secret: 'Secret'
+      skip_filetype_validation: 'Typerkennung überspringen?'
+      storage: 'Speicherung'
+      url: 'Url'
