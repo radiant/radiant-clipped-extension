@@ -1,3 +1,0 @@
-[submodule "vendor/plugins/imagespec"]
-	path = vendor/plugins/imagespec
-	url = git://github.com/andersonbrandon/ruby-imagespec.git
