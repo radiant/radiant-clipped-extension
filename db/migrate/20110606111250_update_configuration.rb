@@ -4,7 +4,6 @@ class UpdateConfiguration < ActiveRecord::Migration
 
       puts "Importing paperclip configuration"
       %w{url path skip_filetype_validation storage}.select{|k| !!Radiant.config["assets.#{k}"] }.each do |k|
-        config_to_set = Radiant.config.find_by_key("paperclip.#{k}")
         begin
           Radiant.config["paperclip.#{k}"] = Radiant.config["assets.#{k}"]
         rescue ActiveRecord::RecordInvalid => e
