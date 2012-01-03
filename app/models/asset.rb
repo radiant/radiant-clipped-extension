@@ -39,18 +39,13 @@ class Asset < ActiveRecord::Base
                       asset.paperclip_processors
                     },
                     :whiny => false,
-                    :storage => RadiantClippedExtension::Cloud.storage ||
-                                :filesystem,
-                    :path => Radiant.config["paperclip.path"],
-                    :url  => Radiant.config["paperclip.url"],
-                    :fog_credentials  => RadiantClippedExtension::Cloud.credentials,
-                    :fog_directory    => Radiant.config["paperclip.fog.directory"] ||
-                                         Radiant.config["paperclip.s3.bucket"],
-                    :fog_public       => Radiant.config["paperclip.fog.public?"]   ||
-                                         true,
-                    :fog_host         => Radiant.config["paperclip.fog.host"]      ||
-                                         "http://#{Radiant.config['paperclip.s3.host_alias']}" ||
-                                         "http://#{Radiant.config['paperclip.url']}"
+                    :storage => RadiantClippedExtension::Cloud.storage,
+                    :path => Radiant.config["assets.path"] || Radiant.config["paperclip.path"],
+                    :url => Radiant.config["paperclip.url"],
+                    :fog_credentials => RadiantClippedExtension::Cloud.credentials,
+                    :fog_directory => RadiantClippedExtension::Cloud.directory,
+                    :fog_public => Radiant.config["paperclip.fog.public?"] || true,
+                    :fog_host => RadiantClippedExtension::Cloud.host
 
   before_save :assign_title
   before_save :assign_uuid
