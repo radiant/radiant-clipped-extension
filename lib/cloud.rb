@@ -26,41 +26,13 @@ module RadiantClippedExtension
       end
     end
 
-    def self.directory
-      Radiant.config["paperclip.fog.directory"] ||
-      Radiant.config["paperclip.s3.bucket"] ||
-      Radiant.config["assets.s3.bucket"]
-    end
-
     def self.host
-      if Radiant.config["paperclip.fog.host"]
-        Radiant.config["paperclip.fog.host"]
-      elsif Radiant.config["paperclip.s3.host_alias"]
-        "http://#{Radiant.config['paperclip.s3.host_alias']}"
-      elsif Radiant.config["assets.storage"] == "s3"
-        "http://#{directory}.s3.amazonaws.com"
+      return Radiant.config["paperclip.fog.host"] if Radiant.config["paperclip.fog.host"]
+      case Radiant.config["paperclip.fog.provider"]
+      when "AWS"
+        "http://#{Radiant.config['paperclip.fog.directory']}.s3.amazonaws.com"
       else
-        case Radiant.config["paperclip.fog.provider"]
-        when "AWS"
-          "http://#{directory}.s3.amazonaws.com"
-        else
-          nil
-        end
-      end
-    end
-
-    def self.storage
-      if Radiant.config["assets.storage"] == "s3"
-        :fog
-      elsif Radiant.config["paperclip.storage"]
-        case Radiant.config["paperclip.storage"]
-        when "fog"
-          :fog
-        when "s3"
-          :fog
-        else
-          :filesystem
-        end
+        nil
       end
     end
 

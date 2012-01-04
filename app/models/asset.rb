@@ -39,11 +39,11 @@ class Asset < ActiveRecord::Base
                       asset.paperclip_processors
                     },
                     :whiny => false,
-                    :storage => RadiantClippedExtension::Cloud.storage,
-                    :path => Radiant.config["assets.path"] || Radiant.config["paperclip.path"],
+                    :storage => Radiant.config["paperclip.storage"],
+                    :path => Radiant.config["paperclip.path"],
                     :url => Radiant.config["paperclip.url"],
                     :fog_credentials => RadiantClippedExtension::Cloud.credentials,
-                    :fog_directory => RadiantClippedExtension::Cloud.directory,
+                    :fog_directory => Radiant.config["paperclip.fog.directory"],
                     :fog_public => Radiant.config["paperclip.fog.public?"] || true,
                     :fog_host => RadiantClippedExtension::Cloud.host
 
