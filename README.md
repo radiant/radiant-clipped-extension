@@ -1,104 +1,54 @@
-Radiant Clipped Extension
-------------------------
+# Radiant Clipped Extension
 
-This is a new core extension intended for use with Radiant version 1.0 or higher. 
-It is based on Keith Bingman's excellent Paperclipped extension, for which it is a drop-in replacement. 
-It should also be an easy upgrade from `page_attachments`, but I haven't tested that yet.
+Asset management for Radiant CMS.
 
-## Changes
+The Clipped extension comes bundled with the Radiant gem but may be updated separately. Only Radiant versions 1.0 or newer are supported.
 
-* video files frame-grabbed (automatically disabled if FFmpeg is not found)
-* pdfs thumbnailed
-* new asset-retrieval and page-attachment interface (by John Long)
-* new inline upload mechanism that allows several concurrent uploads and attachment to new pages
-* easily extended with new asset types and processors
-* helpful insert buttons that do the right thing.
+Please file bugs and feature requests on [Github][issues]. If you have questions regarding usage ask on the [mailing list][mailing-list].
 
-## Still to do
+[issues]: https://github.com/radiant/radiant-clipped-extension/issues
+[mailing-list]: https://groups.google.com/forum/?hl=en#!forum/radiantcms
 
-* progress bars on uploading assets
-* warning if you try and save a page while assets are still uploading
-* html5 video and audio tags in radius (with sensible flash fallbacks)
+## Features
 
-Video transcoding support will be in an optional extension with `delayed_job` support.
-
-# Known bugs
-
-At the moment I think uploads probably don't work in IE7. See github for more issues.
-
-## Requirements
-
-The `paperclip`, `uuidtools` and `acts_as_list` gems are required. For cloud storage you need the `fog` gem.
-
-Paperclip's post-processors require ImageMagick. PDF-thumbnailing also requires ghostscript, which is usually 
-installed with ImageMagick anyway, and if you want to generate thumbnails from video clips then you also need FFmpeg. 
-
-On unixy systems there should be packages available to satisfy all these requirements. You don't need to 
-install development libraries, but you will get a lot of little file-type utilities if you don't have them already.
-
-On OS X, with macports:
-
-    port install ghostscript imagemagick ffmpeg
-
-On debian-like systems:
-
-    apt-get install ghostscript imagemagick ffmpeg
-
-And I expect it's very similar with yum.
-
-On Windows, you can get binary installers of all the required pieces and apparently these days they're simple 
-to install and connect:
-
-* ImageMagick: http://www.imagemagick.org/script/binary-releases.php
-* Ghostscript: http://sourceforge.net/projects/ghostscript/
-* FFMpeg: http://ffmpeg.zeranoe.com/builds/
-
-If your paths are strange, or you're running under passenger, you may need to set `Paperclip.options[:command_path]` 
-to the location of these binaries for each of your environments. On OS X that's usually `/opt/local/bin`.
+* Concurrent uploads
+* Automatic thumbnail generation
+  * requiers ImageMagick for images
+  * requiers FFmpeg for videos
+  * requiers Ghostscript for PDFs
+* In-page and dedicated management interfaces
+* Easily to extended with new asset types and processors
 
 ## Installation
 
-This extension is not currently compatible with versions of radiant earlier than 1.0rc. The incompatibilities 
-are fairly minor and it may be backported, but for now if you're running a version of radiant which with the assets 
-extension will work, you will find it is already installed. If you don't have it in your radiant distribution, it 
-probably wouldn't work anyway.
+If you installed the Radiant gem then you already have Clipped installed. You can upgrade to a newer version using `bundle update radiant-clipped-extension`.
 
-## Upgrading from paperclipped
+Installation of the optional post-processors varies by system but are likely available through your package manager.
 
-No special steps are required. Paperclipped migrations are respected. The /images/assets directory is no longer needed. 
-and can be deleted. See below for some radius tag changes that won't affect you yet but should be borne in mind.
+### Mac OSX
 
-## Upgrading from page_attachments
+    brew install ghostscript imagemagick ffmpeg
+    # or
+    port install ghostscript imagemagick ffmpeg
 
-This is supposed to be straightforward too. In theory once the clipped extension has been migrated all you need is:
+### Debian
 
-    rake radiant:extensions:clipped:migrate_from_page_attachments
+    apt-get install ghostscript imagemagick ffmpeg
 
-But I haven't tested that theory recently.
+### Windows
 
-## Radius tag changes
+[Ghostscript][ghostscript], [ImageMagick][imagemagick] and [FFmpeg][ffmpeg] all
+offer Windows installers that you can install in the usual way.
 
-The full radius tag set of paperclipped is still supported, so your pages should just work. If they worked before. 
+[ghostscript]: http://sourceforge.net/projects/ghostscript/
+[imagemagick]: http://www.imagemagick.org/script/binary-releases.php
+[ffmpeg]: http://ffmpeg.zeranoe.com/builds/
 
-The preferred syntax is slightly different, though. Where paperlipped used the `r:assets` namespace for everything, the 
-assets extension has adopted a readable system of singular and plural tags that will be familiar from other bits of radiant:
-
-    <r:assets:each>
-      <a href="<r:asset:url size="download" />">
-        <r:asset:image size="thumbnail" />
-      </a>
-      <span class="caption"><r:asset:caption /></span>
-    </r:assets:each>
-
-Anything to do with the collection of assets is plural. Anything to do with a particular asset is singular. The old plural 
-forms still work but they are deprecated and (as the log messages will keep telling you) likely to removed in version 2.
+If the post-processors are not in your `PATH` or you're running Passenger you might need to set `Paperclip.options[:command_path]` to the location where the binaries are installed.
 
 ## Configuration
 
-The clipped extension is configured in the usual way, but only its minor settings are exposed in the admin interface. The
-more architectural settings shouldn't be changed at runtime and some of them will require a lot of sorting out if they're 
-changed at all, so those are only accessible through the console or by editing the database. Eventually they will be made 
-part of the initial radiant installation process.
+The clipped extension is configured in the usual way, but only its minor settings are exposed in the admin interface. The more architectural settings shouldn't be changed at runtime and some of them will require a lot of sorting out if they're changed at all, so those are only accessible through the console or by editing the database. Eventually they will be made part of the initial radiant installation process.
 
 ### Structural settings
 
@@ -112,7 +62,7 @@ part of the initial radiant installation process.
 
 Set `paperclip.storage` to 'fog' and add the following line to your `Gemfile`
 
-`gem fog` 
+`gem "fog", "~> 1.0"`
 
 You also have to provide the following settings:
 
@@ -163,30 +113,24 @@ And you can set some defaults:
 
 ## Usage
 
-For most purposes you will probably work with assets while you're working on pages. Click on one of the 'assets' links and a panel will pop up allowing you to find, insert and attach existing assets or upload new ones. 
+For most purposes you will probably work with assets while you're working on pages. Click on one of the 'assets' links and a panel will pop up allowing you to find, insert and attach existing assets or upload new ones.
 
 For tidying up, replacing files and other admin, click on the 'assets' tab to get a larger version of the same list. Here again you can search for assets and filter the results by type, but the options are 'edit' and 'remove' and on editing you can change name, file and caption while keeping page associations intact.
 
 ## Radius Tags
 
-The asset manager has its own family of radius tags. The basic tag is <code><r:asset /></code>, 
-which can be used either alone or as a double tag. This tag requires a `name` or `id` attribute, 
-which references the asset. The <code><r:asset /></code> tag can be combined with other tags for a
-variety of uses:
+The asset manager has its own family of radius tags. The basic tag is `<r:asset/>`, which can be used either alone or as a double tag. This tag requires a `name` or `id` attribute, which references the asset. The `<r:asset/>` tag can be combined with other tags for a variety of uses:
 
-    <r:asset:image name="image.png" />  #=>  <img src="/path/to/image.png" />
-    <r:asset:link name="image.png" />   #=>  <a href="/path/to/image.png">image.png</a>
+    <r:asset:image name="image.png"/>  #=>  <img src="/path/to/image.png" />
+    <r:asset:link name="image.png"/>   #=>  <a href="/path/to/image.png">image.png</a>
 
-You could also use: 
+You could also use:
 
     <r:asset:link name="bar.pdf">Download PDF</r:asset:link>
 
-Asset links are also available, such as content_type, file_size, and url. 
+Asset links are also available, such as content_type, file_size, and url.
 
-Another important tag is the <code><r:assets:each>...</r:assets:each></code>.
-(Note the plural namespace tag "assets".) If a page has attached assets, the
-assets:each tag will cycle through each asset. You can then use an image,
-link or url tag to display and connect your assets. Usage:
+Another important tag is the `<r:assets:each>...</r:assets:each>` (note the plural namespace tag "assets"). If a page has attached assets, the `<r:assets:each>` tag will cycle through each asset. You can then use an image, `link` or `url` tag to display and connect your assets. Usage:
 
     <r:assets:each [limit=0] [offset=0] [order="asc|desc"] [by="position|title|..."]>
       ...
@@ -197,53 +141,37 @@ This tag uses the following parameters:
 * `limit` and `offset` let you specify a range of assets
 * `order` and `by` lets you control sorting
 
-The conditional tags <code><r:if_assets [min_count="0"]></code> and
-<code><r:unless_assets [min_count="0"]></code> allow you to optionally render
-content based on the existence of tags. They accept the same options as
-`<r:assets:each>`.
+The conditional tags `<r:if_assets [min_count="0"]>` and `<r:unless_assets [min_count="0"]>` allow you to optionally render content based on the existence of tags. They accept the same options as `<r:assets:each>`.
 
-Thumbnails are automatically generated for images when the images are
-uploaded. By default, two sizes are made for use within the extension itself.
-These are "icon" 42px by 42px and "thumbnail" which is 100px square.
+Thumbnails are automatically generated for images when the images are uploaded. By default, two sizes are made for use within the extension itself. These are "icon" 42px by 42px and "thumbnail" which is 100px square.
 
-You can access sizes of image assets for various versions with tags like
-`<r:asset:width [size="original"]/>` and <code><r:asset:height
-[size="original"]/></code>.
+You can access sizes of image assets for various versions with tags like `<r:asset:width [size="original"]/>` and `<r:asset:height [size="original"]/>`.
 
-Also, for vertical centering of images, you have the handy
-`<r:asset:top_padding container="<container height>" [size="icon"]/>` tag.
-Working example:
+Also, for vertical centering of images, you have the handy `<r:asset:top_padding container="<container height>" [size="icon"]/>` tag. Working example:
 
     <ul>
       <r:assets:each>
         <li style="height:140px">
-          <img style="padding-top:<r:top_padding size='category' container='140' />px" 
-               src="<r:url />" alt="<r:title />" />
+          <img style="padding-top:<r:top_padding size='category' container='140'/>px" src="<r:url/>" alt="<r:caption/>">
         </li>
       </r:assets:each>
     </ul>
 
 ## Contributions
 
-This extension is a work in progress. If you would like to
-contribute, please fork the project and submit a pull request:
+If you would like to contribute, please [fork the project][fork] and submit a [pull request][pull-request].
 
-<https://github.com/radiant/radiant-clipped-extension>
+[fork]: http://help.github.com/fork-a-repo/
+[pull-request]: http://help.github.com/send-pull-requests/
 
-Pull requests with working tests are preferred and have a greater chance of
-being merged.
+Pull requests with working tests are preferred and have a greater chance of being merged.
 
-## Support
+## TODO
 
-If you have questions about this extension please post a message to the
-Radiant-Dev mailing list:
-
-<http://groups.google.com/group/radiantcms-dev>
-
-If you would like to file a bug report or feature request, please create a
-GitHub issue here:
-
-<https://github.com/radiant/radiant-clipped-extension/issues>
+* Progress bars while uploading assets
+* Warning if you try and save a page while assets are still uploading
+* Radius tags for the HTML video and audio elements
+* Auxiliary extension to add video transcoding support
 
 ## Authors
 
@@ -251,4 +179,4 @@ GitHub issue here:
 * John Long
 * William Ross
 
-Copyright 2011 the radiant team. Released under the same terms as radiant.
+Copyright 2011 the Radiant team. Released under the same terms as Radiant.
