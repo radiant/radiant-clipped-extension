@@ -20,7 +20,7 @@ namespace :radiant do
       end
       
       desc "Copies public assets of the Clipped extension to the instance public/ directory."
-      task :update => :environment do
+      task :update => [:environment, :initialize] do
         is_svn_or_dir = proc {|path| path =~ /\.svn/ || File.directory?(path) }
         puts "Copying assets from ClippedExtension"
         Dir[ClippedExtension.root + "/public/**/*"].reject(&is_svn_or_dir).each do |file|
@@ -112,6 +112,13 @@ If you would like to use this mode type \"yes\", type \"no\" or just hit enter t
         ClippedExtension.migrator.new(:up, ClippedExtension.migrations_path).send(:assume_migrated_upto_version, 3)
         ClippedExtension.migrator.migrate
       end
+
+      desc "Generate an example initializer"
+      task :initialize do
+        puts "Copying initializer from ClippedExtension"
+        cp ClippedExtension.root + "/lib/generators/templates/clipped_config.rb", RAILS_ROOT + "/config/initializers/", :verbose => false
+      end
+
     end
   end
 end
