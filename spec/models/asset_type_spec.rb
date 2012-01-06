@@ -49,7 +49,7 @@ describe AssetType do
     its(:paperclip_styles) { should == {
       :special => {:geometry => "800x800>", :format => 'jpg'},
       :tiny => {:geometry => "10x10#", :format => 'png'},
-      :custom => {:geometry => "1x1", :convert_options='-quality 33 -interlace Plane'}
+      :custom => {:geometry => "1x1", :convert_options => '-quality 33 -interlace Plane'}
     }}
   end
 
