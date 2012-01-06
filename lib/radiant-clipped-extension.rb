@@ -1,5 +1,5 @@
 module RadiantClippedExtension
-  VERSION     = "1.0.15"
+  VERSION     = "1.0.16"
   SUMMARY     = %q{Assets for Radiant CMS}
   DESCRIPTION = %q{Asset-management derived from Keith Bingman's Paperclipped extension.}
   URL         = "http://radiantcms.org"
