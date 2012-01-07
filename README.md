@@ -1,5 +1,7 @@
 # Radiant Clipped Extension
 
+[![Build Status](https://secure.travis-ci.org/radiant/radiant-clipped-extension.png)](http://travis-ci.org/radiant/radiant-clipped-extension)
+
 Asset management for Radiant CMS.
 
 The Clipped extension comes bundled with the Radiant gem but may be updated separately. Only Radiant versions 1.0 or newer are supported.
