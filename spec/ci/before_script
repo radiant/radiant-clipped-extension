@@ -5,7 +5,7 @@ if [[ $RADIANT_VERSION != "master" ]]
 then
   git checkout -b $RADIANT_VERSION $RADIANT_VERSION
 fi
-cp -r ~/builds/radiant/radiant-clipped-extension vendor/extensions/clipped
+cp -r ~/builds/*/radiant-clipped-extension vendor/extensions/clipped
 gem install bundler --pre
 echo 'gem "radiant-clipped-extension", :path => "vendor/extensions/clipped"' >> Gemfile
 bundle install
