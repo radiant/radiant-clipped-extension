@@ -147,7 +147,7 @@ class AssetType
     @configured_styles ||= if style_definitions = Radiant.config["assets.thumbnails.#{name}"]
       style_definitions.split('|').each_with_object({}) do |definition, styles|
         name, rule = definition.split(':')
-        styles[name.strip.to_sym] = rule.strip
+        styles[name.strip.to_sym] = rule.to_s.strip
       end
     else
       {}
