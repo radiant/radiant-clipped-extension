@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.summary     = RadiantClippedExtension::SUMMARY
   s.description = RadiantClippedExtension::DESCRIPTION
 
-  s.add_dependency "acts_as_list", "~> 0.1.4"
+  s.add_dependency "acts_as_list", "0.1.4"
   s.add_dependency "paperclip",    "~> 2.5.0"
   s.add_dependency "uuidtools",    "~> 2.1.2"
 
