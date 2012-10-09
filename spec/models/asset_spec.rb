@@ -32,6 +32,12 @@ describe Asset do
         image.thumbnail.should == '/y/z/e.jpg'
       end
       
+      it 'should return asset url with cache buster when required' do
+        image = new_asset :asset_content_type => 'image/jpeg'
+        image.stub! :asset => mock('asset', :url => '/y/z/e.jpg')
+        image.thumbnail.should =~ /\/y\/z\/e\.jpg\?[0-9]+$/
+      end
+      
       it 'should return paperclip asset url for non-image' do
         asset = new_asset :asset_content_type => 'application/pdf'
         asset.stub! :asset => mock('asset', :url => '/y/z/e.pdf')

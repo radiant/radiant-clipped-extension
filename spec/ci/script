@@ -1,2 +1,25 @@
+#!/usr/bin/env bash
+
+# all 'test's before 'ue' or will exit when test fails
+test "$WITH_RVM" || WITH_RVM="true"
+
+set -xue
+
+start_path="$( pwd )"
+
+# I really dislike using rvm gemset, but while testing this 
+# script I got sick having to install the same gems over and
+# over again.
+if [[ $WITH_RVM == "true" ]]; then
+        rvm gemset create radiant_development
+        rvm gemset use radiant_development
+fi
+
 cd ~/radiant
-bundle exec rake spec:extensions EXT=clipped
+
+# ensure fresh clipped code
+rm -rf vendor/extensions/clipped
+cp -r $start_path vendor/extensions/clipped
+bundle update radiant-clipped-extension
+
+RAILS_ENV=test bundle exec rake spec:extensions EXT=clipped --trace

@@ -64,8 +64,8 @@ class Asset < ActiveRecord::Base
   delegate :paperclip_processors, :paperclip_styles, :style_dimensions, :style_format, :to => :asset_type
 
   def thumbnail(style_name='original')
-    return asset.url if style_name.to_sym == :original
-    return asset.url(style_name.to_sym) if has_style?(style_name)
+    return asset.url+(self.buster? ? buster : '') if style_name.to_sym == :original
+    return asset.url(style_name.to_sym)+(self.buster? ? buster : '') if has_style?(style_name)
     return asset_type.icon(style_name)
   end
 
@@ -156,6 +156,10 @@ class Asset < ActiveRecord::Base
   def dimensions_known?
     original_width? && original_height?
   end
+
+  def buster
+    self.updated_at.to_i
+  end
   
 private
 
@@ -233,5 +237,9 @@ private
     asset_sizes.unshift ['Original (as uploaded)', 'original']
     asset_sizes
   end
-  
+
+  def self.buster?
+    ( Radiant::Config['clipped.use_cache_buster?'] ? Radiant::Config['clipped.use_cache_buster?'] : false )
+  end
+
 end
