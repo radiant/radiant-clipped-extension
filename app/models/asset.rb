@@ -66,7 +66,7 @@ class Asset < ActiveRecord::Base
   def thumbnail(style_name='original')
     return asset.url+(buster? ? buster : '') if style_name.to_sym == :original
     return asset.url(style_name.to_sym)+(buster? ? buster : '') if has_style?(style_name)
-    return asset_type.icon(style_name)
+    return asset_type.icon(style_name)+(buster? ? buster : '')
   end
 
   def has_style?(style_name='original')
@@ -158,7 +158,7 @@ class Asset < ActiveRecord::Base
   end
 
   def buster
-    self.updated_at.to_i
+    "?#{self.updated_at.to_i}"
   end
   
   def buster?

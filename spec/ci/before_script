@@ -27,7 +27,7 @@ gem install bundler --no-ri --no-rdoc
 echo 'gem "radiant-clipped-extension", :path => "vendor/extensions/clipped"' >> Gemfile
 echo 'gemspec' >> Gemfile
 
-# I really dislike using rvm gemset, but while testing this 
+# I really dislike using rvm gemset, but while testing this
 # script I got sick having to install the same gems over and
 # over again.
 if [[ $WITH_RVM == "true" ]]; then
@@ -49,5 +49,5 @@ case $DB in
     cp spec/ci/database.sqlite.yml config/database.yml;;
 esac
 
-RAILS_ENV=test bundle exec rake db:migrate --trace 
+RAILS_ENV=test bundle exec rake db:migrate --trace
 RAILS_ENV=test bundle exec rake db:migrate:extensions --trace
