@@ -64,9 +64,9 @@ class Asset < ActiveRecord::Base
   delegate :paperclip_processors, :paperclip_styles, :style_dimensions, :style_format, :to => :asset_type
 
   def thumbnail(style_name='original')
-    return asset.url if style_name.to_sym == :original
-    return asset.url(style_name.to_sym) if has_style?(style_name)
-    return asset_type.icon(style_name)
+    return asset.url+(buster? ? buster : '') if style_name.to_sym == :original
+    return asset.url(style_name.to_sym)+(buster? ? buster : '') if has_style?(style_name)
+    return asset_type.icon(style_name)+(buster? ? buster : '')
   end
 
   def has_style?(style_name='original')
@@ -156,7 +156,15 @@ class Asset < ActiveRecord::Base
   def dimensions_known?
     original_width? && original_height?
   end
+
+  def buster
+    "?#{self.updated_at.to_i}"
+  end
   
+  def buster?
+    ( Radiant::Config['clipped.use_cache_buster?'] ? Radiant::Config['clipped.use_cache_buster?'] : false )
+  end
+
 private
 
   # at this point the file queue will not have been written
@@ -233,5 +241,5 @@ private
     asset_sizes.unshift ['Original (as uploaded)', 'original']
     asset_sizes
   end
-  
+
 end

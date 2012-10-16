@@ -2,7 +2,7 @@ module AssetTags
   include Radiant::Taggable
   
   class TagError < StandardError; end
-  
+
   %w{top_padding width height caption asset_file_name asset_content_type asset_file_size id filename image flash thumbnail url link extension if_content_type page:title page:url}.each do |name|
     deprecated_tag "assets:#{name}", :substitute => "asset:#{name}", :deadline => '2.0'
   end
