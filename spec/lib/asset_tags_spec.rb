@@ -61,6 +61,7 @@ describe AssetTags do
     end
     
     it "asset:image" do
+      #FIXME this should check for height and width attributes, too
       page.should render(%{<r:asset:image id="#{asset_id(:test1)}" />}).as( %{<img src="#{asset.thumbnail}" alt="#{asset.title}" />} )
       page.should render(%{<r:asset:image size="icon" id="#{asset_id(:test1)}" />}).as( %{<img src="#{asset.thumbnail('icon')}" alt="#{asset.title}" />} )
     end

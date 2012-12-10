@@ -216,7 +216,7 @@ module AssetTags
   end
   
   desc %{
-    Renders an image tag for the asset.
+    Renders an image tag for the asset. Will set alt, width and height attributes, if appropriate.
     
     Using the optional @size@ attribute, different sizes can be display.
     "thumbnail" and "icon" sizes are built in, but custom ones can be set
@@ -230,6 +230,11 @@ module AssetTags
     size = options.delete('size') || 'original'
     raise TagError, "asset #{tag.locals.asset.title} has no '#{size}' thumbnail" unless tag.locals.asset.has_style?(size)
     options['alt'] ||= tag.locals.asset.title
+    if tag.locals.asset.dimensions_known?
+      geo = tag.locals.asset.geometry(size)
+      options['width']  ||= geo.width.to_i.to_s
+      options['height'] ||= geo.height.to_i.to_s
+    end
     attributes = options.inject('') { |s, (k, v)| s << %{#{k.downcase}="#{v}" } }.strip
     url = tag.locals.asset.thumbnail(size)
     %{<img src="#{url}" #{attributes} />} rescue nil
