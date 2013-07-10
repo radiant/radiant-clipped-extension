@@ -1,5 +1,7 @@
 module AssetTags
   include Radiant::Taggable
+  include ActionView::Helpers::TagHelper
+  include ActionView::Helpers::AssetTagHelper
   
   class TagError < StandardError; end
   
@@ -230,9 +232,8 @@ module AssetTags
     size = options.delete('size') || 'original'
     raise TagError, "asset #{tag.locals.asset.title} has no '#{size}' thumbnail" unless tag.locals.asset.has_style?(size)
     options['alt'] ||= tag.locals.asset.title
-    attributes = options.inject('') { |s, (k, v)| s << %{#{k.downcase}="#{v}" } }.strip
     url = tag.locals.asset.thumbnail(size)
-    %{<img src="#{url}" #{attributes} />} rescue nil
+    image_tag url, options rescue nil
   end
   
   desc %{
