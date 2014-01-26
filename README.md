@@ -56,7 +56,6 @@ The clipped extension is configured in the usual way, but only its minor setting
 
 * `paperclip.url` sets the url scheme for attached files. Paperclip interpolations are applied. You probably don't want to change this.
 * `paperclip.path` sets the path scheme for attached files. Paperclip interpolations are applied. You might conceivably want to change this.
-* `paperclip.additional_thumbnails` is a string of comma-separated style definitions that is passed to paperclip for any asset type that has a post-processor (that is, currently, images, pdfs and video clips). The definitions are in the format name=geometry and when assembled the string will look something like `preview=640x640>,square=#260x260`. Thumbnail and icon styles are already defined and don't need to be configured this way.
 * `paperclip.storage` can be 'filesystem' (the default) or 'fog' for cloud storage (such as s3).
 * `paperclip.skip_filetype_validation` is true by default and allows uploads of any mime type.
 
@@ -112,6 +111,13 @@ And you can set some defaults:
 
 * `assets.insertion_size` is the name of the style that's used when you click on 'insert' to add a radius asset tag to your text. You can edit it after insertion, of course.
 * `assets.display_size` is the name of the style that's shows when you edit a single asset in the admin interface.
+
+
+### Asset Thumbnail Sizes
+
+To configure different thumbnail sizes, set `assets.thumbnails.image`. Here is an example of setting two custom thumbnail sizes:
+
+    Radiant::Config['assets.thumbnails.image'] = "custom:geometry=200x300>,format=jpg|bigger:geometry=600x700>,format=jpg"
 
 ## Usage
 
