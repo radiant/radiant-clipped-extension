@@ -242,17 +242,17 @@ module AssetTags
     dimensions of the swf file
     
     *Usage:*
-    <pre><code><r:asset:flash [name="asset name" or id="asset id"] [width="100"] [height="100"]>Fallback content</flash></code></pre>
+    <pre><code><r:asset:flash [name="asset name" or id="asset id"] [width="100"] [height="100"]>Fallback content</r:asset:flash></code></pre>
     
     *Example with text fallback:*
     <pre><code><r:asset:flash name="flash_movie">
         Sorry, you need to have flash installed, <a href="http://adobe.com/flash">get it here</a>
-    </flash></code></pre>
+    </r:asset:flash></code></pre>
     
     *Example with image fallback and explicit dimensions:*
     <pre><code><r:asset:flash name="flash_movie" width="300" height="200">
         <r:asset:image name="flash_screenshot" />
-      </flash></code></pre>
+      </r:asset:flash></code></pre>
   }
   tag 'asset:flash' do |tag|
     asset, options = asset_and_options(tag)
