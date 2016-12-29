@@ -40,9 +40,12 @@ Radiant.config do |config|
       s3.define 'region', :select_from => {
                             'Asia North East' => 'ap-northeast-1',
                             'Asia South East' => 'ap-southeast-1',
+                            'Asia South East 2' => 'ap-southeast-2',
                             'EU West' => 'eu-west-1',
                             'US East' => 'us-east-1',
-                            'US West' => 'us-west-1'
+                            'US West' => 'us-west-1',
+                            'US West 2' => 'us-west-2',
+                            'South America' => 'sa-east-1'
                           }
     end
   end

@@ -32,9 +32,12 @@ Radiant.config do |config|
   # optionally set the S3 region of your bucket; defaults to US East
   # Asia North East => ap-northeast-1
   # Asia South East => ap-southeast-1
+  # Asia South East 2 => ap-southeast-2
   # EU West => eu-west-1
   # US East => us-east-1
   # US West => us-west-1
+  # US West 2 => us-west-2
+  # South America => sa-east-1
   # config["paperclip.s3.region"] = "us-east-1"
 
   # An example of using Rackspace Cloud Files
