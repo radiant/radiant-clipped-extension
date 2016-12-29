@@ -10,8 +10,8 @@ script: "./spec/ci/script"
 env:
   - RADIANT_VERSION=master DB=mysql
   - RADIANT_VERSION=master DB=postgres
-  - RADIANT_VERSION=1.0.0 DB=mysql
-  - RADIANT_VERSION=1.0.0 DB=postgres
+  - RADIANT_VERSION=1.1.4 DB=mysql
+  - RADIANT_VERSION=1.1.4 DB=postgres
 
 notifications:
   recipients:
