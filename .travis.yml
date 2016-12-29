@@ -16,4 +16,5 @@ env:
 notifications:
   recipients:
     - git@johnmuhl.com
+    - avonderluft@avlux.net
   irc: "irc.freenode.org#radiantcms"
