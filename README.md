@@ -61,9 +61,7 @@ The clipped extension is configured in the usual way, but only its minor setting
 
 ### Cloud Storage
 
-Set `paperclip.storage` to 'fog' and add the following line to your `Gemfile`
-
-`gem "fog", "~> 1.0"`
+Set `paperclip.storage` to 'fog'
 
 You also have to provide the following settings:
 
