@@ -75,6 +75,18 @@ module AssetTags
       tag.expand
     end
   end
+  
+  desc %{
+    References the last asset attached to the current page.  
+    
+    *Usage:* 
+    <pre><code><r:assets:last>...</r:assets:last></code></pre>
+  }
+  tag 'assets:last' do |tag|
+    if tag.locals.asset = tag.locals.page.assets.last
+      tag.expand
+    end
+  end
 
   desc %{
     Renders the contained elements only if the current contextual page has one or
