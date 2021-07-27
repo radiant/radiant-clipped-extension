@@ -1,3 +1,4 @@
+require 'radiant/admin_ui'
 module ClippedAdminUI
 
  def self.included(base)
@@ -5,8 +6,8 @@ module ClippedAdminUI
 
       attr_accessor :asset
       alias_method :assets, :asset
-      
-      protected
+
+      # protected
 
         def load_default_asset_regions
           OpenStruct.new.tap do |asset|
@@ -26,7 +27,6 @@ module ClippedAdminUI
           end
         end
     end
-    
+
   end
 end
-
